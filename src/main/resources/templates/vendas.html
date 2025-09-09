@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<!-- lala -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendas</title>
+    <link rel="stylesheet" th:href="@{/styles/reset.css}">
+    <link rel="stylesheet" th:href="@{/styles/style.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+    <header class="cabecalho">
+        <a th:href="@{/inicio}">
+            <img class="logo_cabecalho" th:src="@{/img/logo-removebg.svg}" alt="Logo ZTech" />
+        </a>
+        <div class="titulo_pagina">
+            Vendas
+        </div>
+    </header>
+
+    <div class="area-principal">
+        <div class="barra">
+            <ul>
+				<li class="opcao_lista"><a class="link_lista" th:href="@{/inicio}">INÍCIO</a></li>
+                <li class="opcao_lista"><a class="link_lista" th:href="@{/cliente/listar}">CLIENTES</a></li>
+                <li class="opcao_lista"><a class="link_lista" th:href="@{/produto/listar}">ESTOQUE</a></li>
+                <li class="opcao_lista"><a class="link_lista_atual" th:href="@{/vendas/listar}">VENDAS</a></li>
+                <li class="opcao_lista"><a class="link_lista" th:href="@{/ordens/listar}">ORDENS DE SERVIÇO</a></li>
+            </ul>
+        </div>
+
+        <div class="conteudo">
+            <div class="banner">
+                <a th:href="@{/vendas/cadastrarForm}">
+                    <input class="botao_adicionar" type="button" value="Adicionar Venda">
+                </a>
+                <form th:action="@{/vendas/buscar}" method="get" style="display: flex; align-items: center; margin-left: 10px; margin-top: 20px; top: 13em; left: 210px;">
+                    <input type="search" name="termo" th:value="${termo}" class="banner_pesquisa"
+                        placeholder="Buscar por cliente, produto, ID ou data (AAAA-MM-DD)...">
+                    <button type="submit" class="botao_pesquisar" style="margin-left: 10px; padding: 10px 15px; border-radius: 20px; background-color: #7C1F1F; color: white; border: none; cursor: pointer;">
+                        <i class="fas fa-search"></i> Pesquisar
+                    </button>
+                </form>
+            </div>
+
+            <div th:if="${mensagem}" class="alert alert-success" style="margin-top: 20px; padding: 10px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: .25rem;">
+                <p th:text="${mensagem}"></p>
+            </div>
+             <div th:if="${mensagemBusca}" class="alert alert-info" style="margin-top: 20px; padding: 10px; background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; border-radius: .25rem;">
+                <p th:text="${mensagemBusca}"></p>
+            </div>
+
+            <div class="tabela" >
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID Venda</th>
+                            <th>Data</th>
+                            <th>Hora</th>
+                            <th>Cliente</th>
+                            <th>Produto</th>
+                            <th>Qtd.</th>
+                            <th>Valor Total</th>
+                            <th>Lucro</th>
+                            <th colspan="2" class="acoes">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${paginaVendas != null}" th:each="vendaDTO : ${paginaVendas.content}">
+                             <td th:text="${vendaDTO.idVenda}"></td>
+                             <td th:text="${vendaDTO.dataInicio}"></td>
+                             <td th:text="${vendaDTO.horaInicio}"></td>
+                             <td th:text="${vendaDTO.nomeCliente} ?: 'N/A'"></td>
+                             <td th:text="${vendaDTO.nomeProduto} ?: 'N/A'"></td>
+                             <td th:text="${vendaDTO.quantidade}"></td>
+                             <td th:text="${#numbers.formatCurrency(vendaDTO.valor)}"></td>
+                             <td th:text="${#numbers.formatCurrency(vendaDTO.lucro)}"></td>
+                             <td class="acoes">
+                                 <a th:href="@{/vendas/editarForm/{idVenda}(idVenda=${vendaDTO.idVenda})}"
+                                    class="botao-acao editar" title="Editar">
+                                     <i class="fa fa-edit fa-lg"></i>
+                                 </a>
+                             </td>
+                             <td class="acoes">
+                                 <a th:href="@{/vendas/deletar/{idVenda}(idVenda=${vendaDTO.idVenda})}"
+                                    class="botao-acao deletar" title="Deletar"
+                                    onclick="return confirm('Tem certeza que deseja deletar esta venda? O estoque do produto será restaurado.');">
+                                     <i class="fa fa-trash-alt fa-lg"></i>
+                                 </a>
+                             </td>
+                        </tr>
+                        <tr th:if="${paginaVendas == null or #lists.isEmpty(paginaVendas.content)}">
+                            <td colspan="10" style="text-align: center;">Nenhuma venda encontrada.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div th:if="${paginaVendas != null && paginaVendas.totalPages > 1}" class="paginacao" style="margin-top: 20px; text-align: center;">
+                    <span th:if="${paginaVendas.hasPrevious()}">
+                        <a th:href="@{/vendas/listar(termo=${termo}, page=${paginaVendas.number - 1}, size=${paginaVendas.size})}">Anterior</a>
+                    </span>
+
+                    <th:block th:each="i: ${#numbers.sequence(0, paginaVendas.totalPages - 1)}">
+                        <span th:if="${paginaVendas.number == i}" class="pagina-atual" style="font-weight: bold; margin: 0 5px;">[[${i + 1}]]</span>
+                        <span th:if="${paginaVendas.number != i}" style="margin: 0 5px;">
+                            <a th:href="@{/vendas/listar(termo=${termo}, page=${i}, size=${paginaVendas.size})}">[[${i + 1}]]</a>
+                        </span>
+                    </th:block>
+
+                    <span th:if="${paginaVendas.hasNext()}">
+                        <a th:href="@{/vendas/listar(termo=${termo}, page=${paginaVendas.number + 1}, size=${paginaVendas.size})}">Próxima</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

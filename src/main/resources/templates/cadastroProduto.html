@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Produto</title>
+    <link rel="stylesheet" th:href="@{/styles/reset.css}">
+    <link rel="stylesheet" th:href="@{/styles/style.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header class="cabecalho">
+        <a th:href="@{/inicio}">
+            <img class="logo_cabecalho" th:src="@{/img/logo-removebg.svg}" alt="Logo ZTech" />
+        </a>
+        <div class="titulo_pagina">
+            Cadastro de Produto
+        </div>
+    </header>
+
+    <div class="area-principal">
+        <div class="barra">
+            <ul>
+				<li class="opcao_lista"><a class="link_lista" th:href="@{/inicio}">INÍCIO</a></li>
+                <li class="opcao_lista"><a class="link_lista" th:href="@{/cliente/listar}">CLIENTES</a></li>
+                <li class="opcao_lista"><a class="link_lista" th:href="@{/produto/listar}">ESTOQUE</a></li>
+                <li class="opcao_lista"><a class="link_lista" th:href="@{/vendas/listar}">VENDAS</a></li>
+                <li class="opcao_lista"><a class="link_lista" th:href="@{/ordens/listar}">ORDENS DE SERVIÇO</a></li>
+            </ul>
+        </div>
+        <div class="formulario-cliente"> <div th:if="${mensagem}" class="alert alert-info" style="margin-bottom: 20px; padding: 10px; background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; border-radius: .25rem;">
+                <p th:text="${mensagem}"></p>
+            </div>
+
+            <form th:action="@{/produto/cadastrar}" th:object="${produtoDTO}" method="post" class="formulario">
+                <div class="coluna">
+                    <h3 class="titulo_formulario">Dados do Produto</h3>
+
+                    <label for="nome">Nome do Produto:</label>
+                    <input class="campo_digitacao" type="text" id="nome" th:field="*{nome}" required>
+                    <span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="error"></span>
+
+                    <label for="descricao">Descrição:</label>
+                    <textarea class="campo_digitacao" id="descricao" th:field="*{descricao}" rows="3"></textarea>
+                    <span th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}" class="error"></span>
+                    
+                    <label for="idCategoria">Nome da Categoria:</label>
+					<select id="idCategoria" th:field="*{idCategoria}" class="campo_digitacao" required>
+					    <option value="">Selecione uma Categoria</option>
+					    <option th:each="categoriaOpt : ${categorias}"
+					            th:value="${categoriaOpt.idCategoria}"
+					            th:text="${categoriaOpt.nome}">
+					    </option>
+					</select>
+                    <span th:if="${#fields.hasErrors('categoria')}" th:errors="*{categoria}" class="error"></span>
+                    <!-- BOTÃO QUE ABRE O POPUP DE CATEGORIA-->
+					<button id="openButtonCat" class="butcad">Preciso cadastrar uma nova Categoria</button>
+                    
+                    <label for="marcaNome">Nome da Marca:</label>
+					<select id="idMarca" th:field="*{idMarca}" class="campo_digitacao" required>
+					    <option value="">Selecione uma Marca</option>
+					    <option th:each="marcaOpt : ${marcas}"
+					            th:value="${marcaOpt.idMarca}"
+					            th:text="${marcaOpt.nome}">
+					    </option>
+					</select>
+                    <span th:if="${#fields.hasErrors('marca')}" th:errors="*{marca}" class="error"></span>
+					<!-- BOTÃO QUE ABRE O POPUP DE MARCA-->					
+                    <button id="openButtonMarca" class="butcad">Preciso cadastrar uma nova Marca</button>
+                    
+                </div>
+                <hr class="separador">
+                <div class="coluna">
+                    <h3 class="titulo_formulario">Preço e Estoque</h3>
+
+                    <label for="custo">Custo (R$):</label>
+                    <input class="campo_digitacao" type="number" step="0.01" id="custo" th:field="*{custo}" required>
+                    <span th:if="${#fields.hasErrors('custo')}" th:errors="*{custo}" class="error"></span>
+
+                    <label for="valor">Valor de Venda (R$):</label>
+                    <input class="campo_digitacao" type="number" step="0.01" id="valor" th:field="*{valor}" required>
+                    <span th:if="${#fields.hasErrors('valor')}" th:errors="*{valor}" class="error"></span>
+                    
+                    <label for="quantidade">Quantidade em Estoque:</label>
+                    <input class="campo_digitacao" type="number" id="quantidade" th:field="*{quantidade}" min="0" required>
+                    <span th:if="${#fields.hasErrors('quantidade')}" th:errors="*{quantidade}" class="error"></span>
+                </div>
+				<div class="botoes">
+				          <a class="link_cancelar" th:href="@{/produto/listar}">
+				              <button type="button" class="cancelar">❌ Cancelar</button>
+				          </a>
+				          <button type="submit" class="cadastrar">✔️ Cadastrar</button>
+				      </div>
+      
+            </form>
+			
+			<!-- DIALOG DE MARCA-->
+			<dialog id="modalDialogCat">
+				<form id="formCatModal"> 
+					<h2>Cadastre a nova Categoria:</h2>
+					<input type="hidden" id="idCatModal" name="idCategoria" required>
+					<input type="text"   id="nomeCatModal" name="nome" class="inputpop">
+					<div class="botoespop">
+					<button class="fecharpop" id="closeButtonCat">❌  Fechar</button>
+					<button class="cadastrarpop" type="submit">✔️  Cadastrar</button>
+					</div>
+				</form>
+			</dialog>
+
+			<script>
+				const modalDialogCat = document.querySelector("#modalDialogCat");
+				const openButtonCat = document.querySelector("#openButtonCat");
+				const closeButtonCat = document.querySelector("#closeButtonCat");
+				
+				openButtonCat.addEventListener("click", (e) =>{
+					modalDialogCat.showModal();
+				});
+				closeButtonCat.addEventListener("click", (e) =>{
+					modalDialogCat.close();
+				});
+				openButtonCat.addEventListener("click", (e) =>{
+					e.preventDefault();
+				})
+				closeButtonCat.addEventListener("click", (e) =>{
+					e.preventDefault();
+				})
+
+				document.getElementById("formCatModal").addEventListener("submit", function(event) {
+				  event.preventDefault(); // Impede o envio tradicional
+
+				  const form = event.target;
+				  const nomeCat = form.querySelector("#nomeCatModal").value;
+				  console.log("Valor digitado:", nomeCat); // <== testando
+				  const id = document.getElementById("idCatModal").value;
+
+				  fetch("/categoria/enviar", {
+				    method: "POST",
+				    headers: {
+				      "Content-Type": "application/json"
+				    },
+				    body: JSON.stringify({ nome: nomeCat })
+				  })
+				  .then(response => response.json())
+				  .then(data => {
+				    console.log("Resposta do servidor:", data);
+				    modalDialogCat.close();
+					atualizarCategorias(); // <== Atualiza o select
+				  })
+				  .catch(error => console.error("Erro:", error));
+				});
+				
+			  // atualiza o campo assim que salva uma nova marca
+			  function atualizarCategorias() {
+			    fetch("/categoria/categorias")
+			      .then(response => response.json())
+			      .then(categorias => {
+			        const selectCategoria = document.getElementById("idCategoria");
+			        selectCategoria.innerHTML = ''; // Limpa opções antigas
+
+			        // Adiciona a opção padrão
+			        const optionPadrao = document.createElement("option");
+			        optionPadrao.value = "";
+			        optionPadrao.textContent = "Selecione uma Categoria";
+			        selectCategoria.appendChild(optionPadrao);
+
+			        // Adiciona as opções vindas do backend
+			        categorias.forEach(categoria => {
+			          const option = document.createElement("option");
+			          option.value = categoria.idCategoria;
+			          option.textContent = categoria.nome;
+			          selectCategoria.appendChild(option);
+			        });
+			      })
+			      .catch(error => console.error("Erro ao carregar categorias:", error));
+			  }
+			</script>
+			
+			<!-- DIALOG DE MARCA-->
+			<dialog id="modalDialogMarca">
+				<form id="formMarcaModal"> 
+			    	<h2>Cadastre a nova Marca:</h2>
+					<input type="hidden" id="idMarcaModal" name="idMarca" required>
+			    	<input type="text"   id="nomeModal" name="nome" class="inputpop">
+			    	<div class="botoespop">
+			    	<button class="fecharpop" id="closeButtonMarca">❌  Fechar</button>
+			    	<button class="cadastrarpop" type="submit" >✔️  Cadastrar</button>
+			    	</div>
+				</form>
+			</dialog>
+			<script>
+				const modalDialogMarca = document.querySelector("#modalDialogMarca");
+				const openButtonMarca = document.querySelector("#openButtonMarca");
+				const closeButtonMarca = document.querySelector("#closeButtonMarca");
+				
+				openButtonMarca.addEventListener("click", (e) =>{
+					modalDialogMarca.showModal();
+				});
+				closeButtonMarca.addEventListener("click", (e) =>{
+					modalDialogMarca.close();
+				});
+				openButtonMarca.addEventListener("click", (e) =>{
+					e.preventDefault();
+				})
+				closeButtonMarca.addEventListener("click", (e) =>{
+					e.preventDefault();
+				})
+				
+				document.getElementById("formMarcaModal").addEventListener("submit", function(event) {
+				  event.preventDefault(); // Impede o envio tradicional
+
+				  const form = event.target;
+				  const nomeModal = form.querySelector("#nomeModal").value;
+				  console.log("Valor digitado:", nomeModal); // <== testando
+				  const id = document.getElementById("idMarcaModal").value;
+
+				  fetch("/marca/enviar", {
+				    method: "POST",
+				    headers: {
+				      "Content-Type": "application/json"
+				    },
+				    body: JSON.stringify({ nome: nomeModal })
+				  })
+				  .then(response => response.json())
+				  .then(data => {
+				    console.log("Resposta do servidor:", data);
+				    modalDialogMarca.close();
+					atualizarMarcas(); // <== Atualiza o select
+				  })
+				  .catch(error => console.error("Erro:", error));
+				});
+				
+				// atualiza o campo assim que salva uma nova marca
+				function atualizarMarcas() {
+				  fetch("/marca/marcas")
+				    .then(response => response.json())
+				    .then(marcas => {
+				      const selectMarca = document.getElementById("idMarca");
+				      selectMarca.innerHTML = ''; // Limpa opções antigas
+
+				      // Adiciona a opção padrão
+				      const optionPadrao = document.createElement("option");
+				      optionPadrao.value = "";
+				      optionPadrao.textContent = "Selecione uma Marca";
+				      selectMarca.appendChild(optionPadrao);
+
+				      // Adiciona as opções vindas do backend
+				      marcas.forEach(marca => {
+				        const option = document.createElement("option");
+				        option.value = marca.idMarca;
+				        option.textContent = marca.nome;
+				        selectMarca.appendChild(option);
+				      });
+				    })
+				    .catch(error => console.error("Erro ao carregar marcas:", error));
+				}
+
+			</script>
+        </div>
+    </div>
+</body>
+</html>

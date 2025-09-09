@@ -1,0 +1,22 @@
+.cabecalho {
+    width: 100%;
+    height: 95px;
+    background: black;
+    display: flex;
+    align-items: center;
+}
+
+.logo_cabecalho {
+    width: 109px;
+    height: 109px;
+    margin-left: 25px;
+}
+.titulo_pagina {
+    color: white;
+    font-size: 64px;
+    font-weight: 500;
+    line-height: 96px;
+    margin: 0 auto;
+    text-align: center;
+    font-family: var(--fonte-principal)
+}
