@@ -1,0 +1,1709 @@
+    <div class="container">
+        <div class="header">
+            <div class="header-top">
+                <div class="logo">
+                    <div class="logo-icon">ZT</div>
+                    <div class="logo-text">
+                        <h1>ZTech Pro</h1>
+                        <p class="subtitle">Sistema de Gestão Empresarial</p>
+                    </div>
+                </div>
+                
+                <div class="theme-toggle" onclick="toggleTheme()">
+                    <div class="theme-icon" id="themeIcon">🌙</div>
+                    <div class="theme-text" id="themeText">Tema Escuro</div>
+                </div>
+            </div>
+            
+            <div class="nav">
+                <button class="nav-btn active" onclick="showSection('dashboard')">
+                    📊 Dashboard
+                </button>
+                <button class="nav-btn" onclick="showSection('estoque')">
+                    📦 Estoque
+                </button>
+                <button class="nav-btn" onclick="showSection('vendas')">
+                    💰 Vendas
+                </button>
+                <button class="nav-btn" onclick="showSection('contas')">
+                    💳 Contas a Pagar
+                </button>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard-section" class="section active">
+            <div class="main-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon estoque">📦</div>
+                        <h3>Controle de Estoque</h3>
+                    </div>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-number">247</div>
+                            <div class="stat-label">Produtos Total</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">12</div>
+                            <div class="stat-label">Estoque Baixo</div>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn btn-primary" onclick="openModal('produto')">Novo Produto</button>
+                        <button class="action-btn btn-secondary">Ver Relatório</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon vendas">💰</div>
+                        <h3>Controle de Vendas</h3>
+                    </div>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-number">R$ 15.420</div>
+                            <div class="stat-label">Vendas do Mês</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">89</div>
+                            <div class="stat-label">Pedidos</div>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn btn-primary" onclick="openModal('venda')">Nova Venda</button>
+                        <button class="action-btn btn-secondary">Ver Vendas</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon contas">💳</div>
+                        <h3>Contas a Pagar</h3>
+                    </div>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-number">R$ 3.250</div>
+                            <div class="stat-label">Vencendo Hoje</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">7</div>
+                            <div class="stat-label">Contas Pendentes</div>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn btn-primary" onclick="openModal('conta')">Nova Conta</button>
+                        <button class="action-btn btn-secondary">Ver Contas</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <h3>Ações Rápidas</h3>
+                <div class="quick-grid">
+                    <div class="quick-btn" onclick="openModal('produto')">
+                        <div class="quick-btn-icon">➕</div>
+                        <div class="quick-btn-text">Cadastrar Produto</div>
+                    </div>
+                    <div class="quick-btn" onclick="openModal('venda')">
+                        <div class="quick-btn-icon">🛒</div>
+                        <div class="quick-btn-text">Nova Venda</div>
+                    </div>
+                    <div class="quick-btn" onclick="openModal('conta')">
+                        <div class="quick-btn-icon">💰</div>
+                        <div class="quick-btn-text">Pagar Conta</div>
+                    </div>
+                    <div class="quick-btn">
+                        <div class="quick-btn-icon">📊</div>
+                        <div class="quick-btn-text">Relatórios</div>
+                    </div>
+                    <div class="quick-btn">
+                        <div class="quick-btn-icon">👥</div>
+                        <div class="quick-btn-text">Clientes</div>
+                    </div>
+                    <div class="quick-btn">
+                        <div class="quick-btn-icon">🏪</div>
+                        <div class="quick-btn-text">Fornecedores</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estoque Section -->
+        <div id="estoque-section" class="section">
+            <div class="section-header">
+                <h2>📦 Controle de Estoque</h2>
+                <button class="action-btn btn-primary" onclick="openModal('produto')">
+                    ➕ Novo Produto
+                </button>
+            </div>
+
+            <div class="filters-bar">
+                <input type="text" placeholder="Buscar produtos..." class="search-input">
+                <select class="filter-select">
+                    <option>Todas as Categorias</option>
+                    <option>Eletrônicos</option>
+                    <option>Roupas</option>
+                    <option>Casa e Jardim</option>
+                </select>
+                <select class="filter-select">
+                    <option>Todos os Status</option>
+                    <option>Estoque Normal</option>
+                    <option>Estoque Baixo</option>
+                    <option>Sem Estoque</option>
+                </select>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nome do Produto</th>
+                            <th>Categoria</th>
+                            <th>Preço</th>
+                            <th>Estoque</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>001</td>
+                            <td>Smartphone Samsung Galaxy A54</td>
+                            <td>Eletrônicos</td>
+                            <td>R$ 899,00</td>
+                            <td>25</td>
+                            <td><span class="status-badge status-normal">Normal</span></td>
+                            <td>
+                                <button class="table-btn edit">Editar</button>
+                                <button class="table-btn delete">Excluir</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>002</td>
+                            <td>Notebook Dell Inspiron 15</td>
+                            <td>Eletrônicos</td>
+                            <td>R$ 2.499,00</td>
+                            <td>8</td>
+                            <td><span class="status-badge status-normal">Normal</span></td>
+                            <td>
+                                <button class="table-btn edit">Editar</button>
+                                <button class="table-btn delete">Excluir</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>003</td>
+                            <td>Fone de Ouvido Bluetooth</td>
+                            <td>Eletrônicos</td>
+                            <td>R$ 129,90</td>
+                            <td>3</td>
+                            <td><span class="status-badge status-low">Estoque Baixo</span></td>
+                            <td>
+                                <button class="table-btn edit">Editar</button>
+                                <button class="table-btn delete">Excluir</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>004</td>
+                            <td>Camiseta Polo Masculina</td>
+                            <td>Roupas</td>
+                            <td>R$ 79,90</td>
+                            <td>0</td>
+                            <td><span class="status-badge status-out">Sem Estoque</span></td>
+                            <td>
+                                <button class="table-btn edit">Editar</button>
+                                <button class="table-btn delete">Excluir</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>005</td>
+                            <td>Vaso Decorativo Cerâmica</td>
+                            <td>Casa e Jardim</td>
+                            <td>R$ 45,50</td>
+                            <td>15</td>
+                            <td><span class="status-badge status-normal">Normal</span></td>
+                            <td>
+                                <button class="table-btn edit">Editar</button>
+                                <button class="table-btn delete">Excluir</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Vendas Section -->
+        <div id="vendas-section" class="section">
+            <div class="section-header">
+                <h2>💰 Controle de Vendas</h2>
+                <button class="action-btn btn-primary" onclick="openModal('venda')">
+                    ➕ Nova Venda
+                </button>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <div class="stat-number">R$ 15.420</div>
+                        <div class="stat-label">Vendas do Mês</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🛒</div>
+                    <div class="stat-content">
+                        <div class="stat-number">89</div>
+                        <div class="stat-label">Pedidos</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💳</div>
+                    <div class="stat-content">
+                        <div class="stat-number">R$ 173,15</div>
+                        <div class="stat-label">Ticket Médio</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-content">
+                        <div class="stat-number">67</div>
+                        <div class="stat-label">Clientes</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filters-bar">
+                <input type="text" placeholder="Buscar por cliente..." class="search-input">
+                <input type="date" class="filter-select">
+                <select class="filter-select">
+                    <option>Todos os Status</option>
+                    <option>Concluída</option>
+                    <option>Pendente</option>
+                    <option>Cancelada</option>
+                </select>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID Venda</th>
+                            <th>Data</th>
+                            <th>Cliente</th>
+                            <th>Produtos</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>V001</td>
+                            <td>15/08/2024</td>
+                            <td>João Silva</td>
+                            <td>Smartphone Samsung</td>
+                            <td>R$ 899,00</td>
+                            <td><span class="status-badge status-success">Concluída</span></td>
+                            <td>
+                                <button class="table-btn view">Ver</button>
+                                <button class="table-btn edit">Editar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>V002</td>
+                            <td>15/08/2024</td>
+                            <td>Maria Santos</td>
+                            <td>Notebook Dell + Fone Bluetooth</td>
+                            <td>R$ 2.628,90</td>
+                            <td><span class="status-badge status-success">Concluída</span></td>
+                            <td>
+                                <button class="table-btn view">Ver</button>
+                                <button class="table-btn edit">Editar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>V003</td>
+                            <td>14/08/2024</td>
+                            <td>Pedro Costa</td>
+                            <td>Camiseta Polo (2x)</td>
+                            <td>R$ 159,80</td>
+                            <td><span class="status-badge status-warning">Pendente</span></td>
+                            <td>
+                                <button class="table-btn view">Ver</button>
+                                <button class="table-btn edit">Editar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>V004</td>
+                            <td>14/08/2024</td>
+                            <td>Ana Lima</td>
+                            <td>Vaso Decorativo (3x)</td>
+                            <td>R$ 136,50</td>
+                            <td><span class="status-badge status-success">Concluída</span></td>
+                            <td>
+                                <button class="table-btn view">Ver</button>
+                                <button class="table-btn edit">Editar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>V005</td>
+                            <td>13/08/2024</td>
+                            <td>Carlos Rocha</td>
+                            <td>Fone de Ouvido</td>
+                            <td>R$ 129,90</td>
+                            <td><span class="status-badge status-error">Cancelada</span></td>
+                            <td>
+                                <button class="table-btn view">Ver</button>
+                                <button class="table-btn edit">Editar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Contas Section -->
+        <div id="contas-section" class="section">
+            <div class="section-header">
+                <h2>💳 Contas a Pagar</h2>
+                <button class="action-btn btn-primary" onclick="openModal('conta')">
+                    ➕ Nova Conta
+                </button>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-icon">⏰</div>
+                    <div class="stat-content">
+                        <div class="stat-number">R$ 3.250</div>
+                        <div class="stat-label">Vencendo Hoje</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-content">
+                        <div class="stat-number">R$ 8.750</div>
+                        <div class="stat-label">Este Mês</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚠️</div>
+                    <div class="stat-content">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Em Atraso</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-content">
+                        <div class="stat-number">R$ 12.430</div>
+                        <div class="stat-label">Pagas no Mês</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filters-bar">
+                <input type="text" placeholder="Buscar por fornecedor..." class="search-input">
+                <select class="filter-select">
+                    <option>Todas as Categorias</option>
+                    <option>Aluguel</option>
+                    <option>Energia</option>
+                    <option>Fornecedores</option>
+                    <option>Outros</option>
+                </select>
+                <select class="filter-select">
+                    <option>Todos os Status</option>
+                    <option>Pendente</option>
+                    <option>Pago</option>
+                    <option>Vencido</option>
+                </select>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Descrição</th>
+                            <th>Fornecedor</th>
+                            <th>Valor</th>
+                            <th>Vencimento</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>C001</td>
+                            <td>Aluguel da Loja</td>
+                            <td>Imobiliária ABC</td>
+                            <td>R$ 2.500,00</td>
+                            <td>15/08/2024</td>
+                            <td><span class="status-badge status-warning">Vence Hoje</span></td>
+                            <td>
+                                <button class="table-btn pay">Pagar</button>
+                                <button class="table-btn edit">Editar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>C002</td>
+                            <td>Energia Elétrica</td>
+                            <td>Companhia de Energia</td>
+                            <td>R$ 450,00</td>
+                            <td>20/08/2024</td>
+                            <td><span class="status-badge status-normal">Pendente</span></td>
+                            <td>
+                                <button class="table-btn pay">Pagar</button>
+                                <button class="table-btn edit">Editar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>C003</td>
+                            <td>Fornecedor Eletrônicos</td>
+                            <td>TechSupply Ltda</td>
+                            <td>R$ 5.200,00</td>
+                            <td>10/08/2024</td>
+                            <td><span class="status-badge status-error">Vencido</span></td>
+                            <td>
+                                <button class="table-btn pay">Pagar</button>
+                                <button class="table-btn edit">Editar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>C004</td>
+                            <td>Internet e Telefone</td>
+                            <td>Telecom Plus</td>
+                            <td>R$ 180,00</td>
+                            <td>25/08/2024</td>
+                            <td><span class="status-badge status-normal">Pendente</span></td>
+                            <td>
+                                <button class="table-btn pay">Pagar</button>
+                                <button class="table-btn edit">Editar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>C005</td>
+                            <td>Material de Limpeza</td>
+                            <td>Clean Service</td>
+                            <td>R$ 320,00</td>
+                            <td>05/08/2024</td>
+                            <td><span class="status-badge status-success">Pago</span></td>
+                            <td>
+                                <button class="table-btn view">Ver</button>
+                                <button class="table-btn edit">Editar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2024 ZTech Pro - Sistema desenvolvido para facilitar a gestão da sua empresa</p>
+        </div>
+    </div>
+
+    <!-- Modal para Produto -->
+    <div id="modalProduto" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('produto')">&times;</span>
+            <h2 style="margin-bottom: 25px; color: var(--text-primary-light); transition: color 0.3s ease;">Cadastrar Novo Produto</h2>
+            <div class="form-group">
+                <label>Nome do Produto:</label>
+                <input type="text" placeholder="Digite o nome do produto">
+            </div>
+            <div class="form-group">
+                <label>Código:</label>
+                <input type="text" placeholder="Código do produto">
+            </div>
+            <div class="form-group">
+                <label>Categoria:</label>
+                <select>
+                    <option>Selecione uma categoria</option>
+                    <option>Eletrônicos</option>
+                    <option>Roupas</option>
+                    <option>Casa e Jardim</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Preço:</label>
+                <input type="number" placeholder="0,00" step="0.01">
+            </div>
+            <div class="form-group">
+                <label>Quantidade em Estoque:</label>
+                <input type="number" placeholder="0">
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                <button class="action-btn btn-primary" style="flex: 1;">Salvar Produto</button>
+                <button class="action-btn btn-secondary" onclick="closeModal('produto')">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Venda -->
+    <div id="modalVenda" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('venda')">&times;</span>
+            <h2 style="margin-bottom: 25px; color: var(--text-primary-light); transition: color 0.3s ease;">Registrar Nova Venda</h2>
+            <div class="form-group">
+                <label>Cliente:</label>
+                <input type="text" placeholder="Nome do cliente">
+            </div>
+            <div class="form-group">
+                <label>Produto:</label>
+                <select>
+                    <option>Selecione um produto</option>
+                    <option>Smartphone Samsung - R$ 899,00</option>
+                    <option>Notebook Dell - R$ 2.499,00</option>
+                    <option>Fone de Ouvido - R$ 129,90</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Quantidade:</label>
+                <input type="number" placeholder="1" min="1">
+            </div>
+            <div class="form-group">
+                <label>Valor Total:</label>
+                <input type="number" placeholder="0,00" step="0.01">
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                <button class="action-btn btn-primary" style="flex: 1;">Finalizar Venda</button>
+                <button class="action-btn btn-secondary" onclick="closeModal('venda')">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Conta -->
+    <div id="modalConta" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('conta')">&times;</span>
+            <h2 style="margin-bottom: 25px; color: var(--text-primary-light); transition: color 0.3s ease;">Cadastrar Conta a Pagar</h2>
+            <div class="form-group">
+                <label>Descrição:</label>
+                <input type="text" placeholder="Descrição da conta">
+            </div>
+            <div class="form-group">
+                <label>Fornecedor:</label>
+                <input type="text" placeholder="Nome do fornecedor">
+            </div>
+            <div class="form-group">
+                <label>Valor:</label>
+                <input type="number" placeholder="0,00" step="0.01">
+            </div>
+            <div class="form-group">
+                <label>Data de Vencimento:</label>
+                <input type="date">
+            </div>
+            <div class="form-group">
+                <label>Categoria:</label>
+                <select>
+                    <option>Selecione uma categoria</option>
+                    <option>Aluguel</option>
+                    <option>Energia</option>
+                    <option>Fornecedores</option>
+                    <option>Outros</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                <button class="action-btn btn-primary" style="flex: 1;">Salvar Conta</button>
+                <button class="action-btn btn-secondary" onclick="closeModal('conta')">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle Functionality
+        let isDarkTheme = false;
+
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+            
+            isDarkTheme = !isDarkTheme;
+            
+            if (isDarkTheme) {
+                body.classList.add('dark-theme');
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Tema Claro';
+            } else {
+                body.classList.remove('dark-theme');
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Tema Escuro';
+            }
+            
+            // Save theme preference
+            localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                toggleTheme();
+            }
+        }
+
+        function showSection(section) {
+            // Atualizar botões ativos
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Ocultar todas as seções
+            document.querySelectorAll('.section').forEach(sec => {
+                sec.style.display = 'none';
+                sec.classList.remove('active');
+            });
+            
+            // Mostrar seção selecionada com animação
+            const targetSection = document.getElementById(section + '-section');
+            if (targetSection) {
+                targetSection.style.display = 'block';
+                setTimeout(() => {
+                    targetSection.classList.add('active');
+                }, 50);
+            }
+        }
+
+        function openModal(type) {
+            document.getElementById('modal' + type.charAt(0).toUpperCase() + type.slice(1)).style.display = 'block';
+        }
+
+        function closeModal(type) {
+            document.getElementById('modal' + type.charAt(0).toUpperCase() + type.slice(1)).style.display = 'none';
+        }
+
+        // Fechar modal ao clicar fora dele
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Animação de entrada suave
+        window.addEventListener('load', function() {
+            // Load theme preference
+            loadTheme();
+            
+            // Mostrar dashboard por padrão
+            document.getElementById('dashboard-section').classList.add('active');
+            
+            document.querySelectorAll('.card, .quick-actions').forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    el.style.transition = 'all 0.6s ease';
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+
+        // Simulação de ações da tabela
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('table-btn')) {
+                const action = Array.from(e.target.classList).find(cls => cls !== 'table-btn');
+                const row = e.target.closest('tr');
+                const id = row.cells[0].textContent;
+                
+                switch(action) {
+                    case 'delete':
+                        if (confirm(`Confirma a exclusão do item ${id}?`)) {
+                            row.style.opacity = '0';
+                            setTimeout(() => row.remove(), 300);
+                        }
+                        break;
+                    case 'view':
+                        alert(`Visualizando detalhes do item ${id}`);
+                        break;
+                    case 'pay':
+                        if (confirm(`Confirma o pagamento da conta ${id}?`)) {
+                            const statusCell = row.querySelector('.status-badge');
+                            statusCell.textContent = 'Pago';
+                            statusCell.className = 'status-badge status-success';
+                        }
+                        break;
+                }
+            }
+        });
+
+        // Funcionalidade de busca simples
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('search-input')) {
+                const searchTerm = e.target.value.toLowerCase();
+                const table = e.target.closest('.section').querySelector('.data-table tbody');
+                const rows = table.querySelectorAll('tr');
+                
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(searchTerm) ? '' : 'none';
+                });
+            }
+        });
+
+        // Update modal headers for dark theme
+        function updateModalHeaders() {
+            const modalHeaders = document.querySelectorAll('.modal-content h2');
+            modalHeaders.forEach(header => {
+                if (isDarkTheme) {
+                    header.style.color = 'var(--text-primary-dark)';
+                } else {
+                    header.style.color = 'var(--text-primary-light)';
+                }
+            });
+        }
+
+        // Listen for theme changes to update modal headers
+        document.body.addEventListener('transitionend', function(e) {
+            if (e.target === document.body) {
+                updateModalHeaders();
+            }
+        });
+    </script>
+</body>
+</html>
+                    <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZTech Pro - Sistema de Gestão Empresarial</title>
+    <style>
+        :root {
+            --primary-red: #ff4444;
+            --primary-red-hover: #ff3333;
+            --primary-red-dark: #cc3333;
+            
+            /* Light Theme Variables */
+            --bg-gradient-light: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #f8f9fa 100%);
+            --card-bg-light: rgba(255, 255, 255, 0.95);
+            --text-primary-light: #2d3748;
+            --text-secondary-light: #6c757d;
+            --border-light: rgba(0, 0, 0, 0.05);
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --shadow-hover-light: rgba(0, 0, 0, 0.15);
+            --input-bg-light: rgba(248, 249, 250, 0.9);
+            --table-border-light: rgba(0, 0, 0, 0.08);
+            --stat-bg-light: rgba(248, 249, 250, 0.8);
+            --modal-overlay-light: rgba(0, 0, 0, 0.6);
+            
+            /* Dark Theme Variables */
+            --bg-gradient-dark: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+            --card-bg-dark: rgba(42, 42, 42, 0.95);
+            --text-primary-dark: #ffffff;
+            --text-secondary-dark: #cccccc;
+            --border-dark: rgba(255, 255, 255, 0.1);
+            --shadow-dark: rgba(0, 0, 0, 0.5);
+            --shadow-hover-dark: rgba(0, 0, 0, 0.7);
+            --input-bg-dark: rgba(42, 42, 42, 0.9);
+            --table-border-dark: rgba(255, 255, 255, 0.1);
+            --stat-bg-dark: rgba(255, 255, 255, 0.05);
+            --modal-overlay-dark: rgba(0, 0, 0, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+            background: var(--bg-gradient-light);
+        }
+
+        body.dark-theme {
+            background: var(--bg-gradient-dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: var(--card-bg-light);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px var(--shadow-light);
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+        .dark-theme .header {
+            background: var(--card-bg-dark);
+            box-shadow: 0 8px 32px var(--shadow-dark);
+            border: 1px solid var(--border-dark);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, var(--primary-red), var(--primary-red-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo-text h1 {
+            color: var(--text-primary-light);
+            font-size: 28px;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .logo-text h1 {
+            color: var(--text-primary-dark);
+        }
+
+        .subtitle {
+            color: var(--text-secondary-light);
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .subtitle {
+            color: var(--text-secondary-dark);
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--stat-bg-light);
+            padding: 8px 16px;
+            border-radius: 25px;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .dark-theme .theme-toggle {
+            background: var(--stat-bg-dark);
+            border: 1px solid var(--border-dark);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 68, 68, 0.1);
+            border-color: var(--primary-red);
+        }
+
+        .theme-icon {
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-text {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary-light);
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .theme-text {
+            color: var(--text-secondary-dark);
+        }
+
+        .nav {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background: var(--primary-red);
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-red-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 68, 68, 0.4);
+        }
+
+        .nav-btn.active {
+            background: var(--primary-red-dark);
+            box-shadow: 0 4px 12px rgba(204, 51, 51, 0.6);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: var(--card-bg-light);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px var(--shadow-light);
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+        .dark-theme .card {
+            background: var(--card-bg-dark);
+            box-shadow: 0 8px 32px var(--shadow-dark);
+            border: 1px solid var(--border-dark);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px var(--shadow-hover-light);
+            border-color: rgba(255, 68, 68, 0.3);
+        }
+
+        .dark-theme .card:hover {
+            box-shadow: 0 15px 35px var(--shadow-hover-dark);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .card-icon.estoque { background: linear-gradient(45deg, var(--primary-red), var(--primary-red-dark)); }
+        .card-icon.vendas { background: linear-gradient(45deg, #ff6644, #cc4433); }
+        .card-icon.contas { background: linear-gradient(45deg, #ff8844, #cc5533); }
+
+        .card h3 {
+            color: var(--text-primary-light);
+            font-size: 20px;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .card h3 {
+            color: var(--text-primary-dark);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            background: var(--stat-bg-light);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+        .dark-theme .stat-item {
+            background: var(--stat-bg-dark);
+            border: 1px solid var(--border-dark);
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--text-primary-light);
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .stat-number {
+            color: var(--text-primary-dark);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary-light);
+            margin-top: 4px;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .stat-label {
+            color: var(--text-secondary-dark);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: var(--primary-red);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-red-hover);
+        }
+
+        .btn-secondary {
+            background: var(--stat-bg-light);
+            color: var(--text-secondary-light);
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+        .dark-theme .btn-secondary {
+            background: var(--stat-bg-dark);
+            color: var(--text-secondary-dark);
+            border: 1px solid var(--border-dark);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 68, 68, 0.1);
+            color: var(--text-primary-light);
+            border-color: var(--primary-red);
+        }
+
+        .dark-theme .btn-secondary:hover {
+            color: var(--text-primary-dark);
+        }
+
+        .quick-actions {
+            background: var(--card-bg-light);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px var(--shadow-light);
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+        .dark-theme .quick-actions {
+            background: var(--card-bg-dark);
+            box-shadow: 0 8px 32px var(--shadow-dark);
+            border: 1px solid var(--border-dark);
+        }
+
+        .quick-actions h3 {
+            color: var(--text-primary-light);
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .quick-actions h3 {
+            color: var(--text-primary-dark);
+        }
+
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+        }
+
+        .quick-btn {
+            background: var(--stat-bg-light);
+            border: 2px solid var(--border-light);
+            border-radius: 10px;
+            padding: 20px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--text-secondary-light);
+        }
+
+        .dark-theme .quick-btn {
+            background: var(--stat-bg-dark);
+            border: 2px solid var(--border-dark);
+            color: var(--text-secondary-dark);
+        }
+
+        .quick-btn:hover {
+            border-color: var(--primary-red);
+            background: rgba(255, 68, 68, 0.05);
+            transform: translateY(-2px);
+            color: var(--text-primary-light);
+        }
+
+        .dark-theme .quick-btn:hover {
+            background: rgba(255, 68, 68, 0.1);
+            color: var(--text-primary-dark);
+        }
+
+        .quick-btn-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .quick-btn-text {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--text-secondary-light);
+            font-size: 14px;
+            margin-top: 30px;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .footer {
+            color: var(--text-secondary-dark);
+        }
+
+        .section {
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.4s ease;
+        }
+
+        .section.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-light);
+            transition: border-color 0.3s ease;
+        }
+
+        .dark-theme .section-header {
+            border-bottom-color: var(--border-dark);
+        }
+
+        .section-header h2 {
+            color: var(--text-primary-light);
+            font-size: 28px;
+            font-weight: 600;
+            margin: 0;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .section-header h2 {
+            color: var(--text-primary-dark);
+        }
+
+        .filters-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .search-input, .filter-select {
+            padding: 12px 16px;
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
+            background: var(--input-bg-light);
+            backdrop-filter: blur(10px);
+            font-size: 14px;
+            color: var(--text-primary-light);
+            transition: all 0.3s ease;
+            min-width: 180px;
+        }
+
+        .dark-theme .search-input,
+        .dark-theme .filter-select {
+            border: 2px solid var(--border-dark);
+            background: var(--input-bg-dark);
+            color: var(--text-primary-dark);
+        }
+
+        .search-input:focus, .filter-select:focus {
+            outline: none;
+            border-color: var(--primary-red);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .dark-theme .search-input:focus,
+        .dark-theme .filter-select:focus {
+            background: rgba(42, 42, 42, 1);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary-light);
+        }
+
+        .dark-theme .search-input::placeholder {
+            color: var(--text-secondary-dark);
+        }
+
+        .table-container {
+            background: var(--card-bg-light);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 0;
+            overflow: hidden;
+            box-shadow: 0 8px 32px var(--shadow-light);
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+        .dark-theme .table-container {
+            background: var(--card-bg-dark);
+            box-shadow: 0 8px 32px var(--shadow-dark);
+            border: 1px solid var(--border-dark);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .data-table th {
+            background: linear-gradient(45deg, var(--primary-red), var(--primary-red-dark));
+            color: white;
+            padding: 18px 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            padding: 16px 15px;
+            border-bottom: 1px solid var(--table-border-light);
+            color: var(--text-primary-light);
+            transition: all 0.3s ease;
+        }
+
+        .dark-theme .data-table td {
+            border-bottom: 1px solid var(--table-border-dark);
+            color: var(--text-primary-dark);
+        }
+
+        .data-table tbody tr {
+            transition: background-color 0.3s ease;
+        }
+
+        .data-table tbody tr:hover {
+            background: rgba(255, 68, 68, 0.05);
+        }
+
+        .dark-theme .data-table tbody tr:hover {
+            background: rgba(255, 68, 68, 0.1);
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Light theme status colors */
+        .status-normal { 
+            background: rgba(40, 167, 69, 0.1); 
+            color: #28a745; 
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+        .status-low { 
+            background: rgba(255, 193, 7, 0.1); 
+            color: #ffc107; 
+            border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+        .status-out { 
+            background: rgba(108, 117, 125, 0.1); 
+            color: #6c757d; 
+            border: 1px solid rgba(108, 117, 125, 0.3);
+        }
+        .status-success { 
+            background: rgba(40, 167, 69, 0.1); 
+            color: #28a745; 
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+        .status-warning { 
+            background: rgba(255, 193, 7, 0.1); 
+            color: #ffc107; 
+            border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+        .status-error { 
+            background: rgba(220, 53, 69, 0.1); 
+            color: #dc3545; 
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+
+        /* Dark theme status colors */
+        .dark-theme .status-normal { 
+            background: rgba(40, 167, 69, 0.2); 
+            color: #4ade80; 
+        }
+        .dark-theme .status-low { 
+            background: rgba(255, 193, 7, 0.2); 
+            color: #fbbf24; 
+        }
+        .dark-theme .status-out { 
+            background: rgba(156, 163, 175, 0.2); 
+            color: #9ca3af; 
+        }
+        .dark-theme .status-success { 
+            background: rgba(40, 167, 69, 0.2); 
+            color: #4ade80; 
+        }
+        .dark-theme .status-warning { 
+            background: rgba(255, 193, 7, 0.2); 
+            color: #fbbf24; 
+        }
+        .dark-theme .status-error { 
+            background: rgba(239, 68, 68, 0.2); 
+            color: #ef4444; 
+        }
+
+        .table-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-right: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .table-btn.edit {
+            background: var(--primary-red);
+            color: white;
+        }
+
+        .table-btn.edit:hover {
+            background: var(--primary-red-hover);
+        }
+
+        .table-btn.delete {
+            background: #6c757d;
+            color: white;
+        }
+
+        .table-btn.delete:hover {
+            background: #5a6268;
+        }
+
+        .table-btn.view {
+            background: #ff6644;
+            color: white;
+        }
+
+        .table-btn.view:hover {
+            background: #ff5533;
+        }
+
+        .table-btn.pay {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .table-btn.pay:hover {
+            background: #ffcd39;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--card-bg-light);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 4px 15px var(--shadow-light);
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+        .dark-theme .stat-card {
+            background: var(--card-bg-dark);
+            box-shadow: 0 4px 15px var(--shadow-dark);
+            border: 1px solid var(--border-dark);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px var(--shadow-hover-light);
+            border-color: rgba(255, 68, 68, 0.3);
+        }
+
+        .dark-theme .stat-card:hover {
+            box-shadow: 0 8px 25px var(--shadow-hover-dark);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, var(--primary-red), var(--primary-red-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+            color: white;
+        }
+
+        .stat-content .stat-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--text-primary-light);
+            line-height: 1;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .stat-content .stat-number {
+            color: var(--text-primary-dark);
+        }
+
+        .stat-content .stat-label {
+            font-size: 13px;
+            color: var(--text-secondary-light);
+            margin-top: 4px;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .stat-content .stat-label {
+            color: var(--text-secondary-dark);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--modal-overlay-light);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .dark-theme .modal {
+            background-color: var(--modal-overlay-dark);
+        }
+
+        .modal-content {
+            background: var(--card-bg-light);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px var(--shadow-hover-light);
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+        .dark-theme .modal-content {
+            background: var(--card-bg-dark);
+            box-shadow: 0 25px 50px var(--shadow-hover-dark);
+            border: 1px solid var(--border-dark);
+        }
+
+        .close {
+            color: var(--text-secondary-light);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .close {
+            color: var(--text-secondary-dark);
+        }
+
+        .close:hover {
+            color: var(--primary-red);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-primary-light);
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .form-group label {
+            color: var(--text-primary-dark);
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: var(--input-bg-light);
+            color: var(--text-primary-light);
+        }
+
+        .dark-theme .form-group input,
+        .dark-theme .form-group select {
+            border: 2px solid var(--border-dark);
+            background: var(--input-bg-dark);
+            color: var(--text-primary-dark);
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-red);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .dark-theme .form-group input:focus,
+        .dark-theme .form-group select:focus {
+            background: rgba(42, 42, 42, 1);
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-secondary-light);
+        }
+
+        .dark-theme .form-group input::placeholder {
+            color: var(--text-secondary-dark);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header-top {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .nav {
+                justify-content: center;
+            }
+            
+            .nav-btn {
+                flex: 1;
+                justify-content: center;
+                min-width: 100px;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+
+            .filters-bar {
+                flex-direction: column;
+            }
+
+            .search-input, .filter-select {
+                min-width: auto;
+            }
+
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            .data-table {
+                min-width: 700px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header
