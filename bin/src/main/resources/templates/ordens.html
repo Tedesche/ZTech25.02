@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordens de Serviço </title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/styles/style.css}">
+    <link rel="stylesheet" th:href="@{/styles/reset.css}">
+</head>
+
+<body>
+    <header class="cabecalho">
+        <a th:href="@{/inicio}">
+            <img class="logo_cabecalho" src="/img/logo-removebg.svg" />
+        </a>
+        <div
+            style="width: 1592px; height: 96px; left: 167px; top: 7px; position: absolute; text-align: center; justify-content: center; display: flex; flex-direction: column; color: white; font-size: 64px; font-family: Roboto; font-weight: 500; line-height: 71.86px; word-wrap: break-word">
+            Ordens de Serviço
+        </div>
+    </header>
+
+    <div class="area-principal">
+        <div class="barra">
+            <ul>
+				<li class="opcao_lista"><a class="link_lista" th:href="@{/inicio}">INÍCIO</a></li>
+				<li class="opcao_lista"><a class="link_lista" th:href="@{/cliente/listar}">CLIENTES</a></li>
+				<li class="opcao_lista"><a class="link_lista" th:href="@{/produto/listar}">ESTOQUE</a></li>
+				<li class="opcao_lista"><a class="link_lista" th:href="@{/vendas/listar}">VENDAS</a></li>
+				<li class="opcao_lista"><a class="link_lista_atual" th:href="@{/ordens/listar}">ORDENS DE SERVIÇO</a></li>
+            </ul>
+        </div>
+        <!-- CONTEÚDO DA PÁGINA -->
+        <div class="conteudo">
+            <div class="banner">
+               	  <a th:href="@{/ordens/cadastrarForm}"><input class="botao_adicionar" type="button" value="Adicionar O.S">
+					</a>
+               	  <a th:href="@{/servico/cadastrarForm}"><input class="botao_adicionar_S" type="button" value="Adicionar Serviço">
+					</a>
+				  <form th:action="@{/ordens/buscar}" style="display: flex; align-items: center; margin-left: 10px; margin-top: 20px; top: 13em; left: 222px;" >
+				  	<input type="search" name="termo" th:value="${termo}" class="banner_pesquisa"
+				  	    placeholder="Buscar por ID, nome, CPF, data, servico e produto...">
+				  	<button type="submit" class="botao_pesquisar" style="margin-left: 10px; padding: 10px 15px; border-radius: 20px; background-color: #7C1F1F; color: white; border: none; cursor: pointer;">
+				  	    <i class="fas fa-search"></i> Pesquisar</button>
+				  </form>
+            </div>
+			<div th:if="${mensagem}" class="alert alert-success" style="margin-top: 40px; padding: 10px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: .25rem;">
+			    <p th:text="${mensagem}"></p>
+			</div>
+			 <div th:if="${mensagemBusca}" class="alert alert-info" style="margin-top: 40px; padding: 10px; background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; border-radius: .25rem;">
+			    <p th:text="${mensagemBusca}"></p>
+			</div>
+			
+            <div class="tabelaOS">
+                <table>
+                    <thead>
+                        <tr>
+							<th>ID</th>
+                            <th>Nome Cliente</th>
+                            <th>Data Inicio</th>
+                            <th>Data Fim</th>
+                            <th>Valor</th>
+                            <th>Servico</th>
+							<th>Produto</th>
+							<th colspan="1" class="acoes">Status</th>
+							<th colspan="2" class="acoes">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dados dinâmicos via Java serão inseridos aqui -->
+		<tr th:if="${paginaOrdens != null}" th:each="ordensDTO : ${paginaOrdens.content}">
+                             <td th:text="${ordensDTO.idOS}"></td>
+                             <td th:text="${ordensDTO.nomeCliente} ?: 'N/A'"></td>
+                             <td th:text="${ordensDTO.dataInicio}"></td>
+                             <td th:text="${ordensDTO.dataFim}"></td>
+                             <td th:text="${#numbers.formatCurrency(ordensDTO.valor)}"></td>
+                             <td th:text="${ordensDTO.nomeServico} ?: 'N/A'"></td>
+                             <td th:text="${ordensDTO.nomeProduto} ?: 'N/A'"></td>
+
+                             <td>
+							 <a th:href="@{/ordens/atualizarStatus/{idOS}(idOS=${ordensDTO.idOS})}" title="Clicar para Atualizar OS"
+							    onclick="return confirm('Tem certeza que deseja atualizar o status desta Ordem de Serviço?');">
+                                 <span th:if="${ordensDTO.statusOS != null}"
+                                       th:text="${ordensDTO.statusOS}"
+                                       th:classappend="${#strings.toLowerCase(ordensDTO.statusOS) == 'registrada' ? 'status-registrada' :
+                                                      (#strings.toLowerCase(ordensDTO.statusOS) == 'em andamento' ? 'status-em-andamento' :
+                                                      (#strings.toLowerCase(ordensDTO.statusOS) == 'concluido' ? 'status-concluido' : 
+                                                      (#strings.toLowerCase(ordensDTO.statusOS) == 'cancelado' ? 'status-cancelado' :
+													  (#strings.toLowerCase(ordensDTO.statusOS) == 'cliente ausente' ? 'status-cliente-ausente' : ''))))}">
+                                 </span>
+                                 <span th:if="${ordensDTO.statusOS == null}" th:text="'N/A'"></span>
+                             </td>
+                             <td class="acoes">
+                                 <a th:href="@{/ordens/editarForm/{idOS}(idOS=${ordensDTO.idOS})}"
+                                    class="botao-acao editar" title="Editar">
+                                     <i class="fa fa-edit fa-lg"></i>
+                                 </a>
+                             </td>
+                             <td class="acoes">
+                                 <a th:href="@{/ordens/deletar/{idOS}(idOS=${ordensDTO.idOS})}"
+                                    class="botao-acao deletar" title="Deletar"
+                                    onclick="return confirm('Tem certeza que deseja deletar esta Ordem de Servico? O estoque do produto será restaurado.');">
+                                     <i class="fa fa-trash-alt fa-lg" ></i>
+                                 </a>
+                             </td>
+                        </tr>
+                         <tr th:if="${paginaOrdens == null or #lists.isEmpty(paginaOrdens.content)}">
+                             <td colspan="11" style="text-align: center;">Nenhuma ordem de serviço encontrada.</td>
+                         </tr>
+						
+                    </tbody>
+                </table>
+				<div th:if="${paginaOrdens != null && paginaOrdens.totalPages > 1}" class="paginacao" style="margin-top: 20px; text-align: center;">
+				    <span th:if="${paginaOrdens.hasPrevious()}">
+				        <a th:href="@{/ordens/listar(termo=${termo}, page=${paginaOrdens.number - 1}, size=${paginaOrdens.size})}">Anterior</a>
+				    </span>
+				    <th:block th:each="i: ${#numbers.sequence(0, paginaOrdens.totalPages - 1)}">
+				        <span th:if="${paginaOrdens.number == i}" class="pagina-atual" style="font-weight: bold; margin: 0 5px;">[[${i + 1}]]</span>
+				        <span th:if="${paginaOrdens.number != i}" style="margin: 0 5px;">
+				            <a th:href="@{/ordens/listar(termo=${termo}, page=${i}, size=${paginaOrdens.size})}">[[${i + 1}]]</a>
+				        </span>
+				    </th:block>
+				    <span th:if="${paginaOrdens.hasNext()}">
+				        <a th:href="@{/ordens/listar(termo=${termo}, page=${paginaOrdens.number + 1}, size=${paginaOrdens.size})}">Próxima</a>
+				    </span>
+				</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

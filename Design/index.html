@@ -146,12 +146,6 @@
                     <option>Roupas</option>
                     <option>Casa e Jardim</option>
                 </select>
-                <select class="filter-select">
-                    <option>Todos os Status</option>
-                    <option>Estoque Normal</option>
-                    <option>Estoque Baixo</option>
-                    <option>Sem Estoque</option>
-                </select>
             </div>
 
             <div class="table-container">
@@ -163,7 +157,6 @@
                             <th>Categoria</th>
                             <th>Preço</th>
                             <th>Estoque</th>
-                            <th>Status</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -174,7 +167,6 @@
                             <td>Eletrônicos</td>
                             <td>R$ 899,00</td>
                             <td>25</td>
-                            <td><span class="status-badge status-normal">Normal</span></td>
                             <td>
                                 <button class="table-btn edit">Editar</button>
                                 <button class="table-btn delete">Excluir</button>
@@ -186,7 +178,6 @@
                             <td>Eletrônicos</td>
                             <td>R$ 2.499,00</td>
                             <td>8</td>
-                            <td><span class="status-badge status-normal">Normal</span></td>
                             <td>
                                 <button class="table-btn edit">Editar</button>
                                 <button class="table-btn delete">Excluir</button>
@@ -198,7 +189,6 @@
                             <td>Eletrônicos</td>
                             <td>R$ 129,90</td>
                             <td>3</td>
-                            <td><span class="status-badge status-low">Estoque Baixo</span></td>
                             <td>
                                 <button class="table-btn edit">Editar</button>
                                 <button class="table-btn delete">Excluir</button>
@@ -210,7 +200,6 @@
                             <td>Roupas</td>
                             <td>R$ 79,90</td>
                             <td>0</td>
-                            <td><span class="status-badge status-out">Sem Estoque</span></td>
                             <td>
                                 <button class="table-btn edit">Editar</button>
                                 <button class="table-btn delete">Excluir</button>
@@ -222,7 +211,6 @@
                             <td>Casa e Jardim</td>
                             <td>R$ 45,50</td>
                             <td>15</td>
-                            <td><span class="status-badge status-normal">Normal</span></td>
                             <td>
                                 <button class="table-btn edit">Editar</button>
                                 <button class="table-btn delete">Excluir</button>
@@ -1078,8 +1066,8 @@
         }
 
         .action-btn {
-            flex: 1;
-            min-width: 120px;
+            flex: display;
+            min-width: 150px;
             padding: 10px 16px;
             border: none;
             border-radius: 6px;

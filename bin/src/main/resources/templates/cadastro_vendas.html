@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Nova Venda</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+	    rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/styles/reset.css}">
+    <link rel="stylesheet" th:href="@{/styles/style.css}"> 
+    </head>
+<!-- lala -->
+<body>
+    <header class="cabecalho">
+        <a th:href="@{/inicio}">
+            <img class="logo_cabecalho" th:src="@{/img/logo-removebg.svg}" alt="Logo ZTech" />
+        </a>
+        <div class="titulo_pagina">
+            Cadastrar Nova Venda
+        </div>
+    </header>
+
+    <div class="area-principal">
+        <div class="barra">
+            <ul>
+				<li class="opcao_lista"><a class="link_lista" th:href="@{/inicio}">INÍCIO</a></li>
+                <li class="opcao_lista"><a class="link_lista" th:href="@{/cliente/listar}">CLIENTES</a></li>
+                <li class="opcao_lista"><a class="link_lista" th:href="@{/produto/listar}">ESTOQUE</a></li>
+                <li class="opcao_lista"><a class="link_lista" th:href="@{/vendas/listar}">VENDAS</a></li>
+                <li class="opcao_lista"><a class="link_lista" th:href="@{/ordens/listar}">ORDENS DE SERVIÇO</a></li>
+            </ul>
+        </div>
+            
+            <form th:action="@{/vendas/cadastrar}" th:object="${venda}" method="post" class="formulario">
+                
+                <div class="coluna">
+                    <h3 class="titulo_formulario">Detalhes da Venda</h3>
+
+                    <label for="dataInicio">Data da Venda:</label>
+                    <input class="campo_digitacao" type="date" id="dataInicio" th:field="*{dataInicio}" required>
+                    <span th:if="${#fields.hasErrors('dataInicio')}" th:errors="*{dataInicio}" class="error"></span>
+
+                    <label for="horaInicio">Hora da Venda:</label>
+                    <input class="campo_digitacao" type="time" id="horaInicio" th:field="*{horaInicio}" required>
+                    <span th:if="${#fields.hasErrors('horaInicio')}" th:errors="*{horaInicio}" class="error"></span>
+                    
+                    <label for="idCliente">Cliente:</label>
+                    <select id="idCliente" th:field="*{idCliente}" class="campo_digitacao" required>
+                        <option value="">Selecione um Cliente</option>
+                        <option th:each="clienteOpt : ${clientes}"
+                                th:value="${clienteOpt.idCliente}"
+                                th:text="${clienteOpt.nomeCliente} + ' (CPF: ' + ${clienteOpt.cpf} + ')'">
+                        </option>
+                    </select>
+                    <span th:if="${#fields.hasErrors('idCliente')}" th:errors="*{idCliente}" class="error"></span>
+                </div>
+
+                <hr class="separador"> <div class="coluna">
+                    <h3 class="titulo_formulario">Produto e Quantidade</h3>
+
+                    <label for="idProduto">Produto:</label>
+                    <select id="idProduto" th:field="*{idProduto}" class="campo_digitacao" required>
+                        <option value="">Selecione um Produto</option>
+                        <option th:each="produtoOpt : ${produtos}"
+                                th:value="${produtoOpt.idProduto}"
+                                th:text="${produtoOpt.nome} + ' (Estoque: ' + ${produtoOpt.quantidade} + ' | Valor: R$ ' + ${#numbers.formatDecimal(produtoOpt.valor,1,2,'COMMA')} + ')'">
+                        </option>
+                    </select>
+                    <span th:if="${#fields.hasErrors('idProduto')}" th:errors="*{idProduto}" class="error"></span>
+
+                    <label for="quantidade">Quantidade:</label>
+                    <input class="campo_digitacao" type="number" id="quantidade" th:field="*{quantidade}" min="1" required>
+					<span th:if="${mensagem}" class="alert alert-success" style="margin-top: 15px; padding: 10px; 
+						  background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: .25rem;
+						  max-width: 350px; width: 100%; word-wrap: break-word; box-sizing: border-box;" >
+					      <p th:text="${mensagem}"></p>
+					</span>
+                    <span th:if="${#fields.hasErrors('quantidade')}" th:errors="*{quantidade}" class="error"></span>
+                </div>
+                <div class="botoes">
+                    <a class="link_cancelar" th:href="@{/vendas/listar}"> 
+					<button type="button" class="cancelar">❌ Cancelar</button></a>
+                    <button type="submit" class="cadastrar">✔️ Cadastrar</button>
+                </div>
+            </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,141 @@
+.tabela{
+	padding: 20px;
+	background-color: white;
+    max-width: 1550px;
+    margin: 10px auto;
+	margin-top: 50px;
+	box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    overflow-x: auto;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	font-family: var(--fonte-principal);
+	font-weight: 450;
+}
+
+.tabela table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  font-size: 17px;
+}
+
+.tabela th,
+.tabela td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+.tabela th {
+  background-color: #f2f2f2;
+}
+
+.tabela td:last-child {
+  text-align: center;
+}
+
+/* Tabela de OS maior pois tem mais informações   */
+.tabelaOS{
+	font-family: var(--fonte-principal);
+	font-weight: 450;
+	padding: 20px;
+	background-color: white;
+    max-width: 1550px;
+    margin: 10px auto;
+	margin-top: 40px;
+	box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    overflow-x: auto;
+}
+
+tableOS {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.tabelaOS table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  font-size: 17px;
+}
+
+.tabelaOS th,
+.tabelaOS td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+.tabelaOS th {
+  background-color: #f2f2f2;
+}
+
+.tabelaOS td:last-child {
+  text-align: center;
+}
+.fa-trash-alt{
+	color: #b00707;
+}
+fa fa-edit{
+	color: #0b07b0;
+}
+span[class*="status-"] {
+    display: inline-block;
+    padding: 5px 10px;
+    color: white;
+    border-radius: 15px;
+    font-weight: bold;
+    text-align: center;
+    min-width: 150px; /* Ajuste conforme necessário, talvez precise de um pouco mais para "Cliente Ausente" */
+    box-sizing: border-box;
+}
+
+/* Status existentes e mantidos */
+.status-em-andamento {
+    background-color: #FFC107; /* Amarelo/Laranja */
+    color: #333; /* Texto escuro para contraste com amarelo */
+}
+
+.status-concluido {
+    background-color: #4CAF50; /* Verde */
+}
+
+.status-cancelado {
+    background-color: #F44336; /* Vermelho */
+}
+
+/* Novos status */
+.status-registrada {
+    background-color: #2196F3; /* Azul, por exemplo */
+    /* Ou um cinza claro se preferir algo mais neutro para "inicial" */
+    /* background-color: #B0BEC5; */
+    /* color: #333; */
+}
+
+.status-cliente-ausente {
+    background-color: #FF9800; /* Laranja mais escuro ou um tom diferente de atenção */
+    /* Ou um roxo, por exemplo */
+    /* background-color: #9C27B0; */
+}
+.filtro{
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	display: none;
+    width: 49px;
+    height: 49px;
+    background-image: url(../img/filtro.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+	background-size: 25px 25px;
+	background-color: #ffffff; /* fundo branco */
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* sombra leve */
+    display: inline-block;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    font-size: 16px;
+	text-indent: -9999px; /* Oculta o texto selecionado */
+}

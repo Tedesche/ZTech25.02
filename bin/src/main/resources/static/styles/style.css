@@ -1,0 +1,22 @@
+@import url('/styles/entrar.css');
+@import url('/styles/header.css');
+@import url('/styles/barralateral.css');
+@import url('/styles/banner.css');
+@import url('/styles/tables.css');
+@import url('/styles/formularios.css');
+:root{
+    --fonte-principal: "Roboto";
+}
+body{
+    height: 100%;
+    font-family: var(fonte-principal);
+}
+.area-principal {
+    display: flex;
+    min-height: calc(100vh - 96px); /* Altura total menos o cabeçalho */
+}
+.conteudo {
+    width: 90%;
+    padding: 20px;
+    box-sizing: border-box;
+}
