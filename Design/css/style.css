@@ -277,14 +277,14 @@
             border: 1px solid var(--border-dark);
         }
 
-        .stat-number {
+        .stat-text {
             font-size: 24px;
             font-weight: bold;
             color: var(--text-primary-light);
             transition: color 0.3s ease;
         }
 
-        .dark-theme .stat-number {
+        .dark-theme .stat-text {
             color: var(--text-primary-dark);
         }
 
@@ -643,6 +643,8 @@
             color: #ef4444; 
         }
 
+
+
         .table-btn {
             padding: 6px 12px;
             border: none;
@@ -740,7 +742,7 @@
             color: white;
         }
 
-        .stat-content .stat-number {
+        .stat-content .stat-text {
             font-size: 20px;
             font-weight: bold;
             color: var(--text-primary-light);
@@ -748,7 +750,9 @@
             transition: color 0.3s ease;
         }
 
-        .dark-theme .stat-content .stat-number {
+
+
+        .dark-theme .stat-content .stat-text {
             color: var(--text-primary-dark);
         }
 
