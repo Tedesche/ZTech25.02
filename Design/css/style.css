@@ -874,12 +874,6 @@
                 padding: 15px;
             }
             
-            .header-top {
-                flex-direction: column;
-                gap: 15px;
-                align-items: stretch;
-            }
-            
             .main-content {
                 grid-template-columns: 1fr;
                 gap: 20px;
