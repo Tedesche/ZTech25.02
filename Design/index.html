@@ -1,5 +1,15 @@
+
+                    <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZTech Pro - Sistema de Gestão Empresarial</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
     <div class="container">
-        <div class="header">
+        <div class="header"> 
             <div class="header-top">
                 <div class="logo">
                     <div class="logo-icon">ZT</div>
@@ -233,7 +243,7 @@
 		<div id="os-section" class="section">
 		    <div class="section-header">
 		        <h2>💰 Controle de Ordens de Serviço</h2>
-		        <button class="action-btn btn-primary" onclick="openModal('venda')"> <!-- Adicionar MODAL de serviço -->
+		        <button class="action-btn btn-primary" onclick="openModal('Servico')"> <!-- Adicionar MODAL de serviço -->
 		            ➕ Novo Serviço
 		        </button>
 		    </div>
@@ -329,7 +339,7 @@
         <div id="vendas-section" class="section">
             <div class="section-header">
                 <h2>💰 Controle de Vendas</h2>
-                <button class="action-btn btn-primary" onclick="openModal('venda')">
+                <button class="action-btn btn-primary" onclick="openModal('venda2')">
                     ➕ Nova Venda
                 </button>
             </div>
@@ -425,7 +435,7 @@
         <div id="funcionarios-section" class="section">
             <div class="section-header">
                 <h2>💳 Funcionarios </h2>
-                <button class="action-btn btn-primary" onclick="openModal('conta')">
+                <button class="action-btn btn-primary" onclick="openModal('funcionario')">
                     ➕ Novo funcionario
                 </button>
             </div>
@@ -434,15 +444,15 @@
                 <div class="stat-card">
                     <div class="stat-icon">📅</div>
                     <div class="stat-content">
-                        <div class="stat-text">R$ 8.750</div>
-                        <div class="stat-label">Colaboradores ativos</div>
+                        <div class="stat-text">2</div>
+                        <div class="stat-label">Colaborador(es) ativos</div>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">⚠️</div>
                     <div class="stat-content">
                         <div class="stat-text">Robson</div>
-                        <div class="stat-label">Aniversariante do mês</div>
+                        <div class="stat-label">Aniversariante(s) do mês</div>
                     </div>
                 </div>
             </div>
@@ -617,29 +627,82 @@
                 <input type="text" placeholder="Digite o nome do produto">
             </div>
             <div class="form-group">
-                <label>Código:</label>
-                <input type="text" placeholder="Código do produto">
+                <label>Custo:</label>
+                <input type="number" placeholder="0,00" step="5">
             </div>
             <div class="form-group">
-                <label>Categoria:</label>
-                <select>
-                    <option>Selecione uma categoria</option>
-                    <option>Eletrônicos</option>
-                    <option>Roupas</option>
-                    <option>Casa e Jardim</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Preço:</label>
-                <input type="number" placeholder="0,00" step="0.01">
+                <label>Preço Revenda:</label>
+                <input type="number" placeholder="0,00" step="5">
             </div>
             <div class="form-group">
                 <label>Quantidade em Estoque:</label>
                 <input type="number" placeholder="0">
             </div>
+            <div class="form-group">
+                <label>Descrição do Produto:</label>
+                <textarea 
+                    id="detalhes-pedido" 
+                    name="detalhesPedido" 
+                    rows="3" 
+                    placeholder="Digite aqui a descrição do Produto...">
+                </textarea>
+            </div>
+            <div class="form-group">
+                <label>Categoria:</label>
+                <select style="width: 85%;">
+                    <option>Selecione uma categoria</option>
+                    <option>Eletrônicos</option>
+                    <option>Roupas</option>
+                    <option>Casa e Jardim</option>
+                </select>
+                <button class="action-btn btn-primary" onclick="openModal('Categoria')" style="width: 14%; padding: 12px 0;" title="Cadastrar Nova Categoria">
+                    ➕
+                </button>
+            </div>
+            <div class="form-group">
+                <label>Marca:</label>
+                <select style="width: 85%;">
+                    <option>Selecione uma categoria</option>
+                    <option>Eletrônicos</option>
+                    <option>Roupas</option>
+                    <option>Casa e Jardim</option>
+                </select>
+                <button class="action-btn btn-primary" onclick="openModal('Marca')" style="width: 14%; padding: 12px 0;" title="Cadastrar Nova Marca">
+                    ➕ 
+                </button>
+            </div>
             <div style="display: flex; gap: 10px; margin-top: 25px;">
                 <button class="action-btn btn-primary" style="flex: 1;">Salvar Produto</button>
                 <button class="action-btn btn-secondary" onclick="closeModal('produto')">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Servviço -->
+    <div id="modalServico" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('Servico')">&times;</span>
+            <h2 style="margin-bottom: 25px; color: var(--text-primary-light); transition: color 0.3s ease;">Cadastrar Novo Servico</h2>
+            <div class="form-group">
+                <label>Nome do Servico:</label>
+                <input type="text" placeholder="Digite o nome do Serviço">
+            </div>
+            <div class="form-group">
+                <label>Descrição do Servico:</label>
+                <textarea 
+                    id="detalhes-pedido" 
+                    name="detalhesPedido" 
+                    rows="3" 
+                    placeholder="Digite aqui a descrição do serviço...">
+                </textarea>
+            </div>
+            <div class="form-group">
+                <label>Preço:</label>
+                <input type="number" placeholder="0,00" step="5">
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                <button class="action-btn btn-primary" style="flex: 1;">Salvar Serviço</button>
+                <button class="action-btn btn-secondary" onclick="closeModal('Servico')">Cancelar</button>
             </div>
         </div>
     </div>
@@ -668,11 +731,95 @@
             </div>
             <div class="form-group">
                 <label>Valor Total:</label>
-                <input type="number" placeholder="0,00" step="0.01">
+                <input type="number" placeholder="0,00" step="5">
             </div>
             <div style="display: flex; gap: 10px; margin-top: 25px;">
                 <button class="action-btn btn-primary" style="flex: 1;">Finalizar Venda</button>
                 <button class="action-btn btn-secondary" onclick="closeModal('venda')">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Venda 2-->
+    <div id="modalVenda2" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('venda2')">&times;</span>
+        <h2 style="margin-bottom: 25px;">Registrar Nova Venda</h2>
+
+        <div class="form-group">
+            <label>Cliente:</label>
+            <input type="text" id="cliente-nome" placeholder="Nome do cliente">
+        </div>
+
+        <hr style="margin: 20px 0; border: 1px solid #eee;">
+
+        <div class="add-produto-area">
+            <div class="form-group" style="flex: 3;">
+                <label>Produto:</label>
+                <select id="produto-select">
+                    <option value="">Selecione um produto</option>
+                    <option value="Smartphone Samsung|899.00">Smartphone Samsung - R$ 899,00</option>
+                    <option value="Notebook Dell|2499.00">Notebook Dell - R$ 2.499,00</option>
+                    <option value="Fone de Ouvido|129.90">Fone de Ouvido - R$ 129,90</option>
+                </select>
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label>Quantidade:</label>
+                <input type="number" id="produto-quantidade" value="1" min="1">
+            </div>
+        </div>
+            <button id="btn-adicionar-produto" class="action-btn" style="align-self: flex-end; height: 40px;">Adicionar Produto ao Carrinho</button>
+
+        <hr style="margin: 20px 0; border: 1px solid #eee;">
+
+        <h4>Itens da Venda</h4>
+        <div id="carrinho-itens-lista" class="carrinho-lista">
+            <p class="carrinho-vazio">Nenhum item adicionado ainda.</p>
+        </div>
+
+        <div class="total-venda">
+            <strong>Valor Total: R$ <span id="valor-total-carrinho">0,00</span></strong>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 25px;">
+            <button id="btn-finalizar-venda" class="action-btn btn-primary" style="flex: 1;">Finalizar Venda</button>
+            <button class="action-btn btn-secondary" onclick="closeModal('venda2')">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+    <!-- Modal para funcionario -->
+    <div id="modalFuncionario" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('Funcionario')">&times;</span>
+            <h2 style="margin-bottom: 25px; color: var(--text-primary-light); transition: color 0.3s ease;">Cadastrar Novo Funcionario</h2>
+            <div class="form-group">
+                <label>Nome:</label>
+                <input type="text" placeholder="Descrição da conta">
+            </div>
+            <div class="form-group">
+                <label>CPF:</label>
+                <input type="text" placeholder="Nome do Funcionario">
+            </div>
+            <div class="form-group">
+                <label>Data de Nascimento:</label>
+                <input type="date">
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label>Salario:</label>
+                <input type="number" id="produto-quantidade" value="1" step="100" min="100">
+            </div>
+            <div class="form-group">
+                <label>Nivel de Acesso:</label>
+                <select>
+                    <option>Selecione um Nivel de Acesso</option>
+                    <option>Admin</option>
+                    <option>Funcionario</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                <button class="action-btn btn-primary" style="flex: 1;">Salvar Conta</button>
+                <button class="action-btn btn-secondary" onclick="closeModal('Funcionario')">Cancelar</button>
             </div>
         </div>
     </div>
@@ -692,7 +839,7 @@
             </div>
             <div class="form-group">
                 <label>Valor:</label>
-                <input type="number" placeholder="0,00" step="0.01">
+                <input type="number" placeholder="0,00" step="5">
             </div>
             <div class="form-group">
                 <label>Data de Vencimento:</label>
@@ -714,7 +861,38 @@
             </div>
         </div>
     </div>
+    
+    <!-- Modal para Categoria -->
+    <div id="modalCategoria" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('Categoria')">&times;</span>
+            <h2 style="margin-bottom: 25px; color: var(--text-primary-light); transition: color 0.3s ease;">Cadastrar Nova Categoria</h2>
+            <div class="form-group">
+                <label>Categoria:</label>
+                <input type="text" placeholder="Categoria">
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                <button class="action-btn btn-primary" style="flex: 1;">Salvar Conta</button>
+                <button class="action-btn btn-secondary" onclick="closeModal('Categoria')">Cancelar</button>
+            </div>
+        </div>
+    </div>
 
+    <!-- Modal para Marca -->
+    <div id="modalMarca" class="modal">
+        <div class="modal-content" >
+            <span class="close" onclick="closeModal('Marca')">&times;</span>
+            <h2 style="margin-bottom: 25px; color: var(--text-primary-light); transition: color 0.3s ease;">Cadastrar Nova Marca</h2>
+            <div class="form-group">
+                <label>Marca:</label>
+                <input type="text" placeholder="Marca">
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                <button class="action-btn btn-primary" style="flex: 1;">Salvar Conta</button>
+                <button class="action-btn btn-secondary" onclick="closeModal('Marca')">Cancelar</button>
+            </div>
+        </div>
+    </div>
     <script>
         // Theme Toggle Functionality
         let isDarkTheme = false;
@@ -771,6 +949,7 @@
             }
         }
 
+        // criar uma função para zerar os modais ao fechalos
         function openModal(type) {
             document.getElementById('modal' + type.charAt(0).toUpperCase() + type.slice(1)).style.display = 'block';
         }
@@ -865,17 +1044,110 @@
                 updateModalHeaders();
             }
         });
+
+        // funções da modal de venda
+        document.addEventListener('DOMContentLoaded', () => {
+    // Array para guardar os itens do carrinho em memória
+    let carrinho = [];
+
+    // Seleciona os elementos do DOM
+    const produtoSelect = document.getElementById('produto-select');
+    const quantidadeInput = document.getElementById('produto-quantidade');
+    const btnAdicionar = document.getElementById('btn-adicionar-produto');
+    const listaCarrinho = document.getElementById('carrinho-itens-lista');
+    const totalCarrinhoSpan = document.getElementById('valor-total-carrinho');
+    const btnFinalizar = document.getElementById('btn-finalizar-venda');
+
+    // Evento para o botão de adicionar produto
+    btnAdicionar.addEventListener('click', () => {
+        const produtoOption = produtoSelect.options[produtoSelect.selectedIndex];
+        if (!produtoOption.value) {
+            alert('Por favor, selecione um produto.');
+            return;
+        }
+
+        const [nome, preco] = produtoOption.value.split('|');
+        const quantidade = parseInt(quantidadeInput.value);
+        const precoNumerico = parseFloat(preco);
+
+        // Adiciona o produto ao array do carrinho
+        carrinho.push({
+            nome: nome,
+            preco: precoNumerico,
+            quantidade: quantidade,
+            subtotal: precoNumerico * quantidade
+        });
+        
+        // Atualiza a exibição do carrinho
+        atualizarCarrinhoDisplay();
+
+        // Limpa os campos para a próxima adição
+        produtoSelect.selectedIndex = 0;
+        quantidadeInput.value = 1;
+    });
+    
+    // Função para renderizar o carrinho na tela
+    function atualizarCarrinhoDisplay() {
+        // Limpa a lista atual
+        listaCarrinho.innerHTML = '';
+        
+        if (carrinho.length === 0) {
+            listaCarrinho.innerHTML = '<p class="carrinho-vazio">Nenhum item adicionado ainda.</p>';
+            totalCarrinhoSpan.textContent = '0,00';
+            return;
+        }
+
+        let valorTotal = 0;
+
+        // Cria e adiciona cada item do carrinho na lista
+        carrinho.forEach((item, index) => {
+            valorTotal += item.subtotal;
+
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'carrinho-item';
+            itemDiv.innerHTML = `
+                <span>${item.quantidade}x ${item.nome}</span>
+                <span>R$ ${item.subtotal.toFixed(2).replace('.', ',')}</span>
+                <button class="btn-remover-item" data-index="${index}" style="background:none; border:none; color:red; cursor:pointer;">&times;</button>
+            `;
+            listaCarrinho.appendChild(itemDiv);
+        });
+        
+        // Atualiza o valor total
+        totalCarrinhoSpan.textContent = valorTotal.toFixed(2).replace('.', ',');
+
+        // Adiciona eventos de clique aos botões de remover
+        document.querySelectorAll('.btn-remover-item').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const indexParaRemover = parseInt(e.target.dataset.index);
+                // Remove o item do array
+                carrinho.splice(indexParaRemover, 1);
+                // Atualiza a exibição novamente
+                atualizarCarrinhoDisplay();
+            });
+        });
+    }
+
+    // Lógica para finalizar a venda
+    btnFinalizar.addEventListener('click', () => {
+        if (carrinho.length === 0) {
+            alert('O carrinho está vazio!');
+            return;
+        }
+
+        const dadosVenda = {
+            cliente: document.getElementById('cliente-nome').value,
+            itens: carrinho,
+            total: carrinho.reduce((acc, item) => acc + item.subtotal, 0)
+        };
+        
+        console.log('Dados da Venda para Enviar:', dadosVenda);
+        alert('Venda finalizada com sucesso! (Verifique o console)');
+        // Aqui você enviaria 'dadosVenda' para o seu backend
+        // E depois limparia o carrinho e fecharia a modal
+    });
+});
+         
     </script>
 </body>
 </html>
-                    <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZTech Pro - Sistema de Gestão Empresarial</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-    <div class="container">
-        <div class="header
