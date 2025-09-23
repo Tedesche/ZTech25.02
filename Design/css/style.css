@@ -768,6 +768,8 @@
 
         .modal {
             display: none;
+            align-items: center;
+            justify-content: center;
             position: fixed;
             z-index: 1000;
             left: 0;
@@ -785,7 +787,7 @@
 
         .modal-content {
             background: var(--card-bg-light);
-            margin: 3% auto;
+            margin: auto auto;
             padding: 30px;
             border-radius: 15px;
             width: 90%;
@@ -793,7 +795,6 @@
             box-shadow: 0 25px 50px var(--shadow-hover-light);
             border: 1px solid var(--border-light);
             transition: all 0.3s ease;
-            border: #1a1a1a;
             color: var(--text-primary-light);
         }
 

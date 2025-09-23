@@ -243,6 +243,10 @@
 		<div id="os-section" class="section">
 		    <div class="section-header">
 		        <h2>💰 Controle de Ordens de Serviço</h2>
+		        <button class="action-btn btn-primary" onclick="openModal('Cliente')"
+                        style="margin-left: auto; margin-right: 10px;" > <!-- Adicionar MODAL de serviço -->
+		            ➕ Novo Cliente
+		        </button>
 		        <button class="action-btn btn-primary" onclick="openModal('Servico')"> <!-- Adicionar MODAL de serviço -->
 		            ➕ Novo Serviço
 		        </button>
@@ -951,7 +955,7 @@
 
         // criar uma função para zerar os modais ao fechalos
         function openModal(type) {
-            document.getElementById('modal' + type.charAt(0).toUpperCase() + type.slice(1)).style.display = 'block';
+            document.getElementById('modal' + type.charAt(0).toUpperCase() + type.slice(1)).style.display = 'flex';
         }
 
         function closeModal(type) {
