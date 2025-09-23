@@ -34,13 +34,33 @@
         background: var(--bg-gradient-dark);
         }
         .mosaico1{
+        display: flex;
         background: linear-gradient(180deg, #A62929 0%, #A62929 0%, #A12828 6%, #972626 28%, #902424 41%, #731D1D 74%, rgba(100.58, 25.15, 25.15, 0.76) 100%, rgba(89.25, 22.31, 22.31, 0.57) 100%, rgba(63.75, 15.94, 15.94, 0.58) 100%);
         width: 50vw;
         height: 100vh;
         }
         .form-login{
+        width: 20vw;
+        height: 25vh;
+        box-sizing: border-box;
+        box-shadow:red , 10px;
         display: flex;
-        right: 30%;
+        position: absolute;
+        right: 20%;
+        top: 40%;
+        border: solid 0.5px;
+        border-radius: 5px;
+        padding:30px 100px;
+        }
+        .input-login{
+        padding: 8px;
+        margin: 5px;
+        border-radius: 5px;
+        }
+        .entrar-login{
+        width:9.2vw;
+        margin: 5px;
+        padding: 8px;
         }
         * {
             margin: 0;
