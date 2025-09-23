@@ -30,13 +30,23 @@
             --stat-bg-dark: rgba(255, 255, 255, 0.05);
             --modal-overlay-dark: rgba(0, 0, 0, 0.8);
         }
-
+        .login-tela{
+        background: var(--bg-gradient-dark);
+        }
+        .mosaico1{
+        background: linear-gradient(180deg, #A62929 0%, #A62929 0%, #A12828 6%, #972626 28%, #902424 41%, #731D1D 74%, rgba(100.58, 25.15, 25.15, 0.76) 100%, rgba(89.25, 22.31, 22.31, 0.57) 100%, rgba(63.75, 15.94, 15.94, 0.58) 100%);
+        width: 50vw;
+        height: 100vh;
+        }
+        .form-login{
+        display: flex;
+        right: 30%;
+        }
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
