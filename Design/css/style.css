@@ -808,6 +808,7 @@
             background: var(--card-bg-dark);
             box-shadow: 0 25px 50px var(--shadow-hover-dark);
             border: 1px solid var(--border-dark);
+            color: var(--text-primary-dark);
         }
 
         .close {
