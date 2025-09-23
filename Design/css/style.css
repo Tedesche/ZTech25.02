@@ -867,20 +867,24 @@
         }
 
         .dark-theme .form-group input,
-        .dark-theme .form-group select {
+        .dark-theme .form-group select,
+        .dark-theme .form-group textarea {
             border: 2px solid var(--border-dark);
             background: var(--input-bg-dark);
             color: var(--text-primary-dark);
         }
 
-        .form-group input:focus, .form-group select:focus {
+        .form-group input:focus, 
+        .form-group select:focus, 
+        .form-group textarea:focus  {
             outline: none;
             border-color: var(--primary-red);
             background: rgba(255, 255, 255, 1);
         }
 
         .dark-theme .form-group input:focus,
-        .dark-theme .form-group select:focus {
+        .dark-theme .form-group select:focus, 
+        .dark-theme .form-group textarea:focus  {
             background: rgba(42, 42, 42, 1);
         }
 
