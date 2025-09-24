@@ -30,26 +30,35 @@
             --stat-bg-dark: rgba(255, 255, 255, 0.05);
             --modal-overlay-dark: rgba(0, 0, 0, 0.8);
         }
-        .login-tela{
-        background: var(--bg-gradient-dark);
-        }
+
         .mosaico1{
         display: flex;
         background: linear-gradient(180deg, #A62929 0%, #A62929 0%, #A12828 6%, #972626 28%, #902424 41%, #731D1D 74%, rgba(100.58, 25.15, 25.15, 0.76) 100%, rgba(89.25, 22.31, 22.31, 0.57) 100%, rgba(63.75, 15.94, 15.94, 0.58) 100%);
-        width: 50vw;
+        width: 50%;
         height: 100vh;
+        align-items: center;
+        }
+        .mosaico1 img{
+            max-height: 700px;
+            width: 80%;
+            margin: auto auto;
+            display: flex;
+        }
+        .mosaico2{
+            display: flex;
+            width: 50%;
+            margin: auto;
         }
         .form-login{
         width: 20vw;
         height: 25vh;
         box-sizing: border-box;
-        box-shadow:red , 10px;
+        box-shadow:  0 0 30px var(--primary-red-dark);
         display: flex;
         position: absolute;
-        right: 20%;
+        right: 15%;
         top: 40%;
-        border: solid 0.5px;
-        border-radius: 5px;
+        border-radius: 15px;
         padding:30px 100px;
         }
         .input-login{
@@ -169,6 +178,33 @@
             background: rgba(255, 68, 68, 0.1);
             border-color: var(--primary-red);
         }
+        .theme-toggle2 {
+            display: flex;
+            position: absolute;
+            justify-content: space-between;
+            top: 25px;
+            right: 25px;
+            align-items: center;
+            gap: 10px;
+            background: var(--stat-bg-light);
+            padding: 8px 16px;
+            border-radius: 25px;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            MIN-width: 170px;
+        }
+
+        .dark-theme .theme-toggle2 {
+            background: var(--stat-bg-dark);
+            border: 1px solid var(--border-dark);
+        }
+
+        .theme-toggle2:hover {
+            background: rgba(255, 68, 68, 0.1);
+            border-color: var(--primary-red);
+        }
+
 
         .theme-icon {
             font-size: 18px;
