@@ -365,6 +365,14 @@
             color: var(--text-secondary-dark);
         }
 
+        .stat-label-relatorio {
+            font-size: 17px;
+            font-weight: 650;
+            color: var(--text-primary-light);
+            margin-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
 		/* Criar uma classe para o botão de novo */
         .action-buttons {
             display: grid;
@@ -377,7 +385,7 @@
             padding: 10px 20px;
             border: none;
             border-radius: 6px;
-            font-size: 13px;
+            font-size: 14px;
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: 500;
@@ -739,12 +747,12 @@
             background: #5a6268;
         }
 
-        .table-btn.view {
+        .table-btn.pdf {
             background: #ff6644;
             color: white;
         }
 
-        .table-btn.view:hover {
+        .table-btn.pdf:hover {
             background: #ff5533;
         }
 

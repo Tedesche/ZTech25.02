@@ -1,15 +1,18 @@
-
-                    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZTech Pro - Sistema de Gestão Empresarial</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+
 </head>
+
 <body>
     <div class="container">
-        <div class="header"> 
+        <div class="header">
             <div class="header-top">
                 <div class="logo">
                     <div class="logo-icon">ZT</div>
@@ -18,13 +21,13 @@
                         <p class="subtitle">Sistema de Gestão Empresarial</p>
                     </div>
                 </div>
-                
+
                 <div class="theme-toggle" onclick="toggleTheme()">
                     <div class="theme-icon" id="themeIcon">🌙</div>
                     <div class="theme-text" id="themeText">Tema Escuro</div>
                 </div>
             </div>
-            
+
             <div class="nav">
                 <button class="nav-btn active" onclick="showSection('dashboard')">
                     📊 Dashboard
@@ -35,9 +38,9 @@
                 <button class="nav-btn" onclick="showSection('os')">
                     💰 O. S.
                 </button>
-				<button class="nav-btn" onclick="showSection('vendas')">
-					💰 Vendas
-				</button>
+                <button class="nav-btn" onclick="showSection('vendas')">
+                    💰 Vendas
+                </button>
                 <button class="nav-btn" onclick="showSection('funcionarios')">
                     💳 Funcionarios
                 </button>
@@ -176,6 +179,12 @@
                         <div class="stat-label">Fornecedores</div>
                     </div>
                 </div>
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <div class="stat-label-relatorio">Relatório</div>
+                        <button class="action-btn btn-primary">📊 Emitir Relatório</button>
+                    </div>
+                </div>
             </div>
 
             <div class="filters-bar">
@@ -194,7 +203,7 @@
                 </select>
             </div>
 
-            
+
 
             <div class="table-container">
                 <table class="data-table">
@@ -219,7 +228,7 @@
                             <td>0</td>
                             <td>
                                 <button class="table-btn edit">Editar</button>
-                                <button class="table-btn delete">Excluir</button>
+                                <button class="table-btn delete" onclick="openModal('Excluir')">Excluir</button>
                             </td>
                         </tr>
                         <tr>
@@ -230,7 +239,7 @@
                             <td>15</td>
                             <td>
                                 <button class="table-btn edit">Editar</button>
-                                <button class="table-btn delete">Excluir</button>
+                                <button class="table-btn delete" onclick="openModal('Excluir')">Excluir</button>
                             </td>
                         </tr>
                     </tbody>
@@ -239,106 +248,111 @@
         </div>
 
 
-		<!-- Ordens de Serviço Section -->
-		<div id="os-section" class="section">
-		    <div class="section-header">
-		        <h2>💰 Controle de Ordens de Serviço</h2>
-		        <button class="action-btn btn-primary" onclick="openModal('Cliente')"
-                        style="margin-left: auto; margin-right: 10px;" > <!-- Adicionar MODAL de serviço -->
-		            ➕ Novo Cliente
-		        </button>
-		        <button class="action-btn btn-primary" onclick="openModal('Servico')"> <!-- Adicionar MODAL de serviço -->
-		            ➕ Novo Serviço
-		        </button>
-		    </div>
+        <!-- Ordens de Serviço Section -->
+        <div id="os-section" class="section">
+            <div class="section-header">
+                <h2>💰 Controle de Ordens de Serviço</h2>
+                <button class="action-btn btn-primary" onclick="openModal('Cliente')"
+                    style="margin-left: auto; margin-right: 10px;">
+                    <!-- Adicionar MODAL de serviço -->
+                    ➕ Novo Cliente
+                </button>
+                <button class="action-btn btn-primary" onclick="openModal('Servico')" style="margin-right: 10px;">
+                    <!-- Adicionar MODAL de serviço -->
+                    ➕ Novo Serviço
+                </button>
+                <button class="action-btn btn-primary" onclick="openModal('OS')"> <!-- Adicionar MODAL de serviço -->
+                    ➕ Nova O. S.
+                </button>
+            </div>
 
-		    <div class="stats-row"> <!-- Aferir os campos realmente necessarios -->
-		        <div class="stat-card">
-		            <div class="stat-icon">📊</div>
-		            <div class="stat-content">
-		                <div class="stat-text">R$ 15.420</div>
-		                <div class="stat-label">Serviços do Mês</div>
-		            </div>
-		        </div>
-		        <div class="stat-card">
-		            <div class="stat-icon">🛒</div>
-		            <div class="stat-content">
-		                <div class="stat-text">89</div>
-		                <div class="stat-label">Serviços do Mês</div>
-		            </div>
-		        </div>
-		        <div class="stat-card">
-		            <div class="stat-icon">💳</div>
-		            <div class="stat-content">
-		                <div class="stat-text">R$ 173,15</div>
-		                <div class="stat-label">Ticket Médio</div>
-		            </div>
-		        </div>
-		        <div class="stat-card">
-		            <div class="stat-icon">👥</div>
-		            <div class="stat-content">
-		                <div class="stat-text">67</div>
-		                <div class="stat-label">Clientes</div>
-		            </div>
-		        </div>
-		    </div>
+            <div class="stats-row"> <!-- Aferir os campos realmente necessarios -->
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <div class="stat-text">R$ 15.420</div>
+                        <div class="stat-label">Serviços do Mês</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🛒</div>
+                    <div class="stat-content">
+                        <div class="stat-text">89</div>
+                        <div class="stat-label">Serviços do Mês</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💳</div>
+                    <div class="stat-content">
+                        <div class="stat-text">R$ 173,15</div>
+                        <div class="stat-label">Ticket Médio</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-content">
+                        <div class="stat-text">67</div>
+                        <div class="stat-label">Clientes</div>
+                    </div>
+                </div>
+            </div>
 
-		    <div class="filters-bar">
-		        <input type="text" placeholder="Buscar por cliente..." class="search-input">
-		        <input type="date" class="filter-select">
-		        <select class="filter-select">
-		            <option>Todos os Status</option>
-		            <option>Concluída</option>
-		            <option>Pendente</option>
-		            <option>Cancelada</option>
-		        </select>
-		    </div>
+            <div class="filters-bar">
+                <input type="text" placeholder="Buscar por cliente..." class="search-input">
+                <input type="date" class="filter-select">
+                <select class="filter-select">
+                    <option>Todos os Status</option>
+                    <option>Concluída</option>
+                    <option>Pendente</option>
+                    <option>Cancelada</option>
+                </select>
+            </div>
 
-		    <div class="table-container">
-		        <table class="data-table">
-		            <thead>
-		                <tr>
-		                    <th>ID</th>
-		                    <th>Cliente</th>
-		                    <th>Data Inicio</th>
-		                    <th>Data Fim</th>
-		                    <th>Valor</th>
-		                    <th>Serviço</th>
-		                    <th>Produto</th>
-		                    <th>Status</th>
-		                    <th>Ações</th>
-		                </tr>
-		            </thead>
-		            <tbody>
-		                <tr>
-		                    <td>V004</td>
-		                    <td>14/08/2024</td>
-		                    <td>Ana Lima</td>
-		                    <td>Vaso Decorativo (3x)</td>
-		                    <td>R$ 136,50</td>
-		                    <td><span class="status-badge status-success">Concluída</span></td>
-		                    <td>
-		                        <button class="table-btn view">Ver</button>
-		                        <button class="table-btn edit">Editar</button>
-		                    </td>
-		                </tr>
-		                <tr>
-		                    <td>V005</td>
-		                    <td>13/08/2024</td>
-		                    <td>Carlos Rocha</td>
-		                    <td>Fone de Ouvido</td>
-		                    <td>R$ 129,90</td>
-		                    <td><span class="status-badge status-error">Cancelada</span></td>
-		                    <td>
-		                        <button class="table-btn view">Ver</button>
-		                        <button class="table-btn edit">Editar</button>
-		                    </td>
-		                </tr>
-		            </tbody>
-		        </table>
-		    </div>
-		</div>
-		
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cliente</th>
+                            <th>Data Inicio</th>
+                            <th>Data Fim</th>
+                            <th>Valor</th>
+                            <th>Serviço</th>
+                            <th>Produto</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>V004</td>
+                            <td>14/08/2024</td>
+                            <td>Ana Lima</td>
+                            <td>Vaso Decorativo (3x)</td>
+                            <td>R$ 136,50</td>
+                            <td><span class="status-badge status-success">Concluída</span></td>
+                            <td>
+                                <button class="table-btn edit">Editar</button>
+                                <button class="table-btn delete">Deletar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>V005</td>
+                            <td>13/08/2024</td>
+                            <td>Carlos Rocha</td>
+                            <td>Fone de Ouvido</td>
+                            <td>R$ 129,90</td>
+                            <td><span class="status-badge status-error">Cancelada</span></td>
+                            <td>
+                                <button class="table-btn edit">Editar</button>
+                                <button class="table-btn delete">Deletar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <!-- Vendas Section -->
         <div id="vendas-section" class="section">
             <div class="section-header">
@@ -414,8 +428,8 @@
                             <td>R$ 136,50</td>
                             <td><span class="status-badge status-success">Concluída</span></td>
                             <td>
-                                <button class="table-btn view">Ver</button>
                                 <button class="table-btn edit">Editar</button>
+                                <button class="table-btn delete">Deletar</button>
                             </td>
                         </tr>
                         <tr>
@@ -426,8 +440,8 @@
                             <td>R$ 129,90</td>
                             <td><span class="status-badge status-error">Cancelada</span></td>
                             <td>
-                                <button class="table-btn view">Ver</button>
                                 <button class="table-btn edit">Editar</button>
+                                <button class="table-btn delete">Deletar</button>
                             </td>
                         </tr>
                     </tbody>
@@ -492,10 +506,10 @@
                             <td>R$ 180,00</td>
                             <td>25/08/2024</td>
                             <td><span class="status-badge status-normal">Pendente</span></td>
-                            <!-- atualizar os status de funcionarios --> 
+                            <!-- atualizar os status de funcionarios -->
                             <td>
-                                <button class="table-btn delete">Excluir</button>
                                 <button class="table-btn edit">Editar</button>
+                                <button class="table-btn delete">Deletar</button>
                             </td>
                         </tr>
                         <tr>
@@ -506,8 +520,8 @@
                             <td>05/08/2024</td>
                             <td><span class="status-badge status-success">Pago</span></td>
                             <td>
-                                <button class="table-btn delete">Excluir</button>
                                 <button class="table-btn edit">Editar</button>
+                                <button class="table-btn delete">Deletar</button>
                             </td>
                         </tr>
                     </tbody>
@@ -597,6 +611,7 @@
                             <td>
                                 <button class="table-btn pay">Pagar</button>
                                 <button class="table-btn edit">Editar</button>
+                                <button class="table-btn delete">Deletar</button>
                             </td>
                         </tr>
                         <tr>
@@ -607,8 +622,9 @@
                             <td>05/08/2024</td>
                             <td><span class="status-badge status-success">Pago</span></td>
                             <td>
-                                <button class="table-btn view">Ver</button>
+                                <button class="table-btn pay">Pagar</button>
                                 <button class="table-btn edit">Editar</button>
+                                <button class="table-btn delete">Deletar</button>
                             </td>
                         </tr>
                     </tbody>
@@ -625,7 +641,7 @@
     <div id="modalProduto" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('produto')">&times;</span>
-            <h2 style="margin-bottom: 25px; ; transition: color 0.3s ease;">Cadastrar Novo Produto</h2>
+            <h2 style="margin-bottom: 25px;">Cadastrar Novo Produto</h2>
             <div class="form-group">
                 <label>Nome do Produto:</label>
                 <input type="text" placeholder="Digite o nome do produto">
@@ -644,10 +660,7 @@
             </div>
             <div class="form-group">
                 <label>Descrição do Produto:</label>
-                <textarea 
-                    id="detalhes-pedido" 
-                    name="detalhesPedido" 
-                    rows="3" 
+                <textarea id="detalhes-pedido" name="detalhesPedido" rows="3"
                     placeholder="Digite aqui a descrição do Produto...">
                 </textarea>
             </div>
@@ -659,7 +672,8 @@
                     <option>Roupas</option>
                     <option>Casa e Jardim</option>
                 </select>
-                <button class="action-btn btn-primary" onclick="openModal('Categoria')" style="width: 14%; padding: 12px 0;" title="Cadastrar Nova Categoria">
+                <button class="action-btn btn-primary" onclick="openModal('Categoria')"
+                    style="width: 14%; padding: 12px 0;" title="Cadastrar Nova Categoria">
                     ➕
                 </button>
             </div>
@@ -671,8 +685,9 @@
                     <option>Roupas</option>
                     <option>Casa e Jardim</option>
                 </select>
-                <button class="action-btn btn-primary" onclick="openModal('Marca')" style="width: 14%; padding: 12px 0;" title="Cadastrar Nova Marca">
-                    ➕ 
+                <button class="action-btn btn-primary" onclick="openModal('Marca')" style="width: 14%; padding: 12px 0;"
+                    title="Cadastrar Nova Marca">
+                    ➕
                 </button>
             </div>
             <div style="display: flex; gap: 10px; margin-top: 25px;">
@@ -686,7 +701,7 @@
     <div id="modalCliente" class="modal">
         <div class="modal-content" style="max-width: 750px;">
             <span class="close" onclick="closeModal('Cliente')">&times;</span>
-            <h2 style="margin-bottom: 25px; transition: color 0.3s ease;">Cadastrar Novo Cliente</h2>
+            <h2 style="margin-bottom: 25px;">Cadastrar Novo Cliente</h2>
             <section>
                 <div style="width: 50%;">
                     <div class="form-group">
@@ -710,10 +725,12 @@
                     <div style="display: flex; gap: 5px;">
                         <div class="form-group" style="width: 100%;">
                             <label>CEP:</label>
-                            <input type="text" placeholder="Digite ou Busque o CEP" >
+                            <input type="text" placeholder="Digite ou Busque o CEP">
                         </div>
-                        <button class="action-btn btn-primary" onclick="openModal('Marca')" style="width: 14%; height: 40px; margin-top: auto; margin-bottom: 22px; padding: 10px 0; float: inline-end;" title="Cadastrar Nova Marca">
-                                    ➕ 
+                        <button class="action-btn btn-primary" onclick="openModal('Marca')"
+                            style="width: 14%; height: 40px; margin-top: auto; margin-bottom: 22px; padding: 10px 0; float: inline-end;"
+                            title="Cadastrar Nova Marca">
+                            ➕
                         </button>
                     </div>
                     <div class="form-group">
@@ -726,7 +743,7 @@
                             <input type="text" placeholder="Digite o Bairro">
                         </div>
                         <div class="form-group" style="width: 30%;">
-                            <label>Numero:</label> 
+                            <label>Numero:</label>
                             <input type="number" placeholder="xxxx" step="5">
                         </div>
                     </div>
@@ -745,21 +762,18 @@
         </div>
     </div>
 
-    <!-- Modal para Servviço -->
+    <!-- Modal para Serviço -->
     <div id="modalServico" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('Servico')">&times;</span>
-            <h2 style="margin-bottom: 25px;  transition: color 0.3s ease;">Cadastrar Novo Servico</h2>
+            <h2 style="margin-bottom: 25px;">Cadastrar Novo Servico</h2>
             <div class="form-group">
                 <label>Nome do Servico:</label>
                 <input type="text" placeholder="Digite o nome do Serviço">
             </div>
             <div class="form-group">
                 <label>Descrição do Servico:</label>
-                <textarea 
-                    id="detalhes-pedido" 
-                    name="detalhesPedido" 
-                    rows="3" 
+                <textarea id="detalhes-pedido" name="detalhesPedido" rows="3"
                     placeholder="Digite aqui a descrição do serviço...">
                 </textarea>
             </div>
@@ -772,14 +786,14 @@
                 <button class="action-btn btn-secondary" onclick="closeModal('Servico')">Cancelar</button>
             </div>
         </div>
-        
+
     </div>
 
     <!-- Modal para Venda -->
     <div id="modalVenda" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('venda')">&times;</span>
-            <h2 style="margin-bottom: 25px; transition: color 0.3s ease;">Registrar Nova Venda</h2>
+            <h2 style="margin-bottom: 25px;">Registrar Nova Venda</h2>
             <div class="form-group">
                 <label>Cliente:</label>
                 <input type="text" placeholder="Nome do cliente">
@@ -810,57 +824,59 @@
 
     <!-- Modal para Venda 2-->
     <div id="modalVenda2" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('venda2')">&times;</span>
-        <h2 style="margin-bottom: 25px;">Registrar Nova Venda</h2>
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('venda2')">&times;</span>
+            <h2 style="margin-bottom: 25px;">Registrar Nova Venda</h2>
 
-        <div class="form-group">
-            <label>Cliente:</label>
-            <input type="text" id="cliente-nome" placeholder="Nome do cliente">
-        </div>
-
-        <hr style="margin: 20px 0; border: 1px solid #eee;">
-
-        <div class="add-produto-area">
-            <div class="form-group" style="flex: 3;">
-                <label>Produto:</label>
-                <select id="produto-select">
-                    <option value="">Selecione um produto</option>
-                    <option value="Smartphone Samsung|899.00">Smartphone Samsung - R$ 899,00</option>
-                    <option value="Notebook Dell|2499.00">Notebook Dell - R$ 2.499,00</option>
-                    <option value="Fone de Ouvido|129.90">Fone de Ouvido - R$ 129,90</option>
-                </select>
+            <div class="form-group">
+                <label>Cliente:</label>
+                <input type="text" id="cliente-nome" placeholder="Nome do cliente">
             </div>
-            <div class="form-group" style="flex: 1;">
-                <label>Quantidade:</label>
-                <input type="number" id="produto-quantidade" value="1" min="1">
+
+            <hr style="margin: 20px 0; border: 1px solid #eee;">
+
+            <div class="add-produto-area">
+                <div class="form-group" style="flex: 3;">
+                    <label>Produto:</label>
+                    <select id="produto-select">
+                        <option value="">Selecione um produto</option>
+                        <option value="Smartphone Samsung|899.00">Smartphone Samsung - R$ 899,00</option>
+                        <option value="Notebook Dell|2499.00">Notebook Dell - R$ 2.499,00</option>
+                        <option value="Fone de Ouvido|129.90">Fone de Ouvido - R$ 129,90</option>
+                    </select>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>Quantidade:</label>
+                    <input type="number" id="produto-quantidade" value="1" min="1">
+                </div>
             </div>
-        </div>
-            <button id="btn-adicionar-produto" class="action-btn" style="align-self: flex-end; height: 40px;">Adicionar Produto ao Carrinho</button>
+            <button id="btn-adicionar-produto" class="action-btn" style="align-self: flex-end; height: 40px;">Adicionar
+                Produto ao Carrinho</button>
 
-        <hr style="margin: 20px 0; border: 1px solid #eee;">
+            <hr style="margin: 20px 0; border: 1px solid #eee;">
 
-        <h4>Itens da Venda</h4>
-        <div id="carrinho-itens-lista" class="carrinho-lista">
-            <p class="carrinho-vazio">Nenhum item adicionado ainda.</p>
-        </div>
+            <h4>Itens da Venda</h4>
+            <div id="carrinho-itens-lista" class="carrinho-lista">
+                <p class="carrinho-vazio">Nenhum item adicionado ainda.</p>
+            </div>
 
-        <div class="total-venda">
-            <strong>Valor Total: R$ <span id="valor-total-carrinho">0,00</span></strong>
-        </div>
+            <div class="total-venda">
+                <strong>Valor Total: R$ <span id="valor-total-carrinho">0,00</span></strong>
+            </div>
 
-        <div style="display: flex; gap: 10px; margin-top: 25px;">
-            <button id="btn-finalizar-venda" class="action-btn btn-primary" style="flex: 1;">Finalizar Venda</button>
-            <button class="action-btn btn-secondary" onclick="closeModal('venda2')">Cancelar</button>
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                <button id="btn-finalizar-venda" class="action-btn btn-primary" style="flex: 1;">Finalizar
+                    Venda</button>
+                <button class="action-btn btn-secondary" onclick="closeModal('venda2')">Cancelar</button>
+            </div>
         </div>
     </div>
-</div>
 
     <!-- Modal para funcionario -->
     <div id="modalFuncionario" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('Funcionario')">&times;</span>
-            <h2 style="margin-bottom: 25px;  transition: color 0.3s ease;">Cadastrar Novo Funcionario</h2>
+            <h2 style="margin-bottom: 25px;">Cadastrar Novo Funcionario</h2>
             <div class="form-group">
                 <label>Nome:</label>
                 <input type="text" placeholder="Descrição da conta">
@@ -896,7 +912,7 @@
     <div id="modalConta" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('conta')">&times;</span>
-            <h2 style="margin-bottom: 25px;  transition: color 0.3s ease;">Cadastrar Conta a Pagar</h2>
+            <h2 style="margin-bottom: 25px;">Cadastrar Conta a Pagar</h2>
             <div class="form-group">
                 <label>Descrição:</label>
                 <input type="text" placeholder="Descrição da conta">
@@ -929,12 +945,12 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Modal para Categoria -->
     <div id="modalCategoria" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('Categoria')">&times;</span>
-            <h2 style="margin-bottom: 25px; transition: color 0.3s ease;">Cadastrar Nova Categoria</h2>
+            <h2 style="margin-bottom: 25px;">Cadastrar Nova Categoria</h2>
             <div class="form-group">
                 <label>Categoria:</label>
                 <input type="text" placeholder="Categoria">
@@ -948,9 +964,9 @@
 
     <!-- Modal para Marca -->
     <div id="modalMarca" class="modal">
-        <div class="modal-content" >
+        <div class="modal-content">
             <span class="close" onclick="closeModal('Marca')">&times;</span>
-            <h2 style="margin-bottom: 25px; transition: color 0.3s ease;">Cadastrar Nova Marca</h2>
+            <h2 style="margin-bottom: 25px;">Cadastrar Nova Marca</h2>
             <div class="form-group">
                 <label>Marca:</label>
                 <input type="text" placeholder="Marca">
@@ -961,6 +977,20 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal para Verificação de Exclusão -->
+    <div id="modalExcluir" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('Excluir')">&times;</span>
+            <h2 style="margin-bottom: 25px;">Tem certeza que deseja Excluir ?</h2>
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                <button class="action-btn btn-primary" style="flex: 1;">Excluir</button>
+                <button class="action-btn btn-secondary" onclick="closeModal('Excluir')">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script>
         // Theme Toggle Functionality
         let isDarkTheme = false;
@@ -969,9 +999,9 @@
             const body = document.body;
             const themeIcon = document.getElementById('themeIcon');
             const themeText = document.getElementById('themeText');
-            
+
             isDarkTheme = !isDarkTheme;
-            
+
             if (isDarkTheme) {
                 body.classList.add('dark-theme');
                 themeIcon.textContent = '☀️';
@@ -981,7 +1011,7 @@
                 themeIcon.textContent = '🌙';
                 themeText.textContent = 'Tema Escuro';
             }
-            
+
             // Save theme preference
             localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
         }
@@ -1000,13 +1030,13 @@
                 btn.classList.remove('active');
             });
             event.target.classList.add('active');
-            
+
             // Ocultar todas as seções
             document.querySelectorAll('.section').forEach(sec => {
                 sec.style.display = 'none';
                 sec.classList.remove('active');
             });
-            
+
             // Mostrar seção selecionada com animação
             const targetSection = document.getElementById(section + '-section');
             if (targetSection) {
@@ -1020,6 +1050,9 @@
         // criar uma função para zerar os modais ao fechalos
         function openModal(type) {
             document.getElementById('modal' + type.charAt(0).toUpperCase() + type.slice(1)).style.display = 'flex';
+            
+            //inicializa os dados da choice
+            inicializarChoicesServicos();
         }
 
         function closeModal(type) {
@@ -1027,20 +1060,20 @@
         }
 
         // Fechar modal ao clicar fora dele
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             if (event.target.classList.contains('modal')) {
                 event.target.style.display = 'none';
             }
         }
 
         // Animação de entrada suave
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             // Load theme preference
             loadTheme();
-            
+
             // Mostrar dashboard por padrão
             document.getElementById('dashboard-section').classList.add('active');
-            
+
             document.querySelectorAll('.card, .quick-actions').forEach((el, index) => {
                 el.style.opacity = '0';
                 el.style.transform = 'translateY(20px)';
@@ -1053,6 +1086,7 @@
         });
 
         // Simulação de ações da tabela
+        /*
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('table-btn')) {
                 const action = Array.from(e.target.classList).find(cls => cls !== 'table-btn');
@@ -1079,14 +1113,15 @@
                 }
             }
         });
+        */
 
         // Funcionalidade de busca simples
-        document.addEventListener('input', function(e) {
+        document.addEventListener('input', function (e) {
             if (e.target.classList.contains('search-input')) {
                 const searchTerm = e.target.value.toLowerCase();
                 const table = e.target.closest('.section').querySelector('.data-table tbody');
                 const rows = table.querySelectorAll('tr');
-                
+
                 rows.forEach(row => {
                     const text = row.textContent.toLowerCase();
                     row.style.display = text.includes(searchTerm) ? '' : 'none';
@@ -1107,7 +1142,7 @@
         }
 
         // Listen for theme changes to update modal headers
-        document.body.addEventListener('transitionend', function(e) {
+        document.body.addEventListener('transitionend', function (e) {
             if (e.target === document.body) {
                 updateModalHeaders();
             }
@@ -1115,107 +1150,135 @@
 
         // funções da modal de venda
         document.addEventListener('DOMContentLoaded', () => {
-    // Array para guardar os itens do carrinho em memória
-    let carrinho = [];
+            // Array para guardar os itens do carrinho em memória
+            let carrinho = [];
 
-    // Seleciona os elementos do DOM
-    const produtoSelect = document.getElementById('produto-select');
-    const quantidadeInput = document.getElementById('produto-quantidade');
-    const btnAdicionar = document.getElementById('btn-adicionar-produto');
-    const listaCarrinho = document.getElementById('carrinho-itens-lista');
-    const totalCarrinhoSpan = document.getElementById('valor-total-carrinho');
-    const btnFinalizar = document.getElementById('btn-finalizar-venda');
+            // Seleciona os elementos do DOM
+            const produtoSelect = document.getElementById('produto-select');
+            const quantidadeInput = document.getElementById('produto-quantidade');
+            const btnAdicionar = document.getElementById('btn-adicionar-produto');
+            const listaCarrinho = document.getElementById('carrinho-itens-lista');
+            const totalCarrinhoSpan = document.getElementById('valor-total-carrinho');
+            const btnFinalizar = document.getElementById('btn-finalizar-venda');
 
-    // Evento para o botão de adicionar produto
-    btnAdicionar.addEventListener('click', () => {
-        const produtoOption = produtoSelect.options[produtoSelect.selectedIndex];
-        if (!produtoOption.value) {
-            alert('Por favor, selecione um produto.');
-            return;
-        }
+            // Evento para o botão de adicionar produto
+            btnAdicionar.addEventListener('click', () => {
+                const produtoOption = produtoSelect.options[produtoSelect.selectedIndex];
+                if (!produtoOption.value) {
+                    alert('Por favor, selecione um produto.');
+                    return;
+                }
 
-        const [nome, preco] = produtoOption.value.split('|');
-        const quantidade = parseInt(quantidadeInput.value);
-        const precoNumerico = parseFloat(preco);
+                const [nome, preco] = produtoOption.value.split('|');
+                const quantidade = parseInt(quantidadeInput.value);
+                const precoNumerico = parseFloat(preco);
 
-        // Adiciona o produto ao array do carrinho
-        carrinho.push({
-            nome: nome,
-            preco: precoNumerico,
-            quantidade: quantidade,
-            subtotal: precoNumerico * quantidade
-        });
-        
-        // Atualiza a exibição do carrinho
-        atualizarCarrinhoDisplay();
+                // Adiciona o produto ao array do carrinho
+                carrinho.push({
+                    nome: nome,
+                    preco: precoNumerico,
+                    quantidade: quantidade,
+                    subtotal: precoNumerico * quantidade
+                });
 
-        // Limpa os campos para a próxima adição
-        produtoSelect.selectedIndex = 0;
-        quantidadeInput.value = 1;
-    });
-    
-    // Função para renderizar o carrinho na tela
-    function atualizarCarrinhoDisplay() {
-        // Limpa a lista atual
-        listaCarrinho.innerHTML = '';
-        
-        if (carrinho.length === 0) {
-            listaCarrinho.innerHTML = '<p class="carrinho-vazio">Nenhum item adicionado ainda.</p>';
-            totalCarrinhoSpan.textContent = '0,00';
-            return;
-        }
+                // Atualiza a exibição do carrinho
+                atualizarCarrinhoDisplay();
 
-        let valorTotal = 0;
+                // Limpa os campos para a próxima adição
+                produtoSelect.selectedIndex = 0;
+                quantidadeInput.value = 1;
+            });
 
-        // Cria e adiciona cada item do carrinho na lista
-        carrinho.forEach((item, index) => {
-            valorTotal += item.subtotal;
+            // Função para renderizar o carrinho na tela
+            function atualizarCarrinhoDisplay() {
+                // Limpa a lista atual
+                listaCarrinho.innerHTML = '';
 
-            const itemDiv = document.createElement('div');
-            itemDiv.className = 'carrinho-item';
-            itemDiv.innerHTML = `
+                if (carrinho.length === 0) {
+                    listaCarrinho.innerHTML = '<p class="carrinho-vazio">Nenhum item adicionado ainda.</p>';
+                    totalCarrinhoSpan.textContent = '0,00';
+                    return;
+                }
+
+                let valorTotal = 0;
+
+                // Cria e adiciona cada item do carrinho na lista
+                carrinho.forEach((item, index) => {
+                    valorTotal += item.subtotal;
+
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'carrinho-item';
+                    itemDiv.innerHTML = `
                 <span>${item.quantidade}x ${item.nome}</span>
                 <span>R$ ${item.subtotal.toFixed(2).replace('.', ',')}</span>
-                <button class="btn-remover-item" data-index="${index}" style="background:none; border:none; color:red; cursor:pointer;">&times;</button>
-            `;
-            listaCarrinho.appendChild(itemDiv);
-        });
-        
-        // Atualiza o valor total
-        totalCarrinhoSpan.textContent = valorTotal.toFixed(2).replace('.', ',');
+                <button class="btn-remover-item" data-index="${index}" style="background:none; border:none; color:red; cursor:pointer;">&times;</button>`;
+                    listaCarrinho.appendChild(itemDiv);
+                });
 
-        // Adiciona eventos de clique aos botões de remover
-        document.querySelectorAll('.btn-remover-item').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const indexParaRemover = parseInt(e.target.dataset.index);
-                // Remove o item do array
-                carrinho.splice(indexParaRemover, 1);
-                // Atualiza a exibição novamente
-                atualizarCarrinhoDisplay();
+                // Atualiza o valor total
+                totalCarrinhoSpan.textContent = valorTotal.toFixed(2).replace('.', ',');
+
+                // Adiciona eventos de clique aos botões de remover
+                document.querySelectorAll('.btn-remover-item').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const indexParaRemover = parseInt(e.target.dataset.index);
+                        // Remove o item do array
+                        carrinho.splice(indexParaRemover, 1);
+                        // Atualiza a exibição novamente
+                        atualizarCarrinhoDisplay();
+                    });
+                });
+            }
+
+            // Lógica para finalizar a venda
+            btnFinalizar.addEventListener('click', () => {
+                if (carrinho.length === 0) {
+                    alert('O carrinho está vazio!');
+                    return;
+                }
+
+                const dadosVenda = {
+                    cliente: document.getElementById('cliente-nome').value,
+                    itens: carrinho,
+                    total: carrinho.reduce((acc, item) => acc + item.subtotal, 0)
+                };
+
+                console.log('Dados da Venda para Enviar:', dadosVenda);
+                alert('Venda finalizada com sucesso! (Verifique o console)');
+                // Aqui você enviaria 'dadosVenda' para o seu backend
+                // E depois limparia o carrinho e fecharia a modal
             });
         });
+    
+        
+            // verificar esta função para a modal de serviços e possiveisoutra modals onde possuem campos de dropslist
+        // Variável para guardar a instância do Choices, para não inicializar várias vezes
+        let choicesInstance = null;
+
+        function inicializarChoicesServicos() {
+        // Encontra o elemento <input> de serviços
+        const servicosInput = document.getElementById('servicos-input');
+
+        // Se o elemento existe E AINDA NÃO FOI INICIALIZADO
+        if (servicosInput && !choicesInstance) {
+            
+            // Inicializa a biblioteca
+            choicesInstance = new Choices(servicosInput, {
+            choices: [
+                { value: 'Troca de tela | 380.00', label: 'Troca de tela | 380.00' },
+                { value: 'Troca de Bateria | 250.00', label: 'Troca de Bateria | 250.00' },
+                { value: 'Limpeza Química | 150.00', label: 'Limpeza Química | 150.00' },
+                { value: 'Reparo Placa Mãe | 550.00', label: 'Reparo Placa Mãe | 550.00' }
+            ],
+            removeItemButton: true,
+            addItemText: (value) => `Pressione Enter para adicionar <b>"${value}"</b>`,
+            noResultsText: 'Nenhum resultado encontrado',
+            });
+            
+        }
     }
 
-    // Lógica para finalizar a venda
-    btnFinalizar.addEventListener('click', () => {
-        if (carrinho.length === 0) {
-            alert('O carrinho está vazio!');
-            return;
-        }
-
-        const dadosVenda = {
-            cliente: document.getElementById('cliente-nome').value,
-            itens: carrinho,
-            total: carrinho.reduce((acc, item) => acc + item.subtotal, 0)
-        };
-        
-        console.log('Dados da Venda para Enviar:', dadosVenda);
-        alert('Venda finalizada com sucesso! (Verifique o console)');
-        // Aqui você enviaria 'dadosVenda' para o seu backend
-        // E depois limparia o carrinho e fecharia a modal
-    });
-});
-         
     </script>
 </body>
+
 </html>
