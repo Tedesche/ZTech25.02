@@ -166,5 +166,4 @@ public class indexController {
 	public String cadastro_OS() {
         return "redirect:/ordens/cadastrarForm";
 	}
-	
 }
