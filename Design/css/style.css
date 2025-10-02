@@ -51,7 +51,7 @@
         }
         .form-login{
         width: 20vw;
-        height: 25vh;
+        height: 27vh;
         box-sizing: border-box;
         box-shadow:  0 0 30px var(--primary-red-dark);
         display: flex;
@@ -59,7 +59,8 @@
         right: 15%;
         top: 40%;
         border-radius: 15px;
-        padding:30px 100px;
+        padding:20px 100px;
+        
         }
         .input-login{
         padding: 8px;
@@ -68,7 +69,7 @@
         }
         .entrar-login{
         width:9.2vw;
-        margin: 5px;
+        margin: 10px 5px;
         padding: 8px;
         }
         * {
