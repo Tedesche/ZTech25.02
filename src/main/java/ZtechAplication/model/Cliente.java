@@ -3,7 +3,6 @@ package ZtechAplication.model;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -108,8 +107,5 @@ public class Cliente {
     public void setOrdensServico(List<OrdemServico> ordensServico) {
         this.ordensServico = ordensServico;
     }
-	
-	
-	
-
+    
 }
