@@ -31,6 +31,10 @@ public class Endereco {
     @JoinColumn(name = "fk_Cliente", nullable = false)
     private Cliente cliente;
 	
+    @OneToOne
+    @JoinColumn(name = "fk_Fun", nullable = false)
+    private Funcionario funcionario;
+	
 	public int getIdEndereco() {
 		return idEndereco;
 	}
@@ -73,8 +77,11 @@ public class Endereco {
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
-	
-	
-	
+	public Funcionario getFuncionario() {
+		return funcionario;
+	}
+	public void setFuncionario(Funcionario funcionario) {
+		this.funcionario = funcionario;
+	}
 
 }
