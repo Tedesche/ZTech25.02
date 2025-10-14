@@ -1,5 +1,9 @@
 package ZtechAplication.DTO;
 
+import java.time.LocalTime;
+
+import jakarta.persistence.Column;
+
 public class FuncionarioDTO {
 	
 	private Integer idFun;
@@ -10,6 +14,7 @@ public class FuncionarioDTO {
 	private String telefone;
 	private String status_Fun;
 	private String nivelAces;
+    private String dataAdm;
 	
 	private String rua;
 	private String cep;

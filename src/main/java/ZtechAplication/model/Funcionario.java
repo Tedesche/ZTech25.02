@@ -1,5 +1,6 @@
 package ZtechAplication.model;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,9 @@ public class Funcionario {
 
 	@Column(length = 15)
     private String nivelAces;
+	
+    @Column(name = "data_adm")
+    private LocalTime dataAdm;
 
     @OneToOne(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Email email;
