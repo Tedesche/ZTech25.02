@@ -5,21 +5,43 @@ INSERT INTO TB_CLIENTE (NOME_CLIENTE, CPF) VALUES
 ('MARCUS SAMPAIO', '766.243.213-98'), ('LEANDRO TEDESCKE', '745.765.132-53'), ('BRUNA MACRUZ', '686.655.354-89'),
 ('GUSTAVO TADANO', '456.234.132-79'), ('ALISZOM FERNANDEZ', '632.987.432-23');
 
--- INSERTS PARA TB_EMAIL (para todos os 11 clientes - mantidos)
-INSERT INTO TB_EMAIL (END_EMAIL, FK_CLIENTE) VALUES 
-('joao.silva@gmail.com', 1), ('maria.oliveira@hotmail.com', 2), ('carlos.souza@yahoo.com', 3), 
-('ana.santos@outlook.com', 4), ('pedro.costa@gmail.com', 5), ('davi.franco@example.com', 6),
-('marcus.sampaio@example.com', 7), ('leandro.tedescke@example.com', 8), ('bruna.macruz@example.com', 9),
-('gustavo.tadano@example.com', 10), ('aliszom.fernandez@example.com', 11);
+INSERT INTO TB_FUNCIONARIO (NOME_FUN, CPF_FUN, DATA_ADM, STATUS_FUN, NIVEL_ACESS) VALUES
+('Ana Silva', '111.222.333-44', '2022-08-15', 'Ativo', 'administrador'),
+('Bruno Costa', '222.333.444-55', '2023-01-20', 'Ativo', 'funcionario'),
+('Carla Dias', '333.444.555-66', '2023-05-10', 'Ativo', 'funcionario'),
+('Daniel Souza', '444.555.666-77', '2023-09-01', 'Ativo', 'funcionario'); 
 
--- INSERTS PARA TB_ENDERECO (para todos os 11 clientes - mantidos)
-INSERT INTO TB_ENDERECO (RUA, CEP, BAIRRO, CIDADE, NUMERO_CASA, FK_CLIENTE) VALUES 
-('Rua das Flores', '01234-567', 'Centro', 'São Paulo', 100, 1), ('Avenida Brasil', '98765-432', 'Jardins', 'Rio de Janeiro', 200, 2),
-('Rua das Palmeiras', '45678-901', 'Vila Nova', 'Belo Horizonte', 300, 3), ('Alameda Santos', '23456-789', 'Paraíso', 'São Paulo', 400, 4),
-('Rua do Comércio', '34567-890', 'Centro', 'Curitiba', 500, 5), ('Rua Augusta', '01305-000', 'Consolação', 'São Paulo', 601, 6),
-('Avenida Paulista', '01311-000', 'Bela Vista', 'São Paulo', 702, 7), ('Rua da Bahia', '30160-010', 'Lourdes', 'Belo Horizonte', 803, 8),
-('Avenida Atlântica', '22070-000', 'Copacabana', 'Rio de Janeiro', 904, 9), ('Rua Oscar Freire', '01426-000', 'Jardim Paulista', 'São Paulo', 1005, 10),
-('Praça da Sé', '01001-000', 'Sé', 'São Paulo', 1106, 11);
+-- INSERTS PARA TB_EMAIL (associando cada email a um cliente E um funcionário)
+INSERT INTO TB_EMAIL (END_EMAIL, FK_CLIENTE, FK_FUN) VALUES 
+('joao.silva@gmail.com', 1, NULL), 
+('maria.oliveira@hotmail.com', 2, NULL),
+('carlos.souza@yahoo.com', 3, NULL), 
+('ana.santos@outlook.com', 4, NULL),
+('pedro.costa@gmail.com', 5, NULL), 
+('davi.franco@example.com', 6, NULL),
+('marcus.sampaio@example.com', 7, NULL), 
+('leandro.tedescke@example.com', 8, NULL),
+('bruna.macruz@example.com', 9, NULL), 
+('gustavo.tadano@example.com', 10, NULL),
+('aliszom.fernandez@example.com', 11, NULL);
+
+-- INSERTS PARA TB_ENDERECO (associando cada endereço a um cliente E um funcionário)
+INSERT INTO TB_ENDERECO (RUA, CEP, BAIRRO, CIDADE, NUMERO_CASA, FK_CLIENTE, FK_FUN) VALUES 
+('Rua das Palmeiras', '04567-890', 'Morumbi', 'São Paulo', 150, NULL, 1),
+('Avenida Faria Lima', '05678-901', 'Itaim Bibi', 'São Paulo', 250, NULL, 2),
+('Alameda Juatinga', '06789-012', 'Alphaville', 'Barueri', 350, NULL, 3),
+('Rua Bela Cintra', '07890-123', 'Consolação', 'São Paulo', 450, NULL, 4),
+('Rua das Flores', '01234-567', 'Centro', 'São Paulo', 123, 1, NULL),
+('Avenida Brasil', '12345-678', 'Jardins', 'São Paulo', 456, 2, NULL),
+('Rua Augusta', '23456-789', 'Consolação', 'São Paulo', 789, 3, NULL),
+('Alameda Santos', '34567-890', 'Cerqueira César', 'São Paulo', 101, 4, NULL),
+('Rua Oscar Freire', '45678-901', 'Jardim Paulista', 'São Paulo', 202, 5, NULL),
+('Avenida Paulista', '56789-012', 'Bela Vista', 'São Paulo', 303, 6, NULL),
+('Rua Haddock Lobo', '67890-123', 'Cerqueira César', 'São Paulo', 404, 7, NULL),
+('Alameda Jaú', '78901-234', 'Jardim Paulista', 'São Paulo', 505, 8, NULL),
+('Rua Estados Unidos', '89012-345', 'Jardim América', 'São Paulo', 606, 9, NULL),
+('Avenida Rebouças', '90123-456', 'Pinheiros', 'São Paulo', 707, 10, NULL),
+('Rua Teodoro Sampaio', '01234-567', 'Pinheiros', 'São Paulo', 808, 11, NULL);
 
 -- INSERTS PARA TB_TELEFONE (para todos os 11 clientes - mantidos)
 INSERT INTO TB_TELEFONE (TELEFONE, FK_CLIENTE) VALUES 
@@ -128,9 +150,4 @@ INSERT INTO TB_OS (DATA_INICIO, HORA_INICIO, DATA_FIM, HORA_FIM, QUANTIDADE, VAL
 ('2025-06-04', '15:00:00', NULL, NULL, 0, 90.00, 90.00, 'Em Andamento', 8, 6, 6),
 ('2025-06-04', '16:00:00', '2025-06-04', '17:00:00', 1, 250.00, 250.00, 'Concluido', 9, 7, 7),
 ('2025-06-04', '17:30:00', NULL, NULL, 0, 70.00, 70.00, 'Registrada', 10, 8, 8);
-
-INSERT INTO TB_FUNCIONARIO (NOME_FUN, CPF_FUN, DATA_ADM, STATUS_FUN, NIVEL_ACESS) VALUES
-('Ana Silva', '111.222.333-44', '2022-08-15', 'Ativo', 'administrador'),
-('Bruno Costa', '222.333.444-55', '2023-01-20', 'Ativo', 'funcionario'),
-('Carla Dias', '333.444.555-66', '2023-05-10', 'Ativo', 'funcionario'),
-('Daniel Souza', '444.555.666-77', '2023-09-01', 'Ativo', 'funcionario');  
+ 
