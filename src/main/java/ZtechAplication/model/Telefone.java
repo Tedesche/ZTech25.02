@@ -26,6 +26,10 @@ public class Telefone {
 	@OneToOne
     @JoinColumn(name = "fk_Cliente", nullable = false)
     private Cliente cliente;
+	
+    @OneToOne
+    @JoinColumn(name = "fk_Fun", nullable = false)
+    private Funcionario funcionario;
 
     // Getters e Setters
     public Integer getIdTelefone() {
@@ -51,6 +55,12 @@ public class Telefone {
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
+	public Funcionario getFuncionario() {
+		return funcionario;
+	}
+	public void setFuncionario(Funcionario funcionario) {
+		this.funcionario = funcionario;
+	}
     
     
 

@@ -133,4 +133,4 @@ INSERT INTO TB_FUNCIONARIO (NOME_FUN, CPF_FUN, DATA_ADM, STATUS_FUN, NIVEL_ACESS
 ('Ana Silva', '111.222.333-44', '2022-08-15', 'Ativo', 'administrador'),
 ('Bruno Costa', '222.333.444-55', '2023-01-20', 'Ativo', 'funcionario'),
 ('Carla Dias', '333.444.555-66', '2023-05-10', 'Ativo', 'funcionario'),
-('Daniel Souza', '444.555.666-77', '2023-09-01', 'Ativo', 'funcionario'); 
+('Daniel Souza', '444.555.666-77', '2023-09-01', 'Ativo', 'funcionario');  
