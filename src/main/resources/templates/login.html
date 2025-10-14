@@ -1,80 +1,68 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>ZTech Pro - Sistema de Gestão Empresarial</title>
-    <link rel="stylesheet" href="styles/style.css" />
-  </head>
-  <body style="display: flex;">
-    <div class="mosaico1">
-      <img src="img/logo-removebg.svg" />
-    </div>
-    <div class="mosaico2">
-		<div class="theme-toggle2 " onclick="toggleTheme()">
-			<div class="theme-icon" id="themeIcon" style="font-size: 16px;">🌙</div>
-			<div class="theme-text" id="themeText"  style="font-size: 16px;">Tema Escuro</div>
-		</div>
-      <div class="form-login form-group">
-        <form class="login">
-			<label for="Usuario: "></label>
-          <br />
-          <input
-            type="text"
-            name="user"
-            placeholder="user"
-            class="input-login"
-          />
-          <br />
-			<label for="Senha: "></label>
-          <input
-            type="text"
-            name="senha"
-            placeholder="senha"
-            class="input-login"
-          />
-          <input
-            type="submit"
-            name="entrar"
-            value="Entrar"
-            class="entrar-login"
-			onclick="window.location.href='home.html';"
-          />
-		  <a th:href="@{home}"> entrar </a>
-        </form>
-      </div>
-    </div>
-	<script>
-        // Theme Toggle Functionality
-        let isDarkTheme = false;
 
-        function toggleTheme() {
-            const body = document.body;
-            const themeIcon = document.getElementById('themeIcon');
-            const themeText = document.getElementById('themeText');
-            
-            isDarkTheme = !isDarkTheme;
-            
-            if (isDarkTheme) {
-                body.classList.add('dark-theme');
-                themeIcon.textContent = '☀️';
-                themeText.textContent = 'Tema Claro';
-            } else {
-                body.classList.remove('dark-theme');
-                themeIcon.textContent = '🌙';
-                themeText.textContent = 'Tema Escuro';
-            }
-            
-            // Save theme preference
-            localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
-        }
+<head>
+  <meta charset="UTF-8" />
+  <title>ZTech Pro - Sistema de Gestão Empresarial</title>
+  <link rel="stylesheet" href="/src/main/resources/static/styles/style.css" />
+</head>
 
-        // Load saved theme
-        function loadTheme() {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                toggleTheme();
-            }
-        }
-		</script>
-  </body>
+<body style="display: flex;">
+  <div class="mosaico1">
+    <img src="/src/main/resources/static/img/logo-inicio.svg" />
+  </div>
+  <div class="mosaico2">
+    <div class="theme-toggle2 " onclick="toggleTheme()">
+      <div class="theme-icon" id="themeIcon" style="font-size: 16px;">🌙</div>
+      <div class="theme-text" id="themeText" style="font-size: 16px;">Tema Escuro</div>
+    </div>
+    <div class="form-login form-group">
+      <form class="login">
+        <label for="Usuario: "></label>
+        <br />
+        <input type="text" name="user" placeholder="user" class="input-login" />
+        <br />
+        <label for="Senha: "></label>
+        <input type="text" name="senha" placeholder="senha" class="input-login" />
+        <input type="submit" name="entrar" value="Entrar" class="entrar-login"
+          onclick="window.location.href='home.html';" />
+        <a th:href="@{home}">  </a>
+      </form>
+    </div>
+  </div>
+  <script>
+    // Theme Toggle Functionality
+    let isDarkTheme = false;
+
+    function toggleTheme() {
+      const body = document.body;
+      const themeIcon = document.getElementById('themeIcon');
+      const themeText = document.getElementById('themeText');
+
+      isDarkTheme = !isDarkTheme;
+
+      if (isDarkTheme) {
+        body.classList.add('dark-theme');
+        themeIcon.textContent = '☀️';
+        themeText.textContent = 'Tema Claro';
+      } else {
+        body.classList.remove('dark-theme');
+        themeIcon.textContent = '🌙';
+        themeText.textContent = 'Tema Escuro';
+      }
+
+      // Save theme preference
+      localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
+    }
+
+    // Load saved theme
+    function loadTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        toggleTheme();
+      }
+    }
+  </script>
+</body>
+
 </html>
