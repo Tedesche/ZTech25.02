@@ -2,12 +2,14 @@ package ZtechAplication.DTO;
 
 public class FuncionarioDTO {
 	
-	private Integer idFuncionario;
+	private Integer idFun;
 	private String nomeFuncionario;
 	private String cpf;
 	
 	private String endEmail;
 	private String telefone;
+	private String status_Fun;
+	private String nivelAces;
 	
 	private String rua;
 	private String cep;
@@ -15,10 +17,10 @@ public class FuncionarioDTO {
 	private String cidade;
 	private int numeroCasa;
 	public Integer getIdFuncionario() {
-		return idFuncionario;
+		return idFun;
 	}
 	public void setIdFuncionario(Integer idFuncionario) {
-		this.idFuncionario = idFuncionario;
+		this.idFun = idFuncionario;
 	}
 	public String getNomeFuncionario() {
 		return nomeFuncionario;
@@ -43,6 +45,18 @@ public class FuncionarioDTO {
 	}
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
+	}
+	public String getStatus() {
+		return status_Fun;
+	}
+	public void setStatus(String status) {
+		this.status_Fun = status;
+	}
+	public String getNivelAces() {
+		return nivelAces;
+	}
+	public void setNivelAces(String nivelAces) {
+		this.nivelAces = nivelAces;
 	}
 	public String getRua() {
 		return rua;
