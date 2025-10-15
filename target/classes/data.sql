@@ -6,13 +6,17 @@ INSERT INTO TB_CLIENTE (NOME_CLIENTE, CPF) VALUES
 ('GUSTAVO TADANO', '456.234.132-79'), ('ALISZOM FERNANDEZ', '632.987.432-23');
 
 INSERT INTO TB_FUNCIONARIO (NOME_FUN, CPF_FUN, DATA_ADM, STATUS_FUN, NIVEL_ACESS) VALUES
-('Ana Silva', '111.222.333-44', '2022-08-15', 'Ativo', 'administrador'),
-('Bruno Costa', '222.333.444-55', '2023-01-20', 'Ativo', 'funcionario'),
-('Carla Dias', '333.444.555-66', '2023-05-10', 'Ativo', 'funcionario'),
+('Eduardo Severo', '111.222.333-44', '2022-08-15', 'Ativo', 'administrador'),
+('Bruno Costa', '222.333.444-55', '2023-01-20', 'Afastado', 'funcionario'),
+('Carla Dias', '333.444.555-66', '2023-05-10', 'Desligado', 'funcionario'),
 ('Daniel Souza', '444.555.666-77', '2023-09-01', 'Ativo', 'funcionario'); 
 
 -- INSERTS PARA TB_EMAIL (associando cada email a um cliente E um funcionário)
 INSERT INTO TB_EMAIL (END_EMAIL, FK_CLIENTE, FK_FUN) VALUES 
+('eduardo.severo@empresa.com', NULL, 1),
+('bruno.costa@empresa.com', NULL, 2),
+('carla.dias@empresa.com', NULL, 3),
+('daniel.souza@empresa.com', NULL, 4),
 ('joao.silva@gmail.com', 1, NULL), 
 ('maria.oliveira@hotmail.com', 2, NULL),
 ('carlos.souza@yahoo.com', 3, NULL), 
@@ -44,10 +48,15 @@ INSERT INTO TB_ENDERECO (RUA, CEP, BAIRRO, CIDADE, NUMERO_CASA, FK_CLIENTE, FK_F
 ('Rua Teodoro Sampaio', '01234-567', 'Pinheiros', 'São Paulo', 808, 11, NULL);
 
 -- INSERTS PARA TB_TELEFONE (para todos os 11 clientes - mantidos)
-INSERT INTO TB_TELEFONE (TELEFONE, FK_CLIENTE) VALUES 
-('(11) 99999-1111', 1), ('(21) 98888-2222', 2), ('(31) 97777-3333', 3), ('(11) 96666-4444', 4),
-('(41) 95555-5555', 5), ('(11) 94444-6666', 6), ('(11) 93333-7777', 7), ('(31) 92222-8888', 8),
-('(21) 91111-9999', 9), ('(11) 99000-1010', 10), ('(11) 98080-2020', 11);
+INSERT INTO TB_TELEFONE (TELEFONE, FK_CLIENTE, FK_FUN) VALUES 
+('(11) 99999-1111', NULL, 1), ('(21) 98888-2222', NULL, 2), 
+('(31) 97777-3333', NULL, 3), ('(11) 96666-4444', NULL, 4),
+('(11) 99999-1111', 1, NULL), ('(21) 98888-2222', 2, NULL), 
+('(31) 97777-3333', 3, NULL), ('(11) 96666-4444', 4, NULL),
+('(41) 95555-5555', 5, NULL), ('(11) 94444-6666', 6, NULL), 
+('(11) 93333-7777', 7, NULL), ('(31) 92222-8888', 8, NULL),
+('(21) 91111-9999', 9, NULL), ('(11) 99000-1010', 10, NULL), 
+('(11) 98080-2020', 11, NULL);
 
 -- INSERTS PARA TB_CATEGORIA (mantidos da versão anterior)
 INSERT INTO TB_CATEGORIA (NOME) VALUES 

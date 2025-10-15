@@ -1,5 +1,6 @@
 package ZtechAplication.model;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,17 +27,17 @@ public class Funcionario {
 	@Column(name = "nome_Fun" , length = 50)
 	private String nomeFuncionario;
 	
-	@Column(length = 20)
+	@Column(name = "CPF_Fun" ,length = 20)
     private String cpf;
+	
+    @Column(name = "data_adm")
+    private LocalDate dataAdm;
 	
 	@Column(length = 15)
     private String status_Fun;
 
-	@Column(length = 15)
+	@Column(name = "nivel_acess" , length = 15)
     private String nivelAces;
-	
-    @Column(name = "data_adm")
-    private LocalTime dataAdm;
 
     @OneToOne(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Email email;
