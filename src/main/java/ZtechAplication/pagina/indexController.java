@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model; 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping; // Import necessário para @GetMapping
 
 import ZtechAplication.repository.ClienteRepository;
 import ZtechAplication.repository.OrdemServicoRepository;
@@ -35,10 +36,16 @@ public class indexController {
     @Autowired
     private OrdemServicoRepository ordemServicoRepository; // Repositório para Ordens de Serviço
 
-	@RequestMapping("/")
+	@GetMapping("/") // Mapeamento para a rota raiz
 	public String index() {
-		return "index"; // Retorna a página de login/entrada inicial
+		return "login"; // Retorna a página de login/entrada inicial
 	}
+
+    // Mapeamento GET para a página de login (requisitado pelo Spring Security)
+    @GetMapping("/login")
+    public String login() {
+        return "login"; // Retorna o template de login
+    }
 	
     // Método para carregar dados para a página inicial/dashboard
 	@RequestMapping("/inicio")
@@ -134,7 +141,7 @@ public class indexController {
         model.addAttribute("labelsGraficoOsRecentes", labelsGraficoOsRecentes);
         model.addAttribute("dadosGraficoOsRecentes", dadosGraficoOsRecentes);
 
-		return "inicio"; // Retorna o nome do template da página inicial
+		return "index"; // Retorna o nome do template da página inicial (CORRIGIDO)
 	}
 
     // Mapeamentos para as outras páginas (redirecionando para os controllers específicos)

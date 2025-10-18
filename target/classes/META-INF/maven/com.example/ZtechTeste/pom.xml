@@ -7,8 +7,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.5</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
+		<relativePath/> </parent>
 	<groupId>com.example</groupId>
 	<artifactId>ZtechTeste</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -42,6 +41,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -62,9 +66,7 @@
 		<dependency>
     		<groupId>org.projectlombok</groupId>
    			 <artifactId>lombok</artifactId>
-   			 <version>1.18.38</version> <!-- Use a versão mais recente -->
-  			  <scope>provided</scope> <!-- Não é incluído no build final -->
-		</dependency>	
+   			 <version>1.18.38</version> <scope>provided</scope> </dependency>	
 			
 		</dependencies>
 		

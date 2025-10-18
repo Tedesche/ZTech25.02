@@ -1,15 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <meta charset="UTF-8" />
   <title>ZTech Pro - Sistema de Gestão Empresarial</title>
-  <link rel="stylesheet" href="/src/main/resources/static/styles/style.css" />
+  
+  <link rel="stylesheet" th:href="@{/styles/reset.css}" />
+  <link rel="stylesheet" th:href="@{/styles/style.css}" />
+  <link rel="stylesheet" th:href="@{/styles/entrar.css}" />
 </head>
 
 <body style="display: flex;">
   <div class="mosaico1">
-    <img src="/src/main/resources/static/img/logo-inicio.svg" />
+    <img th:src="@{/img/logo-inicio.svg}" />
   </div>
   <div class="mosaico2">
     <div class="theme-toggle2 " onclick="toggleTheme()">
@@ -17,17 +20,29 @@
       <div class="theme-text" id="themeText" style="font-size: 16px;">Tema Escuro</div>
     </div>
     <div class="form-login form-group">
-      <form class="login">
-        <label for="Usuario: "></label>
-        <br />
-        <input type="text" name="user" placeholder="user" class="input-login" />
-        <br />
-        <label for="Senha: "></label>
-        <input type="text" name="senha" placeholder="senha" class="input-login" />
-        <input type="submit" name="entrar" value="Entrar" class="entrar-login"
-          onclick="window.location.href='home.html';" />
-        <a th:href="@{home}">  </a>
-      </form>
+     <form th:action="@{/login}" method="POST">
+        <h2>Login</h2>
+        
+        <div th:if="${param.error}" class="alert alert-danger">
+            Usuário ou senha inválidos.
+        </div>
+    
+        <div th:if="${param.logout}" class="alert alert-success">
+            Você foi desconectado.
+        </div>
+    
+        <div>
+            <label for="username">Usuário:</label>
+            <input type="text" id="username" name="username" required autofocus>
+        </div>
+        
+        <div>
+            <label for="password">Senha:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+    
+        <button type="submit">Entrar</button>
+    </form>
     </div>
   </div>
   <script>
@@ -62,6 +77,9 @@
         toggleTheme();
       }
     }
+    
+    // Carrega o tema ao carregar a página
+    loadTheme();
   </script>
 </body>
 
