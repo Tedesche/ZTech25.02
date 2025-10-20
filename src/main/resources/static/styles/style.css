@@ -55,7 +55,8 @@
         .form-login{
         width: 30vw;
         max-width: 430px;
-        height: 25vh;
+        
+        min-height: 150px;
         box-sizing: border-box;
         box-shadow:  0 0 30px var(--primary-red-dark);
         display: flex;
@@ -73,9 +74,22 @@
         border-radius: 5px;
         }
         .entrar-login{
-        width:9.2vw;
-        margin: 5px;
-        padding: 8px;
+			
+         	display:flex;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+     		background: var(--primary-red);
+            color: white;
+            margin-top: 15px;
+        }
+
+        .entrar:hover {
+            background: var(--primary-red-hover);
         }
         * {
             margin: 0;
@@ -399,7 +413,7 @@
 
         .btn-primary {
             background: var(--primary-red);
-            color: white;
+            color: white;      
         }
 
         .btn-primary:hover {

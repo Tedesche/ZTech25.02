@@ -67,11 +67,22 @@
         border-radius: 5px;
        
         }
-        .entrar-login{
-        display:flex;
-        width:10vw;
-        margin: 10px 5px;
-        padding: 8px;
+         .entrar-login{
+         	display:flex;
+            flex: none;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+     		background: var(--primary-red);
+            color: white;
+        }
+
+        .entrar:hover {
+            background: var(--primary-red-hover);
         }
         * {
             margin: 0;
