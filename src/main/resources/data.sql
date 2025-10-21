@@ -6,10 +6,10 @@ INSERT INTO TB_CLIENTE (NOME_CLIENTE, CPF) VALUES
 ('GUSTAVO TADANO', '456.234.132-79'), ('ALISZOM FERNANDEZ', '632.987.432-23');
 
 INSERT INTO TB_FUNCIONARIO (NOME_FUN, CPF_FUN, DATA_ADM, STATUS_FUN, NIVEL_ACESS) VALUES
-('Eduardo Severo', '111.222.333-44', '2022-08-15', 'Ativo', 'administrador'),
-('Bruno Costa', '222.333.444-55', '2023-01-20', 'Afastado', 'funcionario'),
-('Carla Dias', '333.444.555-66', '2023-05-10', 'Desligado', 'funcionario'),
-('Daniel Souza', '444.555.666-77', '2023-09-01', 'Ativo', 'funcionario'); 
+('Eduardo Severo', '111.222.333-44', '2022-08-15', 'Ativo', 'ADMIN'),
+('Bruno Costa', '222.333.444-55', '2023-01-20', 'Afastado', 'FUNCIONARIO'),
+('Carla Dias', '333.444.555-66', '2023-05-10', 'Desligado', 'FUNCIONARIO'),
+('Daniel Souza', '444.555.666-77', '2023-09-01', 'Ativo', 'FUNCIONARIO'); 
 
 -- INSERTS PARA TB_EMAIL (associando cada email a um cliente E um funcionário)
 INSERT INTO TB_EMAIL (END_EMAIL, FK_CLIENTE, FK_FUN) VALUES 
@@ -159,4 +159,7 @@ INSERT INTO TB_OS (DATA_INICIO, HORA_INICIO, DATA_FIM, HORA_FIM, QUANTIDADE, VAL
 ('2025-06-04', '15:00:00', NULL, NULL, 0, 90.00, 90.00, 'Em Andamento', 8, 6, 6),
 ('2025-06-04', '16:00:00', '2025-06-04', '17:00:00', 1, 250.00, 250.00, 'Concluido', 9, 7, 7),
 ('2025-06-04', '17:30:00', NULL, NULL, 0, 70.00, 70.00, 'Registrada', 10, 8, 8);
+
+INSERT INTO TB_USUARIO (USERNAME, PASSWORD, FK_FUNCIONARIO) 
+VALUES ('admin', '$2a$10$f.x/mwh.Qvj1a.1uMMiLseVLJvUOKmfxs.Ei/i0YxYGa.A8CBEfgy', 1);
  

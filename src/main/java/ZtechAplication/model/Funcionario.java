@@ -1,51 +1,48 @@
 package ZtechAplication.model;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-
+// Removidos imports não utilizados (LocalTime, ArrayList, List, ManyToOne)
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+// Removido @JoinColumn (não é usado diretamente aqui)
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tb_Funcionario")
+@Table(name = "TB_FUNCIONARIO") // Mapeia para a tabela TB_FUNCIONARIO do schema.sql
 public class Funcionario {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID_FUN") // Mapeia para a coluna ID_FUN
 	private Integer idFun;
 	
-	@Column(name = "nome_Fun" , length = 50)
+	@Column(name = "NOME_FUN" , length = 50) // Mapeia para a coluna NOME_FUN
 	private String nomeFuncionario;
 	
-	@Column(name = "CPF_Fun" ,length = 20)
+	@Column(name = "CPF_FUN" ,length = 20) // Mapeia para a coluna CPF_FUN
     private String cpf;
 	
-    @Column(name = "data_adm")
+    @Column(name = "DATA_ADM") // Mapeia para a coluna DATA_ADM
     private LocalDate dataAdm;
 	
-	@Column(length = 15)
+	@Column(name = "STATUS_FUN", length = 15) // Mapeia para a coluna STATUS_FUN
     private String status_Fun;
 
-	@Column(name = "nivel_acess" , length = 15)
+	@Column(name = "NIVEL_ACESS" , length = 15) // Mapeia para a coluna NIVEL_ACESS
     private String nivelAces;
 
-    @OneToOne(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Email email;
     
-    @OneToOne(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Endereco endereco;
     
-    @OneToOne(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Telefone telefone;
 
 	public Integer getIdFun() {
