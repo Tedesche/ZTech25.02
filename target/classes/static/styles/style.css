@@ -194,6 +194,9 @@
             transition: all 0.3s ease;
             cursor: pointer;
         }
+		.theme-toggle a{
+			text-decoration: none;
+		}
 
         .dark-theme .theme-toggle {
             background: var(--stat-bg-dark);

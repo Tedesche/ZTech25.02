@@ -29,7 +29,7 @@
 	                </div>
 	                <div class="theme-toggle">
 	                    <div class="theme-icon" id="logoutIcon">🚪</div>
-	                    <div class="theme-text" id="logoutText">Sair</div>
+	                    <a th:href="@{login.html}"><div class="theme-text" id="logoutText">Sair</div></a>
 	                </div>
 				</div>
             </div>
@@ -185,12 +185,7 @@
                         <div class="stat-label">Fornecedores</div>
                     </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-content">
-                        <div class="stat-label-relatorio">Relatório</div>
-                        <button class="action-btn btn-primary">📊 Emitir Relatório</button>
-                    </div>
-                </div>
+
             </div>
 
             <div class="filters-bar">
