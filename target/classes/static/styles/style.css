@@ -176,6 +176,12 @@
         .dark-theme .subtitle {
             color: var(--text-secondary-dark);
         }
+		
+		.caixa-botoes{
+			display: flex;
+			flex-direction: row;
+			gap: 10px;
+		}
 
         .theme-toggle {
             display: flex;
