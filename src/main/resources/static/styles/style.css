@@ -194,7 +194,7 @@
             transition: all 0.3s ease;
             cursor: pointer;
         }
-		.theme-toggle a{
+		.theme-toggle-link{
 			text-decoration: none;
 		}
 

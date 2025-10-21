@@ -27,10 +27,12 @@
 	                    <div class="theme-icon" id="themeIcon">🌙</div>
 	                    <div class="theme-text" id="themeText">Tema Escuro</div>
 	                </div>
-	                <div class="theme-toggle">
-	                    <div class="theme-icon" id="logoutIcon">🚪</div>
-	                    <a th:href="@{login.html}"><div class="theme-text" id="logoutText">Sair</div></a>
-	                </div>
+					<a th:href="@{login.html}" class="theme-toggle-link">
+					  <div class="theme-toggle">
+					    <div class="theme-icon" id="logoutIcon">🚪</div>
+					    <div class="theme-text" id="logoutText">Sair</div>
+					  </div>
+					</a>
 				</div>
             </div>
 
