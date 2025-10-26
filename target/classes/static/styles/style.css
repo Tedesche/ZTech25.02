@@ -424,6 +424,12 @@
             background: var(--primary-red);
             color: white;      
         }
+        .pesquisa{
+        background-image: url("../img/pesquisabotao.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        }
 
         .btn-primary:hover {
             background: var(--primary-red-hover);
