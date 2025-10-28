@@ -427,9 +427,16 @@
         .pesquisa{
         background-image: url("../img/pesquisabotao.png");
         background-repeat: no-repeat;
-        background-size: cover;
+        background-size: 25px;
         background-position: center;
-        }
+		}
+		.pesquisa:hover{
+			
+		}
+		.caixa-pesquisa{
+			display: flex;
+			
+		}
 
         .btn-primary:hover {
             background: var(--primary-red-hover);
@@ -580,6 +587,8 @@
         .dark-theme .section-header h2 {
             color: var(--text-primary-dark);
         }
+		
+
 
         .filters-bar {
             display: flex;
