@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List; 
 
 import ZtechAplication.model.Cliente;
+import ZtechAplication.model.Funcionario;
 import ZtechAplication.model.OrdemServico;
 import ZtechAplication.model.Produto;
 import ZtechAplication.model.Venda; 
@@ -41,6 +42,26 @@ public class SpecificationController {
 
 			return cb.or( // Combina os critérios de busca com OR
 					cb.like(cb.lower(root.get("nomeCliente")), likeTerm), // Busca por nome do cliente
+					cb.like(cb.lower(root.get("cpf")), likeTerm), // Busca por CPF
+					// Para buscar em campos de entidades relacionadas, é preciso fazer o join (implícito ou explícito)
+					cb.like(cb.lower(root.get("email").get("endEmail")), likeTerm), // Busca por email
+					cb.like(cb.lower(root.get("telefone").get("telefone")), likeTerm), // Busca por telefone
+					cb.like(cb.lower(root.get("endereco").get("bairro")), likeTerm) // Busca por bairro
+			);
+		};
+	}
+	
+	public static Specification<Funcionario> comTermoFun (String termo){
+		return (root, query, cb) -> {
+			if ( termo == null || termo.trim().isEmpty() ) {
+				// Retorna todos os clientes se o termo de busca for nulo ou vazio
+				return cb.isTrue(cb.literal(true)); 
+			} 
+			String likeTerm = "%" + termo.toLowerCase() + "%";
+
+
+			return cb.or( // Combina os critérios de busca com OR
+					cb.like(cb.lower(root.get("nomeFuncionario")), likeTerm), // Busca por nome do cliente
 					cb.like(cb.lower(root.get("cpf")), likeTerm), // Busca por CPF
 					// Para buscar em campos de entidades relacionadas, é preciso fazer o join (implícito ou explícito)
 					cb.like(cb.lower(root.get("email").get("endEmail")), likeTerm), // Busca por email

@@ -7,9 +7,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping; // Import necessário para @GetMapping
 
 import ZtechAplication.repository.ClienteRepository;
+import ZtechAplication.repository.FuncionarioRepository;
 import ZtechAplication.repository.OrdemServicoRepository;
 import ZtechAplication.repository.ProdutoRepository;
-import ZtechAplication.model.OrdemServico; 
+import ZtechAplication.repository.VendaRepository;
+import ZtechAplication.DTO.ClienteDTO;
+import ZtechAplication.DTO.FuncionarioDTO;
+import ZtechAplication.DTO.OrdemServicoDTO;
+import ZtechAplication.DTO.ProdutoDTO;
+import ZtechAplication.DTO.VendaDTO;
+import ZtechAplication.model.Cliente;
+import ZtechAplication.model.Funcionario;
+import ZtechAplication.model.OrdemServico;
+import ZtechAplication.model.Produto;
+import ZtechAplication.model.Venda;
 
 import java.math.BigDecimal; 
 // Removido: import java.text.NumberFormat; pois a formatação será no Thymeleaf
@@ -28,13 +39,28 @@ import java.util.LinkedHashMap;
 public class indexController {
 
     @Autowired
-    private ProdutoRepository produtoRepository; // Repositório para Clientes
+    private ClienteController clienteController; // Repositório para Produtos
+    @Autowired
+    private FuncionarioController funcionarioController; // Repositório para Produtos
+    @Autowired
+    private OrdemServicoController osController; // Repositório para Produtos
+    @Autowired
+    private ProdutoController produtoController; // Repositório para Produtos
+    @Autowired
+    private VendaController vendaController; // Repositório para Produtos
+	
 
     @Autowired
     private ClienteRepository clienteRepository; // Repositório para Produtos
-
+    @Autowired
+    private FuncionarioRepository funcionarioRepository; // Repositório para Ordens de Serviço
     @Autowired
     private OrdemServicoRepository ordemServicoRepository; // Repositório para Ordens de Serviço
+    @Autowired
+    private ProdutoRepository produtoRepository; // Repositório para Clientes
+    @Autowired
+    private VendaRepository vendaRepository; // Repositório para Clientes
+    
 
 	@GetMapping("/") // Mapeamento para a rota raiz
 	public String index() {
@@ -48,9 +74,24 @@ public class indexController {
     }
 	
     // Método para carregar dados para a página inicial/dashboard
-	@RequestMapping("/inicio")
+	@GetMapping("/inicio2.0")
 	public String inicio(Model model) { 
-        
+		// 1. Buscar os dados específicos para cada tabela
+	    // Usando queries otimizadas dos seus repositórios
+	    List<Cliente> clientes = clienteRepository.findAll();
+	    List<Funcionario> funcionarios = funcionarioRepository.findAll();
+	    List<OrdemServico> ordemServicos = ordemServicoRepository.findAll();
+	    List<Produto> produtos = produtoRepository.findAll();
+	    List<Venda> vendas = vendaRepository.findAll();
+	    
+	 // 2. Converter para DTOs (se necessário)
+	    List<ClienteDTO> clienteDTOs = clienteController.getClienteDTO(clientes);
+	    List<FuncionarioDTO> funcionarioDTOs = funcionarioController.getFuncionarioDTO(funcionarios);
+	    List<OrdemServicoDTO> osDTOs = osController.getOSDTO(ordemServicos);
+	    List<ProdutoDTO> produtoDTOs = produtoController.getProdutoDTO(produtos);
+	    List<VendaDTO> vendaDTOs = vendaController.getVendaDTO(vendas);
+		
+		
 		return "index"; // Retorna o nome do template da página inicial (CORRIGIDO)
 	}
 
