@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import ZtechAplication.DTO.ClienteDTO;
 import ZtechAplication.DTO.VendaDTO;
 import ZtechAplication.model.Cliente;
 import ZtechAplication.model.Produto;
@@ -234,6 +237,16 @@ public class VendaController {
         return "vendas";
     }
 
+    public List<VendaDTO> getVendaDTO(List<Venda> vendas) {
+		//cria a lista que vai receber a conversão
+		List<VendaDTO> listaDeDTOs = new ArrayList<>();
+		//passa um for para popula uma list com os clienets passados
+		for (Venda venda : vendas) {
+			listaDeDTOs.add(converterParaDTO(venda));
+		}
+		return listaDeDTOs; 
+	}
+    
     private VendaDTO converterParaDTO(Venda venda) {
         VendaDTO dto = new VendaDTO();
         dto.setIdVenda(venda.getIdVenda());

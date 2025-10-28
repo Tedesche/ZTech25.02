@@ -1,5 +1,7 @@
 package ZtechAplication.pagina;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 // import java.util.List; // Removido se a listagem principal for paginada
@@ -222,6 +224,16 @@ public class ClienteController {
             attributes.addFlashAttribute("mensagem", "Erro ao remover cliente: Pode estar associado a vendas ou ordens de serviço. Detalhe: " + e.getMessage());
         }
         return "redirect:/cliente/listar"; 
+	}
+	
+	public List<ClienteDTO> getClienteDTO(List<Cliente> clientes) {
+		//cria a lista que vai receber a conversão
+		List<ClienteDTO> listaDeDTOs = new ArrayList<>();
+		//passa um for para popula uma list com os clienets passados
+		for (Cliente cliente : clientes) {
+			listaDeDTOs.add(converterParaDTO(cliente));
+		}
+		return listaDeDTOs; 
 	}
 	
     // Método auxiliar para converter Cliente para ClienteDTO

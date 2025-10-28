@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import ZtechAplication.DTO.ClienteDTO;
 import ZtechAplication.DTO.OrdemServicoDTO;
 import ZtechAplication.DTO.ProdutoDTO;
 import ZtechAplication.model.Categoria;
@@ -378,6 +379,16 @@ public class OrdemServicoController {
         ordemServicoRepository.save(osExistente);
         attributes.addFlashAttribute("mensagem", "Status de Ordem de Serviço atualizada com sucesso - " + proxStatus);
         return "redirect:/ordens/listar"; 
+	}
+	
+	public List<OrdemServicoDTO> getOSDTO(List<OrdemServico> oss) {
+		//cria a lista que vai receber a conversão
+		List<OrdemServicoDTO> listaDeDTOs = new ArrayList<>();
+		//passa um for para popula uma list com os clienets passados
+		for (OrdemServico os : oss ) {
+			listaDeDTOs.add(converterParaDTO(os));
+		}
+		return listaDeDTOs; 
 	}
 	
 	

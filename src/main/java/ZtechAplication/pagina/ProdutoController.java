@@ -27,8 +27,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import ZtechAplication.DTO.ClienteDTO;
 import ZtechAplication.DTO.ProdutoDTO;
 import ZtechAplication.model.Categoria;
+import ZtechAplication.model.Cliente;
 import ZtechAplication.model.Marca;
 import ZtechAplication.model.Produto;
 import ZtechAplication.repository.CategoriaRepository;
@@ -265,6 +267,16 @@ public class ProdutoController {
             attributes.addFlashAttribute("mensagem", "Erro ao remover produto: Pode estar associado a vendas ou ordens de serviço. Detalhe: " + e.getMessage());
         }
         return "redirect:/produto/listar";
+	}
+	
+	public List<ProdutoDTO> getProdutoDTO(List<Produto> produtos) {
+		//cria a lista que vai receber a conversão
+		List<ProdutoDTO> listaDeDTOs = new ArrayList<>();
+		//passa um for para popula uma list com os clienets passados
+		for (Produto produto : produtos) {
+			listaDeDTOs.add(converterParaDTO(produto));
+		}
+		return listaDeDTOs; 
 	}
 	
     // Método auxiliar para converter Produto para ProdutoDTO
