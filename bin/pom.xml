@@ -65,6 +65,11 @@
    			 <version>1.18.38</version> <!-- Use a versão mais recente -->
   			  <scope>provided</scope> <!-- Não é incluído no build final -->
 		</dependency>	
+		
+		<dependency>
+  		  <groupId>org.springframework.boot</groupId>
+  		  <artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
 			
 		</dependencies>
 		
