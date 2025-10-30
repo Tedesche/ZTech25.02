@@ -68,9 +68,9 @@ public class indexController {
 	}
 
     // Mapeamento GET para a página de login (requisitado pelo Spring Security)
-    @GetMapping("/login")
+    @GetMapping("/inicio")
     public String login() {
-        return "login"; // Retorna o template de login
+        return "index"; // Retorna o template de login
     }
 	
     // Método para carregar dados para a página inicial/dashboard
