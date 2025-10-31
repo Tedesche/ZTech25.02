@@ -217,30 +217,21 @@
                             <th>Nome do Produto</th>
                             <th>Preço</th>
                             <th>Estoque</th>
-                            <th>Descrioção</th>
+                            <th>Descrição</th>
                             <th>Categoria</th>
                             <th>Marca</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>004</td>
-                            <td>Camiseta Polo Masculina</td>
-                            <td>Roupas</td>
-                            <td>R$ 79,90</td>
-                            <td>0</td>
-                            <td>
-                                <button class="table-btn edit">Editar</button>
-                                <button class="table-btn delete" onclick="openModal('Excluir')">Excluir</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>005</td>
-                            <td>Vaso Decorativo Cerâmica</td>
-                            <td>Casa e Jardim</td>
-                            <td>R$ 45,50</td>
-                            <td>15</td>
+                        <tr th:each="produto :${listaDeProdutos}">
+                            <td th:text="${produto.IdProduto}"></td>
+                            <td th:text="${produto.nome}"></td>
+                            <td th:text="${produto.valor}"></td>
+                            <td th:text="${produto.quantidade}"></td>
+                            <td th:text="${produto.descricao}"></td>
+                            <td th:text="${produto.categoria}"></td>
+                            <td th:text="${produto.marca}"></td>
                             <td>
                                 <button class="table-btn edit">Editar</button>
                                 <button class="table-btn delete" onclick="openModal('Excluir')">Excluir</button>
@@ -331,25 +322,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>V004</td>
-                            <td>14/08/2024</td>
-                            <td>Ana Lima</td>
-                            <td>Vaso Decorativo (3x)</td>
-                            <td>R$ 136,50</td>
-                            <td><span class="status-badge status-success">Concluída</span></td>
-                            <td>
-                                <button class="table-btn edit">Editar</button>
-                                <button class="table-btn delete">Deletar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>V005</td>
-                            <td>13/08/2024</td>
-                            <td>Carlos Rocha</td>
-                            <td>Fone de Ouvido</td>
-                            <td>R$ 129,90</td>
-                            <td><span class="status-badge status-error">Cancelada</span></td>
+                        <tr th:each="ordemServicos :${listaDeOrdensServico}">
+                            <td th:text="${ordemServicos.IdOS}"></td>
+                            <td th:text="${ordemServicos.nomeCliente}"></td>
+                            <td th:text="${ordemServicos.dataInicio}"></td>
+                            <td th:text="${ordemServicos.dataFim}"></td>
+                            <td th:text="${ordemServicos.valor}"></td>
+                            <td th:text="${ordemServicos.nomeServico}"></td>
+                            <td th:text="${ordemServicos.nomeProduto}"></td>
+                            <td th:text="${ordemServicos.statusOS}"><span class="status-badge status-success">Concluída</span></td>
                             <td>
                                 <button class="table-btn edit">Editar</button>
                                 <button class="table-btn delete">Deletar</button>
