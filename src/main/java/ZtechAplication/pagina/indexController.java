@@ -68,13 +68,13 @@ public class indexController {
 	}
 
     // Mapeamento GET para a página de login (requisitado pelo Spring Security)
-    @GetMapping("/inicio")
+    @GetMapping("/inicioAntiga")
     public String login() {
         return "index"; // Retorna o template de login
     }
 	
     // Método para carregar dados para a página inicial/dashboard
-	@GetMapping("/inicio2.0")
+	@GetMapping("/inicio")
 	public String inicio(Model model) { 
 		// 1. Buscar os dados específicos para cada tabela
 	    // Usando queries otimizadas dos seus repositórios
@@ -91,7 +91,12 @@ public class indexController {
 	    List<ProdutoDTO> produtoDTOs = produtoController.getProdutoDTO(produtos);
 	    List<VendaDTO> vendaDTOs = vendaController.getVendaDTO(vendas);
 		
-		
+	 // 3. PRÓXIMA ETAPA: Adicionar as listas de DTOs ao Model
+	    model.addAttribute("listaDeClientes", clienteDTOs);
+	    model.addAttribute("listaDeFuncionarios", funcionarioDTOs);
+	    model.addAttribute("listaDeOrdensServico", osDTOs);
+	    model.addAttribute("listaDeProdutos", produtoDTOs);
+	    model.addAttribute("listaDeVendas", vendaDTOs);
 		return "index"; // Retorna o nome do template da página inicial (CORRIGIDO)
 	}
 
