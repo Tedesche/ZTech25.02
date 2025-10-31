@@ -721,9 +721,9 @@
                     <div style="display: flex; gap: 5px;">
                         <div class="form-group" style="width: 100%;">
                             <label>CEP:</label>
-                            <input type="text" placeholder="Digite ou Busque o CEP">
+                            <input type="text" id="cep" placeholder="Digite ou Busque o CEP">
                         </div>
-                        <button class="action-btn btn-primary" onclick="openModal('Marca')"
+                        <button class="action-btn btn-primary" onclick="GETcep()"
                             style="width: 14%; height: 40px; margin-top: auto; margin-bottom: 22px; padding: 10px 0; float: inline-end;"
                             title="Cadastrar Nova Marca">
                             ➕
@@ -731,21 +731,21 @@
                     </div>
                     <div class="form-group">
                         <label>Rua:</label>
-                        <input type="text" placeholder="Digite o nome da Rua">
+                        <input type="text" id="rua" placeholder="Digite o nome da Rua">
                     </div>
                     <div style="display: flex; gap: 5px;">
                         <div class="form-group" style="width: 70%;">
                             <label>Bairro:</label>
-                            <input type="text" placeholder="Digite o Bairro">
+                            <input type="text" id="bairro" placeholder="Digite o Bairro">
                         </div>
                         <div class="form-group" style="width: 30%;">
                             <label>Numero:</label>
-                            <input type="number" placeholder="xxxx" step="5">
+                            <input type="number" id="numero" placeholder="xxxx" step="5">
                         </div>
                     </div>
                     <div class="form-group">
                         <label>Cidade:</label>
-                        <input type="text" placeholder="Digite o nome da Cidade">
+                        <input type="text" id="cidade" placeholder="Digite o nome da Cidade">
                     </div>
                     <div class="form-group">
                     </div>
