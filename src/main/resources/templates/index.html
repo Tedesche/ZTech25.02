@@ -383,32 +383,24 @@
                             <th>Hora</th>
                             <th>Cliente</th>
                             <th>Produtos</th>
-                            <th>quantidae</th>
+                            <th>Quantidade</th>
                             <th>Valor Total</th>
                             <th>Lucro</th>
+                            <th>Status</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>V004</td>
-                            <td>14/08/2024</td>
-                            <td>Ana Lima</td>
-                            <td>Vaso Decorativo (3x)</td>
-                            <td>R$ 136,50</td>
+                        <tr th:each="vendas :${listaDeVendas}">
+                            <td th:text="${vendas.IdVenda}"></td>
+                            <td th:text="${vendas.dataInicio}"></td>
+                            <td th:text="${vendas.horaInicio}"></td>
+                            <td th:text="${vendas.nomeCliente}"></td>
+                            <td th:text="${vendas.nomeProduto}"></td>
+                            <td th:text="${vendas.quantidade}"></td>
+                            <td th:text="${vendas.valor}"></td>
+                            <td th:text="${vendas.lucro}"></td>
                             <td><span class="status-badge status-success">Concluída</span></td>
-                            <td>
-                                <button class="table-btn edit">Editar</button>
-                                <button class="table-btn delete">Deletar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>V005</td>
-                            <td>13/08/2024</td>
-                            <td>Carlos Rocha</td>
-                            <td>Fone de Ouvido</td>
-                            <td>R$ 129,90</td>
-                            <td><span class="status-badge status-error">Cancelada</span></td>
                             <td>
                                 <button class="table-btn edit">Editar</button>
                                 <button class="table-btn delete">Deletar</button>
