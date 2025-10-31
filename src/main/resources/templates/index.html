@@ -465,13 +465,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>C004</td>
-                            <td>Internet e Telefone</td>
-                            <td>Telecom Plus</td>
-                            <td>R$ 180,00</td>
-                            <td>25/08/2024</td>
-                            <td><span class="status-badge status-normal">Pendente</span></td>
+                        <tr th:each="funcionarios :${listaDeFuncionarios}">
+                            <td th:text="${funcionarios.IdFun}"></td>
+                            <td th:text="${funcionarios.nomeFuncionario}"></td>
+                            <td th:text="${funcionarios.cpf}"></td>
+                            <td th:text="${funcionarios.dataAdm}"></td>
+                            <td th:text="${funcionarios.nivelAces}"></td>
+                            <td th:text="${funcionarios.status_Fun}"><span class="status-badge status-normal">Pendente</span></td>
                             <!-- atualizar os status de funcionarios -->
                             <td>
                                 <button class="table-btn edit">Editar</button>
