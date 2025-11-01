@@ -217,30 +217,21 @@
                             <th>Nome do Produto</th>
                             <th>Preço</th>
                             <th>Estoque</th>
-                            <th>Descrioção</th>
+                            <th>Descrição</th>
                             <th>Categoria</th>
                             <th>Marca</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>004</td>
-                            <td>Camiseta Polo Masculina</td>
-                            <td>Roupas</td>
-                            <td>R$ 79,90</td>
-                            <td>0</td>
-                            <td>
-                                <button class="table-btn edit">Editar</button>
-                                <button class="table-btn delete" onclick="openModal('Excluir')">Excluir</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>005</td>
-                            <td>Vaso Decorativo Cerâmica</td>
-                            <td>Casa e Jardim</td>
-                            <td>R$ 45,50</td>
-                            <td>15</td>
+                        <tr th:each="produto :${listaDeProdutos}">
+                            <td th:text="${produto.IdProduto}"></td>
+                            <td th:text="${produto.nome}"></td>
+                            <td th:text="${produto.valor}"></td>
+                            <td th:text="${produto.quantidade}"></td>
+                            <td th:text="${produto.descricao}"></td>
+                            <td th:text="${produto.categoria}"></td>
+                            <td th:text="${produto.marca}"></td>
                             <td>
                                 <button class="table-btn edit">Editar</button>
                                 <button class="table-btn delete" onclick="openModal('Excluir')">Excluir</button>
@@ -331,25 +322,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>V004</td>
-                            <td>14/08/2024</td>
-                            <td>Ana Lima</td>
-                            <td>Vaso Decorativo (3x)</td>
-                            <td>R$ 136,50</td>
-                            <td><span class="status-badge status-success">Concluída</span></td>
-                            <td>
-                                <button class="table-btn edit">Editar</button>
-                                <button class="table-btn delete">Deletar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>V005</td>
-                            <td>13/08/2024</td>
-                            <td>Carlos Rocha</td>
-                            <td>Fone de Ouvido</td>
-                            <td>R$ 129,90</td>
-                            <td><span class="status-badge status-error">Cancelada</span></td>
+                        <tr th:each="ordemServicos :${listaDeOrdensServico}">
+                            <td th:text="${ordemServicos.IdOS}"></td>
+                            <td th:text="${ordemServicos.nomeCliente}"></td>
+                            <td th:text="${ordemServicos.dataInicio}"></td>
+                            <td th:text="${ordemServicos.dataFim}"></td>
+                            <td th:text="${ordemServicos.valor}"></td>
+                            <td th:text="${ordemServicos.nomeServico}"></td>
+                            <td th:text="${ordemServicos.nomeProduto}"></td>
+                            <td th:text="${ordemServicos.statusOS}"><span class="status-badge status-success">Concluída</span></td>
                             <td>
                                 <button class="table-btn edit">Editar</button>
                                 <button class="table-btn delete">Deletar</button>
@@ -402,32 +383,24 @@
                             <th>Hora</th>
                             <th>Cliente</th>
                             <th>Produtos</th>
-                            <th>quantidae</th>
+                            <th>Quantidade</th>
                             <th>Valor Total</th>
                             <th>Lucro</th>
+                            <th>Status</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>V004</td>
-                            <td>14/08/2024</td>
-                            <td>Ana Lima</td>
-                            <td>Vaso Decorativo (3x)</td>
-                            <td>R$ 136,50</td>
+                        <tr th:each="vendas :${listaDeVendas}">
+                            <td th:text="${vendas.IdVenda}"></td>
+                            <td th:text="${vendas.dataInicio}"></td>
+                            <td th:text="${vendas.horaInicio}"></td>
+                            <td th:text="${vendas.nomeCliente}"></td>
+                            <td th:text="${vendas.nomeProduto}"></td>
+                            <td th:text="${vendas.quantidade}"></td>
+                            <td th:text="${vendas.valor}"></td>
+                            <td th:text="${vendas.lucro}"></td>
                             <td><span class="status-badge status-success">Concluída</span></td>
-                            <td>
-                                <button class="table-btn edit">Editar</button>
-                                <button class="table-btn delete">Deletar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>V005</td>
-                            <td>13/08/2024</td>
-                            <td>Carlos Rocha</td>
-                            <td>Fone de Ouvido</td>
-                            <td>R$ 129,90</td>
-                            <td><span class="status-badge status-error">Cancelada</span></td>
                             <td>
                                 <button class="table-btn edit">Editar</button>
                                 <button class="table-btn delete">Deletar</button>
@@ -492,13 +465,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>C004</td>
-                            <td>Internet e Telefone</td>
-                            <td>Telecom Plus</td>
-                            <td>R$ 180,00</td>
-                            <td>25/08/2024</td>
-                            <td><span class="status-badge status-normal">Pendente</span></td>
+                        <tr th:each="funcionarios :${listaDeFuncionarios}">
+                            <td th:text="${funcionarios.IdFun}"></td>
+                            <td th:text="${funcionarios.nomeFuncionario}"></td>
+                            <td th:text="${funcionarios.cpf}"></td>
+                            <td th:text="${funcionarios.dataAdm}"></td>
+                            <td th:text="${funcionarios.nivelAces}"></td>
+                            <td th:text="${funcionarios.status_Fun}"><span class="status-badge status-normal">Pendente</span></td>
                             <!-- atualizar os status de funcionarios -->
                             <td>
                                 <button class="table-btn edit">Editar</button>
@@ -561,7 +534,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="filters-bar">
 				<div class="caixa-pesquisa">
 				 	<input type="text" placeholder="Buscar produtos..." class="search-input" style="border-radius: 10px 0 0 10px;">
@@ -722,9 +694,9 @@
                     <div style="display: flex; gap: 5px;">
                         <div class="form-group" style="width: 100%;">
                             <label>CEP:</label>
-                            <input type="text" placeholder="Digite ou Busque o CEP">
+                            <input type="text" id="cep" placeholder="Digite ou Busque o CEP">
                         </div>
-                        <button class="action-btn btn-primary" onclick="openModal('Marca')"
+                        <button class="action-btn btn-primary" onclick="GETcep()"
                             style="width: 14%; height: 40px; margin-top: auto; margin-bottom: 22px; padding: 10px 0; float: inline-end;"
                             title="Cadastrar Nova Marca">
                             ➕
@@ -732,21 +704,21 @@
                     </div>
                     <div class="form-group">
                         <label>Rua:</label>
-                        <input type="text" placeholder="Digite o nome da Rua">
+                        <input type="text" id="rua" placeholder="Digite o nome da Rua">
                     </div>
                     <div style="display: flex; gap: 5px;">
                         <div class="form-group" style="width: 70%;">
                             <label>Bairro:</label>
-                            <input type="text" placeholder="Digite o Bairro">
+                            <input type="text" id="bairro" placeholder="Digite o Bairro">
                         </div>
                         <div class="form-group" style="width: 30%;">
                             <label>Numero:</label>
-                            <input type="number" placeholder="xxxx" step="5">
+                            <input type="number" id="numero" placeholder="xxxx" step="5">
                         </div>
                     </div>
                     <div class="form-group">
                         <label>Cidade:</label>
-                        <input type="text" placeholder="Digite o nome da Cidade">
+                        <input type="text" id="cidade" placeholder="Digite o nome da Cidade">
                     </div>
                     <div class="form-group">
                     </div>
@@ -988,6 +960,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+	<script src="./static/script/script.js"></script>
     <script>
         // Theme Toggle Functionality
         let isDarkTheme = false;

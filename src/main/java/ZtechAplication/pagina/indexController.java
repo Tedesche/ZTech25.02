@@ -63,15 +63,10 @@ public class indexController {
     
 
 	@GetMapping("/") // Mapeamento para a rota raiz
-	public String index() {
+	public String login() {
 		return "login"; // Retorna a página de login/entrada inicial
 	}
 
-    // Mapeamento GET para a página de login (requisitado pelo Spring Security)
-    @GetMapping("/inicioAntiga")
-    public String login() {
-        return "index"; // Retorna o template de login
-    }
 	
     // Método para carregar dados para a página inicial/dashboard
 	@GetMapping("/inicio")
