@@ -8,6 +8,297 @@
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
 
+	<script>
+	       // Theme Toggle Functionality
+	       let isDarkTheme = false;
+
+	       function toggleTheme() {
+	           const body = document.body;
+	           const themeIcon = document.getElementById('themeIcon');
+	           const themeText = document.getElementById('themeText');
+
+	           isDarkTheme = !isDarkTheme;
+
+	           if (isDarkTheme) {
+	               body.classList.add('dark-theme');
+	               themeIcon.textContent = '☀️';
+	               themeText.textContent = 'Tema Claro';
+	           } else {
+	               body.classList.remove('dark-theme');
+	               themeIcon.textContent = '🌙';
+	               themeText.textContent = 'Tema Escuro';
+	           }
+
+	           // Save theme preference
+	           localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
+	       }
+
+	       // Load saved theme
+	       function loadTheme() {
+	           const savedTheme = localStorage.getItem('theme');
+	           if (savedTheme === 'dark') {
+	               toggleTheme();
+	           }
+	       }
+
+	       function showSection(section) {
+	           // Atualizar botões ativos
+	           document.querySelectorAll('.nav-btn').forEach(btn => {
+	               btn.classList.remove('active');
+	           });
+	           event.target.classList.add('active');
+
+	           // Ocultar todas as seções
+	           document.querySelectorAll('.section').forEach(sec => {
+	               sec.style.display = 'none';
+	               sec.classList.remove('active');
+	           });
+
+	           // Mostrar seção selecionada com animação
+	           const targetSection = document.getElementById(section + '-section');
+	           if (targetSection) {
+	               targetSection.style.display = 'block';
+	               setTimeout(() => {
+	                   targetSection.classList.add('active');
+	               }, 50);
+	           }
+	       }
+
+	       // criar uma função para zerar os modais ao fechalos
+	       function openModal(type) {
+	           document.getElementById('modal' + type.charAt(0).toUpperCase() + type.slice(1)).style.display = 'flex';
+	           
+	           //inicializa os dados da choice
+	           inicializarChoicesServicos();
+	       }
+
+	       function closeModal(type) {
+	           document.getElementById('modal' + type.charAt(0).toUpperCase() + type.slice(1)).style.display = 'none';
+	       }
+
+	       // Fechar modal ao clicar fora dele
+	       window.onclick = function (event) {
+	           if (event.target.classList.contains('modal')) {
+	               event.target.style.display = 'none';
+	           }
+	       }
+
+	       // Animação de entrada suave
+	       window.addEventListener('load', function () {
+	           // Load theme preference
+	           loadTheme();
+
+	           // Mostrar dashboard por padrão
+	           document.getElementById('dashboard-section').classList.add('active');
+
+	           document.querySelectorAll('.card, .quick-actions').forEach((el, index) => {
+	               el.style.opacity = '0';
+	               el.style.transform = 'translateY(20px)';
+	               setTimeout(() => {
+	                   el.style.transition = 'all 0.6s ease';
+	                   el.style.opacity = '1';
+	                   el.style.transform = 'translateY(0)';
+	               }, index * 100);
+	           });
+	       });
+
+	       // Simulação de ações da tabela
+	       /*
+	       document.addEventListener('click', function(e) {
+	           if (e.target.classList.contains('table-btn')) {
+	               const action = Array.from(e.target.classList).find(cls => cls !== 'table-btn');
+	               const row = e.target.closest('tr');
+	               const id = row.cells[0].textContent;
+	               
+	               switch(action) {
+	                   case 'delete':
+	                       if (confirm(`Confirma a exclusão do item ${id}?`)) {
+	                           row.style.opacity = '0';
+	                           setTimeout(() => row.remove(), 300);
+	                       }
+	                       break;
+	                   case 'view':
+	                       alert(`Visualizando detalhes do item ${id}`);
+	                       break;
+	                   case 'pay':
+	                       if (confirm(`Confirma o pagamento da conta ${id}?`)) {
+	                           const statusCell = row.querySelector('.status-badge');
+	                           statusCell.textContent = 'Pago';
+	                           statusCell.className = 'status-badge status-success';
+	                       }
+	                       break;
+	               }
+	           }
+	       });
+	       */
+
+	       // Funcionalidade de busca simples
+	       document.addEventListener('input', function (e) {
+	           if (e.target.classList.contains('search-input')) {
+	               const searchTerm = e.target.value.toLowerCase();
+	               const table = e.target.closest('.section').querySelector('.data-table tbody');
+	               const rows = table.querySelectorAll('tr');
+
+	               rows.forEach(row => {
+	                   const text = row.textContent.toLowerCase();
+	                   row.style.display = text.includes(searchTerm) ? '' : 'none';
+	               });
+	           }
+	       });
+
+	       // Update modal headers for dark theme
+	       function updateModalHeaders() {
+	           const modalHeaders = document.querySelectorAll('.modal-content h2');
+	           modalHeaders.forEach(header => {
+	               if (isDarkTheme) {
+	                   header.style.color = 'var(--text-primary-dark)';
+	               } else {
+	                   header.style.color = 'var(--text-primary-light)';
+	               }
+	           });
+	       }
+
+	       // Listen for theme changes to update modal headers
+	       document.body.addEventListener('transitionend', function (e) {
+	           if (e.target === document.body) {
+	               updateModalHeaders();
+	           }
+	       });
+
+	       // funções da modal de venda
+	       document.addEventListener('DOMContentLoaded', () => {
+	           // Array para guardar os itens do carrinho em memória
+	           let carrinho = [];
+
+	           // Seleciona os elementos do DOM
+	           const produtoSelect = document.getElementById('produto-select');
+	           const quantidadeInput = document.getElementById('produto-quantidade');
+	           const btnAdicionar = document.getElementById('btn-adicionar-produto');
+	           const listaCarrinho = document.getElementById('carrinho-itens-lista');
+	           const totalCarrinhoSpan = document.getElementById('valor-total-carrinho');
+	           const btnFinalizar = document.getElementById('btn-finalizar-venda');
+
+	           // Evento para o botão de adicionar produto
+	           btnAdicionar.addEventListener('click', () => {
+	               const produtoOption = produtoSelect.options[produtoSelect.selectedIndex];
+	               if (!produtoOption.value) {
+	                   alert('Por favor, selecione um produto.');
+	                   return;
+	               }
+
+	               const [nome, preco] = produtoOption.value.split('|');
+	               const quantidade = parseInt(quantidadeInput.value);
+	               const precoNumerico = parseFloat(preco);
+
+	               // Adiciona o produto ao array do carrinho
+	               carrinho.push({
+	                   nome: nome,
+	                   preco: precoNumerico,
+	                   quantidade: quantidade,
+	                   subtotal: precoNumerico * quantidade
+	               });
+
+	               // Atualiza a exibição do carrinho
+	               atualizarCarrinhoDisplay();
+
+	               // Limpa os campos para a próxima adição
+	               produtoSelect.selectedIndex = 0;
+	               quantidadeInput.value = 1;
+	           });
+
+	           // Função para renderizar o carrinho na tela
+	           function atualizarCarrinhoDisplay() {
+	               // Limpa a lista atual
+	               listaCarrinho.innerHTML = '';
+
+	               if (carrinho.length === 0) {
+	                   listaCarrinho.innerHTML = '<p class="carrinho-vazio">Nenhum item adicionado ainda.</p>';
+	                   totalCarrinhoSpan.textContent = '0,00';
+	                   return;
+	               }
+
+	               let valorTotal = 0;
+
+	               // Cria e adiciona cada item do carrinho na lista
+	               carrinho.forEach((item, index) => {
+	                   valorTotal += item.subtotal;
+
+	                   const itemDiv = document.createElement('div');
+	                   itemDiv.className = 'carrinho-item';
+	                   itemDiv.innerHTML = `
+	               <span>${item.quantidade}x ${item.nome}</span>
+	               <span>R$ ${item.subtotal.toFixed(2).replace('.', ',')}</span>
+	               <button class="btn-remover-item" data-index="${index}" style="background:none; border:none; color:red; cursor:pointer;">&times;</button>`;
+	                   listaCarrinho.appendChild(itemDiv);
+	               });
+
+	               // Atualiza o valor total
+	               totalCarrinhoSpan.textContent = valorTotal.toFixed(2).replace('.', ',');
+
+	               // Adiciona eventos de clique aos botões de remover
+	               document.querySelectorAll('.btn-remover-item').forEach(button => {
+	                   button.addEventListener('click', (e) => {
+	                       const indexParaRemover = parseInt(e.target.dataset.index);
+	                       // Remove o item do array
+	                       carrinho.splice(indexParaRemover, 1);
+	                       // Atualiza a exibição novamente
+	                       atualizarCarrinhoDisplay();
+	                   });
+	               });
+	           }
+
+	           // Lógica para finalizar a venda
+	           btnFinalizar.addEventListener('click', () => {
+	               if (carrinho.length === 0) {
+	                   alert('O carrinho está vazio!');
+	                   return;
+	               }
+
+	               const dadosVenda = {
+	                   cliente: document.getElementById('cliente-nome').value,
+	                   itens: carrinho,
+	                   total: carrinho.reduce((acc, item) => acc + item.subtotal, 0)
+	               };
+
+	               console.log('Dados da Venda para Enviar:', dadosVenda);
+	               alert('Venda finalizada com sucesso! (Verifique o console)');
+	               // Aqui você enviaria 'dadosVenda' para o seu backend
+	               // E depois limparia o carrinho e fecharia a modal
+	           });
+	       });
+	   
+	       
+	           // verificar esta função para a modal de serviços e possiveisoutra modals onde possuem campos de dropslist
+	       // Variável para guardar a instância do Choices, para não inicializar várias vezes
+	       let choicesInstance = null;
+
+	       function inicializarChoicesServicos() {
+	       // Encontra o elemento <input> de serviços
+	       const servicosInput = document.getElementById('servicos-input');
+
+	       // Se o elemento existe E AINDA NÃO FOI INICIALIZADO
+	       if (servicosInput && !choicesInstance) {
+	           
+	           // Inicializa a biblioteca
+	           choicesInstance = new Choices(servicosInput, {
+	           choices: [
+	               { value: 'Troca de tela | 380.00', label: 'Troca de tela | 380.00' },
+	               { value: 'Troca de Bateria | 250.00', label: 'Troca de Bateria | 250.00' },
+	               { value: 'Limpeza Química | 150.00', label: 'Limpeza Química | 150.00' },
+	               { value: 'Reparo Placa Mãe | 550.00', label: 'Reparo Placa Mãe | 550.00' }
+	           ],
+	           removeItemButton: true,
+	           addItemText: (value) => `Pressione Enter para adicionar <b>"${value}"</b>`,
+	           noResultsText: 'Nenhum resultado encontrado',
+	           });
+	           
+	       }
+	   }
+
+	   </script>
+	
+	
+	
 </head>
 
 <body>
@@ -961,294 +1252,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 	<script src="./static/script/script.js"></script>
-    <script>
-        // Theme Toggle Functionality
-        let isDarkTheme = false;
-
-        function toggleTheme() {
-            const body = document.body;
-            const themeIcon = document.getElementById('themeIcon');
-            const themeText = document.getElementById('themeText');
-
-            isDarkTheme = !isDarkTheme;
-
-            if (isDarkTheme) {
-                body.classList.add('dark-theme');
-                themeIcon.textContent = '☀️';
-                themeText.textContent = 'Tema Claro';
-            } else {
-                body.classList.remove('dark-theme');
-                themeIcon.textContent = '🌙';
-                themeText.textContent = 'Tema Escuro';
-            }
-
-            // Save theme preference
-            localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
-        }
-
-        // Load saved theme
-        function loadTheme() {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                toggleTheme();
-            }
-        }
-
-        function showSection(section) {
-            // Atualizar botões ativos
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-
-            // Ocultar todas as seções
-            document.querySelectorAll('.section').forEach(sec => {
-                sec.style.display = 'none';
-                sec.classList.remove('active');
-            });
-
-            // Mostrar seção selecionada com animação
-            const targetSection = document.getElementById(section + '-section');
-            if (targetSection) {
-                targetSection.style.display = 'block';
-                setTimeout(() => {
-                    targetSection.classList.add('active');
-                }, 50);
-            }
-        }
-
-        // criar uma função para zerar os modais ao fechalos
-        function openModal(type) {
-            document.getElementById('modal' + type.charAt(0).toUpperCase() + type.slice(1)).style.display = 'flex';
-            
-            //inicializa os dados da choice
-            inicializarChoicesServicos();
-        }
-
-        function closeModal(type) {
-            document.getElementById('modal' + type.charAt(0).toUpperCase() + type.slice(1)).style.display = 'none';
-        }
-
-        // Fechar modal ao clicar fora dele
-        window.onclick = function (event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.style.display = 'none';
-            }
-        }
-
-        // Animação de entrada suave
-        window.addEventListener('load', function () {
-            // Load theme preference
-            loadTheme();
-
-            // Mostrar dashboard por padrão
-            document.getElementById('dashboard-section').classList.add('active');
-
-            document.querySelectorAll('.card, .quick-actions').forEach((el, index) => {
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(20px)';
-                setTimeout(() => {
-                    el.style.transition = 'all 0.6s ease';
-                    el.style.opacity = '1';
-                    el.style.transform = 'translateY(0)';
-                }, index * 100);
-            });
-        });
-
-        // Simulação de ações da tabela
-        /*
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('table-btn')) {
-                const action = Array.from(e.target.classList).find(cls => cls !== 'table-btn');
-                const row = e.target.closest('tr');
-                const id = row.cells[0].textContent;
-                
-                switch(action) {
-                    case 'delete':
-                        if (confirm(`Confirma a exclusão do item ${id}?`)) {
-                            row.style.opacity = '0';
-                            setTimeout(() => row.remove(), 300);
-                        }
-                        break;
-                    case 'view':
-                        alert(`Visualizando detalhes do item ${id}`);
-                        break;
-                    case 'pay':
-                        if (confirm(`Confirma o pagamento da conta ${id}?`)) {
-                            const statusCell = row.querySelector('.status-badge');
-                            statusCell.textContent = 'Pago';
-                            statusCell.className = 'status-badge status-success';
-                        }
-                        break;
-                }
-            }
-        });
-        */
-
-        // Funcionalidade de busca simples
-        document.addEventListener('input', function (e) {
-            if (e.target.classList.contains('search-input')) {
-                const searchTerm = e.target.value.toLowerCase();
-                const table = e.target.closest('.section').querySelector('.data-table tbody');
-                const rows = table.querySelectorAll('tr');
-
-                rows.forEach(row => {
-                    const text = row.textContent.toLowerCase();
-                    row.style.display = text.includes(searchTerm) ? '' : 'none';
-                });
-            }
-        });
-
-        // Update modal headers for dark theme
-        function updateModalHeaders() {
-            const modalHeaders = document.querySelectorAll('.modal-content h2');
-            modalHeaders.forEach(header => {
-                if (isDarkTheme) {
-                    header.style.color = 'var(--text-primary-dark)';
-                } else {
-                    header.style.color = 'var(--text-primary-light)';
-                }
-            });
-        }
-
-        // Listen for theme changes to update modal headers
-        document.body.addEventListener('transitionend', function (e) {
-            if (e.target === document.body) {
-                updateModalHeaders();
-            }
-        });
-
-        // funções da modal de venda
-        document.addEventListener('DOMContentLoaded', () => {
-            // Array para guardar os itens do carrinho em memória
-            let carrinho = [];
-
-            // Seleciona os elementos do DOM
-            const produtoSelect = document.getElementById('produto-select');
-            const quantidadeInput = document.getElementById('produto-quantidade');
-            const btnAdicionar = document.getElementById('btn-adicionar-produto');
-            const listaCarrinho = document.getElementById('carrinho-itens-lista');
-            const totalCarrinhoSpan = document.getElementById('valor-total-carrinho');
-            const btnFinalizar = document.getElementById('btn-finalizar-venda');
-
-            // Evento para o botão de adicionar produto
-            btnAdicionar.addEventListener('click', () => {
-                const produtoOption = produtoSelect.options[produtoSelect.selectedIndex];
-                if (!produtoOption.value) {
-                    alert('Por favor, selecione um produto.');
-                    return;
-                }
-
-                const [nome, preco] = produtoOption.value.split('|');
-                const quantidade = parseInt(quantidadeInput.value);
-                const precoNumerico = parseFloat(preco);
-
-                // Adiciona o produto ao array do carrinho
-                carrinho.push({
-                    nome: nome,
-                    preco: precoNumerico,
-                    quantidade: quantidade,
-                    subtotal: precoNumerico * quantidade
-                });
-
-                // Atualiza a exibição do carrinho
-                atualizarCarrinhoDisplay();
-
-                // Limpa os campos para a próxima adição
-                produtoSelect.selectedIndex = 0;
-                quantidadeInput.value = 1;
-            });
-
-            // Função para renderizar o carrinho na tela
-            function atualizarCarrinhoDisplay() {
-                // Limpa a lista atual
-                listaCarrinho.innerHTML = '';
-
-                if (carrinho.length === 0) {
-                    listaCarrinho.innerHTML = '<p class="carrinho-vazio">Nenhum item adicionado ainda.</p>';
-                    totalCarrinhoSpan.textContent = '0,00';
-                    return;
-                }
-
-                let valorTotal = 0;
-
-                // Cria e adiciona cada item do carrinho na lista
-                carrinho.forEach((item, index) => {
-                    valorTotal += item.subtotal;
-
-                    const itemDiv = document.createElement('div');
-                    itemDiv.className = 'carrinho-item';
-                    itemDiv.innerHTML = `
-                <span>${item.quantidade}x ${item.nome}</span>
-                <span>R$ ${item.subtotal.toFixed(2).replace('.', ',')}</span>
-                <button class="btn-remover-item" data-index="${index}" style="background:none; border:none; color:red; cursor:pointer;">&times;</button>`;
-                    listaCarrinho.appendChild(itemDiv);
-                });
-
-                // Atualiza o valor total
-                totalCarrinhoSpan.textContent = valorTotal.toFixed(2).replace('.', ',');
-
-                // Adiciona eventos de clique aos botões de remover
-                document.querySelectorAll('.btn-remover-item').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        const indexParaRemover = parseInt(e.target.dataset.index);
-                        // Remove o item do array
-                        carrinho.splice(indexParaRemover, 1);
-                        // Atualiza a exibição novamente
-                        atualizarCarrinhoDisplay();
-                    });
-                });
-            }
-
-            // Lógica para finalizar a venda
-            btnFinalizar.addEventListener('click', () => {
-                if (carrinho.length === 0) {
-                    alert('O carrinho está vazio!');
-                    return;
-                }
-
-                const dadosVenda = {
-                    cliente: document.getElementById('cliente-nome').value,
-                    itens: carrinho,
-                    total: carrinho.reduce((acc, item) => acc + item.subtotal, 0)
-                };
-
-                console.log('Dados da Venda para Enviar:', dadosVenda);
-                alert('Venda finalizada com sucesso! (Verifique o console)');
-                // Aqui você enviaria 'dadosVenda' para o seu backend
-                // E depois limparia o carrinho e fecharia a modal
-            });
-        });
-    
-        
-            // verificar esta função para a modal de serviços e possiveisoutra modals onde possuem campos de dropslist
-        // Variável para guardar a instância do Choices, para não inicializar várias vezes
-        let choicesInstance = null;
-
-        function inicializarChoicesServicos() {
-        // Encontra o elemento <input> de serviços
-        const servicosInput = document.getElementById('servicos-input');
-
-        // Se o elemento existe E AINDA NÃO FOI INICIALIZADO
-        if (servicosInput && !choicesInstance) {
-            
-            // Inicializa a biblioteca
-            choicesInstance = new Choices(servicosInput, {
-            choices: [
-                { value: 'Troca de tela | 380.00', label: 'Troca de tela | 380.00' },
-                { value: 'Troca de Bateria | 250.00', label: 'Troca de Bateria | 250.00' },
-                { value: 'Limpeza Química | 150.00', label: 'Limpeza Química | 150.00' },
-                { value: 'Reparo Placa Mãe | 550.00', label: 'Reparo Placa Mãe | 550.00' }
-            ],
-            removeItemButton: true,
-            addItemText: (value) => `Pressione Enter para adicionar <b>"${value}"</b>`,
-            noResultsText: 'Nenhum resultado encontrado',
-            });
-            
-        }
-    }
-
-    </script>
+   
 </body>
 
 </html>
