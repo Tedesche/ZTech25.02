@@ -21,11 +21,12 @@ public class FuncionarioDTO {
 	private String bairro;
 	private String cidade;
 	private int numeroCasa;
-	public Integer getIdFuncionario() {
+	
+	public Integer getIdFun() {
 		return idFun;
 	}
-	public void setIdFuncionario(Integer idFuncionario) {
-		this.idFun = idFuncionario;
+	public void setIdFuncionario(Integer idFun) {
+		this.idFun = idFun;
 	}
 	public String getNomeFuncionario() {
 		return nomeFuncionario;
@@ -51,17 +52,23 @@ public class FuncionarioDTO {
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
-	public String getStatus() {
+	public String getStatus_Fun() {
 		return status_Fun;
 	}
-	public void setStatus(String status) {
-		this.status_Fun = status;
+	public void setStatus_Fun(String status_Fun) {
+		this.status_Fun = status_Fun;
 	}
 	public String getNivelAces() {
 		return nivelAces;
 	}
 	public void setNivelAces(String nivelAces) {
 		this.nivelAces = nivelAces;
+	}
+	public String getDataAdm() {
+		return dataAdm;
+	}
+	public void setDataAdm(String dataAdm) {
+		this.dataAdm = dataAdm;
 	}
 	public String getRua() {
 		return rua;

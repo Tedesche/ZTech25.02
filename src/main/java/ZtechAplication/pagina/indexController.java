@@ -1,6 +1,9 @@
 package ZtechAplication.pagina;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model; 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,22 +74,35 @@ public class indexController {
     // Método para carregar dados para a página inicial/dashboard
 	@GetMapping("/inicio")
 	public String inicio(Model model) { 
-		// 1. Buscar os dados específicos para cada tabela
-	    // Usando queries otimizadas dos seus repositórios
-	    List<Cliente> clientes = clienteRepository.findAll();
-	    List<Funcionario> funcionarios = funcionarioRepository.findAll();
-	    List<OrdemServico> ordemServicos = ordemServicoRepository.findAll();
-	    List<Produto> produtos = produtoRepository.findAll();
-	    List<Venda> vendas = vendaRepository.findAll();
+		// Crie um "pedido de página" que limita a 10 itens
+        // PageRequest.of(int page, int size)
+        // Página 0 = a primeira página
+        // Tamanho 10 = o limite que você queria
+        Pageable limiteDe10 = PageRequest.of(0, 10);
+        
+        // Bônus: Para Vendas e OS, podemos pegar as 10 *mais recentes*
+        Pageable top10Recentes = PageRequest.of(0, 10, Sort.by("dataInicio").descending());
+
+
+		// 1. Buscar os dados (APENAS 10 DE CADA - RÁPIDO)
+        // Usamos .getContent() para pegar a List<T> de dentro da Página
+	    List<Cliente> clientes = clienteRepository.findAll(limiteDe10).getContent();
+	    List<Funcionario> funcionarios = funcionarioRepository.findAll(limiteDe10).getContent();
+	    List<OrdemServico> ordemServicos = ordemServicoRepository.findAll(top10Recentes).getContent();
+	    List<Produto> produtos = produtoRepository.findAll(limiteDe10).getContent();
+	    List<Venda> vendas = vendaRepository.findAll(top10Recentes).getContent();
 	    
-	 // 2. Converter para DTOs (se necessário)
+        // -------------------------------------------------------------------
+        // (O RESTO DO SEU CÓDIGO FICA IDÊNTICO)
+
+	    // 2. Converter para DTOs (agora só converte 10 de cada)
 	    List<ClienteDTO> clienteDTOs = clienteController.getClienteDTO(clientes);
 	    List<FuncionarioDTO> funcionarioDTOs = funcionarioController.getFuncionarioDTO(funcionarios);
 	    List<OrdemServicoDTO> osDTOs = osController.getOSDTO(ordemServicos);
 	    List<ProdutoDTO> produtoDTOs = produtoController.getProdutoDTO(produtos);
 	    List<VendaDTO> vendaDTOs = vendaController.getVendaDTO(vendas);
 		
-	 // 3. PRÓXIMA ETAPA: Adicionar as listas de DTOs ao Model
+	    // 3. Adicionar ao Model
 	    model.addAttribute("listaDeClientes", clienteDTOs);
 	    model.addAttribute("listaDeFuncionarios", funcionarioDTOs);
 	    model.addAttribute("listaDeOrdensServico", osDTOs);
