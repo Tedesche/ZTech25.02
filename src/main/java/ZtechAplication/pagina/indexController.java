@@ -108,6 +108,50 @@ public class indexController {
 	    model.addAttribute("listaDeOrdensServico", osDTOs);
 	    model.addAttribute("listaDeProdutos", produtoDTOs);
 	    model.addAttribute("listaDeVendas", vendaDTOs);
+	 
+	    // Valores dos cards
+	    	// 1. Total de produtos cadastrados
+        long totalProdutos = produtoRepository.count();
+        model.addAttribute("totalProdutos", totalProdutos);
+        
+        	// 2. Numero de Vendas e O.S.s do mes e seu ganho 
+        // Busca todas as OS com seus relacionamentos
+        List<OrdemServico> todasAsOS = ordemServicoRepository.findAllWithRelationships();
+        List<Venda> todasAsVendas = vendaRepository.findAllWithRelationships();
+        
+        int ano = LocalDate.now().getYear();
+        int mes = LocalDate.now().getMonthValue();
+        mes = 6;
+        
+        // contagem de vendas e OSs do mes
+        long totalOS = ordemServicoRepository.countByYearAndMonth(ano, mes);
+        long totalVendas = vendaRepository.countByYearAndMonth(ano, mes);
+        long totalPedidos = totalOS + totalVendas;
+        // Adiciona o numero total de OS e vendas do mes ao modelo
+        model.addAttribute("totalPedidosMes", totalPedidos);
+
+     // --- 2. Calculo EFICIENTE do Lucro Total do Mes ---
+        String statusConcluido = StatusLibrary.getStatusDescricao(3); // "Concluido"
+
+        // Pede ao banco para SOMAR o lucro, já filtrando por status e data
+        BigDecimal lucroOSMes = ordemServicoRepository.sumLucroConcluidoByYearAndMonth(
+            statusConcluido, ano, mes);
+        // Pede ao banco para SOMAR o lucro, já filtrando por data
+        BigDecimal lucroVendasMes = vendaRepository.sumLucroByYearAndMonth( 
+        	ano, mes);
+
+        // IMPORTANTE: SUM pode retornar null se nao houver registros.
+        // Devemos tratar isso antes de somar.
+        BigDecimal lucroTotalMes = BigDecimal.ZERO;
+        if (lucroOSMes != null) {
+            lucroTotalMes = lucroTotalMes.add(lucroOSMes);
+        }
+        if (lucroVendasMes != null) {
+            lucroTotalMes = lucroTotalMes.add(lucroVendasMes);
+        }
+        // Adiciona o ganho total de OS e vendas do mês ao modelo
+        model.addAttribute("lucroTotalMes", lucroTotalMes);
+        
 		return "index"; // Retorna o nome do template da página inicial (CORRIGIDO)
 	}
 

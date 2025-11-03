@@ -4095,3 +4095,6 @@ Caused by: org.h2.mvstore.MVStoreException: The file is locked: C:/Users/Marcus 
 	at org.h2.mvstore.SingleFileStore.open(SingleFileStore.java:81)
 	at org.h2.mvstore.MVStore.<init>(MVStore.java:286)
 	... 64 more
+2025-11-02 20:10:38.976225-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TB_USUARIO" not found; SQL statement:
+select u1_0.id_usuario,u1_0.fk_funcionario,u1_0.password,u1_0.username from tb_usuario u1_0 where u1_0.username=? [42102-232]

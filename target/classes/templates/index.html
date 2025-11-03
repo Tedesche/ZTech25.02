@@ -128,7 +128,7 @@
                     </div>
                     <div class="stats">
                         <div class="stat-item">
-                            <div class="stat-text">247</div>
+                            <div class="stat-text" th:text="${totalProdutos}">0</div>
                             <div class="stat-label">Produtos Total</div>
                         </div>
                         <div class="stat-item">
@@ -149,11 +149,11 @@
                     </div>
                     <div class="stats">
                         <div class="stat-item">
-                            <div class="stat-text">R$ 15.420</div>
+                            <div class="stat-text" th:text="${lucroTotalMes}" >R$ 0.00</div>
                             <div class="stat-label">Vendas do Mês</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-text">89</div>
+                            <div class="stat-text" th:text="${totalPedidosMes}">0</div>
                             <div class="stat-label">Pedidos</div>
                         </div>
                     </div>
