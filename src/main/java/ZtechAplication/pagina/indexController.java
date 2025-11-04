@@ -126,31 +126,33 @@ public class indexController {
         // contagem de vendas e OSs do mes
         long totalOS = ordemServicoRepository.countByYearAndMonth(ano, mes);
         long totalVendas = vendaRepository.countByYearAndMonth(ano, mes);
-        long totalPedidos = totalOS + totalVendas;
         // Adiciona o numero total de OS e vendas do mes ao modelo
-        model.addAttribute("totalPedidosMes", totalPedidos);
+        model.addAttribute("totalVendas", totalVendas);
+        model.addAttribute("totalOS", totalOS);
 
      // --- 2. Calculo EFICIENTE do Lucro Total do Mes ---
         String statusConcluido = StatusLibrary.getStatusDescricao(3); // "Concluido"
-
         // Pede ao banco para SOMAR o lucro, já filtrando por status e data
         BigDecimal lucroOSMes = ordemServicoRepository.sumLucroConcluidoByYearAndMonth(
             statusConcluido, ano, mes);
+        // Devemos tratar isso antes de somar.
+        BigDecimal lucroOSs = BigDecimal.ZERO;
+        if (lucroOSMes != null) {
+        	lucroOSs = lucroOSs.add(lucroOSMes);
+        }
+        // Adiciona o ganho total de OS do mês ao modelo
+        model.addAttribute("lucroOSs", lucroOSs);
+        
         // Pede ao banco para SOMAR o lucro, já filtrando por data
         BigDecimal lucroVendasMes = vendaRepository.sumLucroByYearAndMonth( 
         	ano, mes);
-
-        // IMPORTANTE: SUM pode retornar null se nao houver registros.
         // Devemos tratar isso antes de somar.
-        BigDecimal lucroTotalMes = BigDecimal.ZERO;
-        if (lucroOSMes != null) {
-            lucroTotalMes = lucroTotalMes.add(lucroOSMes);
-        }
+           BigDecimal lucroVendas = BigDecimal.ZERO;
         if (lucroVendasMes != null) {
-            lucroTotalMes = lucroTotalMes.add(lucroVendasMes);
+        	lucroVendas = lucroVendas.add(lucroVendasMes);
         }
-        // Adiciona o ganho total de OS e vendas do mês ao modelo
-        model.addAttribute("lucroTotalMes", lucroTotalMes);
+        // Adiciona o ganho total de vendas do mês ao modelo
+        model.addAttribute("lucroVendas", lucroVendas);
         
 		return "index"; // Retorna o nome do template da página inicial (CORRIGIDO)
 	}

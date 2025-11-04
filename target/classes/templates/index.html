@@ -145,15 +145,15 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-icon vendas">💰</div>
-                        <h3>Controle de Vendas</h3>
+                        <h3>Controle de Venda</h3>
                     </div>
                     <div class="stats">
                         <div class="stat-item">
-                            <div class="stat-text" th:text="${lucroTotalMes}" >R$ 0.00</div>
+                            <div class="stat-text" th:text="${lucroVendas}" >R$ 0.00</div>
                             <div class="stat-label">Vendas do Mês</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-text" th:text="${totalPedidosMes}">0</div>
+                            <div class="stat-text" th:text="${totalVendas}">0</div>
                             <div class="stat-label">Pedidos</div>
                         </div>
                     </div>
@@ -165,17 +165,17 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-icon contas">💳</div>
-                        <h3>Contas a Pagar</h3>
+                        <div class="card-icon vendas">💳</div>
+                        <h3>Controle de O.S.</h3>
                     </div>
                     <div class="stats">
                         <div class="stat-item">
-                            <div class="stat-text">R$ 3.250</div>
-                            <div class="stat-label">Vencendo Hoje</div>
+                            <div class="stat-text" th:text="${lucroOSs}" >R$ 0.00</div>
+                            <div class="stat-label">Serviços do mês</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-text">7</div>
-                            <div class="stat-label">Contas Pendentes</div>
+                            <div class="stat-text" th:text="${totalVendas}">0</div>
+                            <div class="stat-label">Serviços</div>
                         </div>
                     </div>
                     <div class="action-buttons">
