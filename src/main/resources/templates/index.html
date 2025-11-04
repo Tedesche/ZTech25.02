@@ -284,7 +284,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="produto :${listaDeProdutos}">
+                        <tr th:each="produto :${paginaDeProdutos.content}">
                             <td th:text="${produto.IdProduto}"></td>
                             <td th:text="${produto.nome}"></td>
                             <td th:text="${produto.valor}"></td>
@@ -300,6 +300,25 @@
                     </tbody>
                 </table>
             </div>
+			<div class="pagination-controls" th:if="${paginaDeProdutos.totalPages > 1}" 
+			     style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 20px;">
+
+			    <a th:if="${paginaDeProdutos.hasPrevious()}"
+			       th:href="@{/inicio(pageEstoque=${paginaDeProdutos.number - 1}, tab='estoque')}"
+			       class="action-btn btn-secondary">
+			       &larr; Anterior
+			    </a>
+
+			    <span th:text="|Página ${paginaDeProdutos.number + 1} de ${paginaDeProdutos.totalPages}|"
+			          style="font-weight: bold;">
+			    </span>
+
+			    <a th:if="${paginaDeProdutos.hasNext()}"
+			       th:href="@{/inicio(pageEstoque=${paginaDeProdutos.number + 1}, tab='estoque')}"
+			       class="action-btn btn-primary">
+			       Próximo &rarr;
+			    </a>
+			</div>
         </div>
 
 
@@ -382,7 +401,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="ordemServicos :${listaDeOrdensServico}">
+                        <tr th:each="ordemServicos :${paginaDeOrdensServico.content}">
                             <td th:text="${ordemServicos.IdOS}"></td>
                             <td th:text="${ordemServicos.nomeCliente}"></td>
                             <td th:text="${ordemServicos.dataInicio}"></td>
@@ -399,6 +418,25 @@
                     </tbody>
                 </table>
             </div>
+			<div class="pagination-controls" th:if="${paginaDeOrdensServico.totalPages > 1}" 
+			     style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 20px;">
+
+			    <a th:if="${paginaDeOrdensServico.hasPrevious()}"
+			       th:href="@{/inicio(pageOS=${paginaDeOrdensServico.number - 1}, tab='os')}"
+			       class="action-btn btn-secondary">
+			       &larr; Anterior
+			    </a>
+
+			    <span th:text="|Página ${paginaDeOrdensServico.number + 1} de ${paginaDeOrdensServico.totalPages}|"
+			          style="font-weight: bold;">
+			    </span>
+
+			    <a th:if="${paginaDeOrdensServico.hasNext()}"
+			       th:href="@{/inicio(pageOS=${paginaDeOrdensServico.number + 1}, tab='os')}"
+			       class="action-btn btn-primary">
+			       Próximo &rarr;
+			    </a>
+			</div>
         </div>
 
         <!-- Vendas Section -->
@@ -451,7 +489,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="vendas :${listaDeVendas}">
+                        <tr th:each="vendas :${paginaDeVendas.content}">
                             <td th:text="${vendas.IdVenda}"></td>
                             <td th:text="${vendas.dataInicio}"></td>
                             <td th:text="${vendas.horaInicio}"></td>
@@ -469,6 +507,26 @@
                     </tbody>
                 </table>
             </div>
+
+			<div class="pagination-controls" th:if="${paginaDeVendas.totalPages > 1}" 
+			     style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 20px;">
+
+			    <a th:if="${paginaDeVendas.hasPrevious()}"
+			       th:href="@{/inicio(pageVendas=${paginaDeVendas.number - 1}, tab='vendas')}"
+			       class="action-btn btn-secondary">
+			       &larr; Anterior
+			    </a>
+
+			    <span th:text="|Página ${paginaDeVendas.number + 1} de ${paginaDeVendas.totalPages}|"
+			          style="font-weight: bold;">
+			    </span>
+
+			    <a th:if="${paginaDeVendas.hasNext()}"
+			       th:href="@{/inicio(pageVendas=${paginaDeVendas.number + 1}, tab='vendas')}"
+			       class="action-btn btn-primary">
+			       Próximo &rarr;
+			    </a>
+			</div>
         </div>
 
         <!-- Funcionarios Section -->
@@ -525,7 +583,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="funcionarios :${listaDeFuncionarios}">
+                        <tr th:each="funcionarios :${paginaDeFuncionarios.content}">
                             <td th:text="${funcionarios.idFun}"></td>
                             <td th:text="${funcionarios.nomeFuncionario}"></td>
                             <td th:text="${funcionarios.cpf}"></td>
@@ -541,6 +599,25 @@
                     </tbody>
                 </table>
             </div>
+			<div class="pagination-controls" th:if="${paginaDeFuncionarios.totalPages > 1}" 
+			     style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 20px;">
+
+			    <a th:if="${paginaDeFuncionarios.hasPrevious()}"
+			       th:href="@{/inicio(pageFuncionarios=${paginaDeFuncionarios.number - 1}, tab='funcionarios')}"
+			       class="action-btn btn-secondary">
+			       &larr; Anterior
+			    </a>
+
+			    <span th:text="|Página ${paginaDeFuncionarios.number + 1} de ${paginaDeFuncionarios.totalPages}|"
+			          style="font-weight: bold;">
+			    </span>
+
+			    <a th:if="${paginaDeFuncionarios.hasNext()}"
+			       th:href="@{/inicio(pageFuncionarios=${paginaDeFuncionarios.number + 1}, tab='funcionarios')}"
+			       class="action-btn btn-primary">
+			       Próximo &rarr;
+			    </a>
+			</div>
         </div>
 
         <!-- Contas Section -->
@@ -1027,6 +1104,45 @@
 		               event.target.style.display = 'none';
 		           }
 		       }
+			   
+			   // NOVA FUNÇÃO para ler o parâmetro 'tab' da URL
+			   function ativarAbaPelaUrl() {
+			       const params = new URLSearchParams(window.location.search);
+			       const abaAtiva = params.get('tab'); // ex: 'estoque'
+
+			       if (abaAtiva) {
+			           // Simula um clique no botão da aba correta
+			           const botaoAtivo = document.querySelector(`.nav-btn[onclick="showSection('${abaAtiva}')"]`);
+			           if(botaoAtivo) {
+			               botaoAtivo.click(); // Usa sua função showSection para abrir a aba
+			           }
+			       } else {
+			           // Comportamento padrão: mostrar dashboard
+			           document.getElementById('dashboard-section').classList.add('active');
+			           // Marca o botão 'dashboard' como ativo
+			           document.querySelector('.nav-btn[onclick="showSection(\'dashboard\')"]').classList.add('active');
+			       }
+			   }
+
+			   // ACHE ISSO NO SEU CÓDIGO (no final do script):
+			   window.addEventListener('load', function () {
+			       // Load theme preference
+			       loadTheme();
+
+			       // SUBSTITUA O CÓDIGO ANTIGO DE MOSTRAR O DASHBOARD POR ISSO:
+			       ativarAbaPelaUrl(); 
+			       
+			       // O resto da sua função 'load' (animações, etc.)
+			       document.querySelectorAll('.card, .quick-actions').forEach((el, index) => {
+			           el.style.opacity = '0';
+			           el.style.transform = 'translateY(20px)';
+			           setTimeout(() => {
+			               el.style.transition = 'all 0.6s ease';
+			               el.style.opacity = '1';
+			               el.style.transform = 'translateY(0)';
+			           }, index * 100);
+			       });
+			   });
 
 		       // Animação de entrada suave
 		       window.addEventListener('load', function () {

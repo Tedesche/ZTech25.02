@@ -1,12 +1,15 @@
 package ZtechAplication.pagina;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model; 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping; // Import necessário para @GetMapping
 
 import ZtechAplication.repository.ClienteRepository;
@@ -71,44 +74,67 @@ public class indexController {
 	}
 
 	
-    // Método para carregar dados para a página inicial/dashboard
-	@GetMapping("/inicio")
-	public String inicio(Model model) { 
-		// Crie um "pedido de página" que limita a 10 itens
-        // PageRequest.of(int page, int size)
-        // Página 0 = a primeira página
-        // Tamanho 10 = o limite que você queria
-        Pageable limiteDe10 = PageRequest.of(0, 10);
-        
-        // Bônus: Para Vendas e OS, podemos pegar as 10 *mais recentes*
-        Pageable top10Recentes = PageRequest.of(0, 10, Sort.by("dataInicio").descending());
+	// Método para carregar dados para a página inicial/dashboard
+		@GetMapping("/inicio")
+		public String inicio(Model model,
+	            // --- MUDANÇA AQUI: Recebendo os números das páginas da URL ---
+	            @RequestParam(value = "pageEstoque", defaultValue = "0") int pageEstoque,
+	            @RequestParam(value = "pageOS", defaultValue = "0") int pageOS,
+	            @RequestParam(value = "pageVendas", defaultValue = "0") int pageVendas,
+	            @RequestParam(value = "pageFuncionarios", defaultValue = "0") int pageFuncionarios,
+	            @RequestParam(value = "pageClientes", defaultValue = "0") int pageClientes
+	        ) { 
+			
+	        // --- MUDANÇA AQUI: Definindo o tamanho da página em um só lugar ---
+	        int pageSize = 10; // 10 itens por página
+
+	        // Crie os "pedidos de página" usando as variáveis que recebemos
+	        Pageable pageableCliente = PageRequest.of(pageClientes, pageSize);
+	        Pageable pageableFuncionario = PageRequest.of(pageFuncionarios, pageSize);
+	        Pageable pageableProduto = PageRequest.of(pageEstoque, pageSize);
+	        
+	        // Mantemos a ordenação para Vendas e OS
+	        Pageable pageableOS = PageRequest.of(pageOS, pageSize, Sort.by("dataInicio").descending());
+	        Pageable pageableVenda = PageRequest.of(pageVendas, pageSize, Sort.by("dataInicio").descending());
 
 
-		// 1. Buscar os dados (APENAS 10 DE CADA - RÁPIDO)
-        // Usamos .getContent() para pegar a List<T> de dentro da Página
-	    List<Cliente> clientes = clienteRepository.findAll(limiteDe10).getContent();
-	    List<Funcionario> funcionarios = funcionarioRepository.findAll(limiteDe10).getContent();
-	    List<OrdemServico> ordemServicos = ordemServicoRepository.findAll(top10Recentes).getContent();
-	    List<Produto> produtos = produtoRepository.findAll(limiteDe10).getContent();
-	    List<Venda> vendas = vendaRepository.findAll(top10Recentes).getContent();
-	    
-        // -------------------------------------------------------------------
-        // (O RESTO DO SEU CÓDIGO FICA IDÊNTICO)
+			// 1. Buscar os dados como OBJETOS PAGE (e não mais List)
+		    Page<Cliente> paginaClientes = clienteRepository.findAll(pageableCliente);
+		    Page<Funcionario> paginaFuncionarios = funcionarioRepository.findAll(pageableFuncionario);
+		    Page<OrdemServico> paginaOrdemServicos = ordemServicoRepository.findAll(pageableOS);
+		    Page<Produto> paginaProdutos = produtoRepository.findAll(pageableProduto);
+		    Page<Venda> paginaVendas = vendaRepository.findAll(pageableVenda);
+		    
+	        // -------------------------------------------------------------------
 
-	    // 2. Converter para DTOs (agora só converte 10 de cada)
-	    List<ClienteDTO> clienteDTOs = clienteController.getClienteDTO(clientes);
-	    List<FuncionarioDTO> funcionarioDTOs = funcionarioController.getFuncionarioDTO(funcionarios);
-	    List<OrdemServicoDTO> osDTOs = osController.getOSDTO(ordemServicos);
-	    List<ProdutoDTO> produtoDTOs = produtoController.getProdutoDTO(produtos);
-	    List<VendaDTO> vendaDTOs = vendaController.getVendaDTO(vendas);
-		
-	    // 3. Adicionar ao Model
-	    model.addAttribute("listaDeClientes", clienteDTOs);
-	    model.addAttribute("listaDeFuncionarios", funcionarioDTOs);
-	    model.addAttribute("listaDeOrdensServico", osDTOs);
-	    model.addAttribute("listaDeProdutos", produtoDTOs);
-	    model.addAttribute("listaDeVendas", vendaDTOs);
-	 
+		    // 2. Converter para DTOs (Preservando a Paginação)
+	        //    Nós convertemos o *conteúdo* da página para DTOs
+	        //    E criamos uma *nova Página* de DTOs
+	        
+		    List<ClienteDTO> clienteDTOs = clienteController.getClienteDTO(paginaClientes.getContent());
+		    Page<ClienteDTO> paginaDTOClientes = new PageImpl<>(clienteDTOs, pageableCliente, paginaClientes.getTotalElements());
+
+		    List<FuncionarioDTO> funcionarioDTOs = funcionarioController.getFuncionarioDTO(paginaFuncionarios.getContent());
+	        Page<FuncionarioDTO> paginaDTOFuncionarios = new PageImpl<>(funcionarioDTOs, pageableFuncionario, paginaFuncionarios.getTotalElements());
+
+		    List<OrdemServicoDTO> osDTOs = osController.getOSDTO(paginaOrdemServicos.getContent());
+	        Page<OrdemServicoDTO> paginaDTOOS = new PageImpl<>(osDTOs, pageableOS, paginaOrdemServicos.getTotalElements());
+
+		    List<ProdutoDTO> produtoDTOs = produtoController.getProdutoDTO(paginaProdutos.getContent());
+	        Page<ProdutoDTO> paginaDTOProdutos = new PageImpl<>(produtoDTOs, pageableProduto, paginaProdutos.getTotalElements());
+		    
+		    List<VendaDTO> vendaDTOs = vendaController.getVendaDTO(paginaVendas.getContent());
+	        Page<VendaDTO> paginaDTOVendas = new PageImpl<>(vendaDTOs, pageableVenda, paginaVendas.getTotalElements());
+
+			
+		    // 3. Adicionar as PÁGINAS (Page) ao Model, não as Listas (List)
+	        // --- MUDANÇA AQUI: Renomeando os atributos para refletir que são Páginas ---
+		    model.addAttribute("paginaDeClientes", paginaDTOClientes);
+		    model.addAttribute("paginaDeFuncionarios", paginaDTOFuncionarios);
+		    model.addAttribute("paginaDeOrdensServico", paginaDTOOS);
+		    model.addAttribute("paginaDeProdutos", paginaDTOProdutos);
+		    model.addAttribute("paginaDeVendas", paginaDTOVendas);
+		    
 	    // Valores dos cards
 	    	// 1. Total de produtos cadastrados
         long totalProdutos = produtoRepository.count();
