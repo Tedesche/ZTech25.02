@@ -20,12 +20,20 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(authorize -> authorize
                 // Permite acesso a recursos estáticos (CSS, JS, imagens, etc.)
-                .requestMatchers("/styles/**", "/img/**", "/js/**").permitAll()
+                .requestMatchers("/styles/**", "/img/**", "/script/**").permitAll()
                 // Permite acesso irrestrito ao H2 Console
                 .requestMatchers(toH2Console()).permitAll()
                 // Permite acesso à página de login e à raiz
-                .requestMatchers("/", "/login").permitAll()
+                .requestMatchers("/", "/login", "/inicio").permitAll()
+             // 2. Permite que usuários logados vejam a página /index
+                .requestMatchers("/index").permitAll()
                 // Qualquer outra requisição precisa de autenticação
+
+                .requestMatchers("/api/marcas", "/api/categorias").permitAll()
+
+                //teste do metodo para cadastrar marca
+                .requestMatchers("/api/marcas/salvar" ).permitAll()
+                
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form

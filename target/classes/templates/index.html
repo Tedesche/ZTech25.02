@@ -7,6 +7,8 @@
     <title>ZTech Pro - Sistema de Gestão Empresarial</title>
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
 	<script>
 	       // Theme Toggle Functionality
@@ -216,7 +218,7 @@
         <div id="estoque-section" class="section">
             <div class="section-header">
                 <h2>📦 Controle de Estoque</h2>
-                <button class="action-btn btn-primary" onclick="openModal('produto')">
+                <button id="btn_novoProduto" class="action-btn btn-primary" onclick="openModal('produto')">
                     ➕ Novo Produto
                 </button>
             </div>
@@ -759,12 +761,9 @@
                 </textarea>
             </div>
             <div class="form-group">
-                <label>Categoria:</label>
-                <select style="width: 85%;">
-                    <option>Selecione uma categoria</option>
-                    <option>Eletrônicos</option>
-                    <option>Roupas</option>
-                    <option>Casa e Jardim</option>
+                <label for="produtoCategoriaSelect">Categoria:</label>
+                <select id="produtoCategoriaSelect" name="categoria" style="width: 85%;">
+                    <option value="" >Selecione uma categoria</option>
                 </select>
                 <button class="action-btn btn-primary" onclick="openModal('Categoria')"
                     style="width: 14%; padding: 12px 0;" title="Cadastrar Nova Categoria">
@@ -772,12 +771,9 @@
                 </button>
             </div>
             <div class="form-group">
-                <label>Marca:</label>
-                <select style="width: 85%;">
-                    <option>Selecione uma categoria</option>
-                    <option>Eletrônicos</option>
-                    <option>Roupas</option>
-                    <option>Casa e Jardim</option>
+                <label for="produtoMarcaSelect">Marca:</label>
+                <select id="produtoMarcaSelect" name="marca" style="width: 85%;">
+                    <option value="" >Selecione uma categoria</option>
                 </select>
                 <button class="action-btn btn-primary" onclick="openModal('Marca')" style="width: 14%; padding: 12px 0;"
                     title="Cadastrar Nova Marca">
@@ -1061,14 +1057,16 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal('Marca')">&times;</span>
             <h2 style="margin-bottom: 25px;">Cadastrar Nova Marca</h2>
-            <div class="form-group">
-                <label>Marca:</label>
-                <input type="text" placeholder="Marca">
-            </div>
-            <div style="display: flex; gap: 10px; margin-top: 25px;">
-                <button class="action-btn btn-primary" style="flex: 1;">Salvar Conta</button>
-                <button class="action-btn btn-secondary" onclick="closeModal('Marca')">Cancelar</button>
-            </div>
+            <form id="formNovaMarca" action="/api/marcas/salvar" method="post">
+				<div class="form-group">
+				    <label>Marca:</label>
+				    <input id="nomeMarcaInput" type="text" placeholder="Marca">
+				</div>
+				<div style="display: flex; gap: 10px; margin-top: 25px;">
+				    <button type="submit" class="action-btn btn-primary" style="flex: 1;">Salvar Conta</button>
+				    <button type="button" class="action-btn btn-secondary" onclick="closeModal('Marca')">Cancelar</button>
+				</div>
+			</form>
         </div>
     </div>
 
@@ -1391,7 +1389,7 @@
 		       }
 		   }
 	</script>	
-	<script src="./static/script/script.js"></script>
+	<script th:src="@{/script/script.js}"></script>
    
 </body>
 

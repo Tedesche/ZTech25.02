@@ -28,7 +28,6 @@ import ZtechAplication.repository.ServicoRepository;
 
 
 @Controller
-@RequestMapping(value = "/categoria") //para que qualquer um deles seja valido
 public class CategoriaController {
 
 	@Autowired
@@ -50,38 +49,6 @@ public class CategoriaController {
 		classeRepo.save(categoria);
         return ResponseEntity.ok(resposta);
     }
-
-	@GetMapping("/categorias")
-	public ResponseEntity<List<Categoria>> listarMarcas() {
-	    List<Categoria> categoria = classeRepo.findAll();
-	    return ResponseEntity.ok(categoria);
-	}
-	
-	
-	
-	// Exibe o formulário de cadastro de novo produto
-	@GetMapping(value = "/cadastrarForm")
-	public ModelAndView cadastrarForm() { // Nome do método mais descritivo
-		ModelAndView mv = new ModelAndView("cadastro_categoria"); // Template para cadastrar produto
-		mv.addObject("categoria", new Categoria()); // Usar produtoDTO para o formulário
-		return mv;
-	}
-	
-	
-//	// Processa o cadastro do novo produto
-//	@PostMapping(value = "/cadastrar") // Alterado de @RequestMapping para @PostMapping
-//	public String cadastrarServico(@Validated @ModelAttribute("categoria") Categoria categoria, BindingResult result,
-//			RedirectAttributes attributes, Model model) {
-//		
-//		if (result.hasErrors()) {
-//			attributes.addFlashAttribute("mensagem", "Verifique os campos...");
-//			return "redirect:/servico/cadastrarServico";
-//		}
-//		
-//		classeRepo.save(categoria);
-//		attributes.addFlashAttribute("mensagem", "Marca cadastrado com sucesso!");
-//		return "redirect:/ordens/listar"; // Redireciona para a lista após o cadastro
-//	}
 	
 	@PostMapping("/cadastrar")
 	@ResponseBody
@@ -89,6 +56,17 @@ public class CategoriaController {
 	    classeRepo.save(categoria);
 	    return ResponseEntity.ok("Categoria cadastrada com sucesso!");
 	}
+	
+	
+	//metodos novos
+	
+
+	// metodo para a modal de produto
+	@GetMapping("/api/categorias")
+    @ResponseBody
+    public List<Categoria> getCategoriasApi() {
+        return classeRepo.findAll();
+    }
 }
 
 
