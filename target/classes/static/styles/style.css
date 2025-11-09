@@ -421,27 +421,26 @@
         }
 
         .btn-primary {
-            background: var(--primary-red);
-            color: white;      
-        }
+    	background-color: var(--primary-red);
+    	color: white;      
+		}
         .pesquisa{
         background-image: url("../img/pesquisabotao.png");
         background-repeat: no-repeat;
         background-size: 25px;
         background-position: center;
 		}
-		.pesquisa:hover{
-			
-		}
+
 		.caixa-pesquisa{
 			display: flex;
 			
 		}
 
-        .btn-primary:hover {
-            background: var(--primary-red-hover);
-        }
-
+		.btn-primary:hover {
+    	background-color: var(--primary-red-hover); /* MUDADO */
+    	transform: translateY(-2px); /* ADICIONADO */
+   		box-shadow: 0 4px 12px rgba(255, 68, 68, 0.4);
+		}
         .btn-secondary {
             background: var(--stat-bg-light);
             color: var(--text-secondary-light);
@@ -552,12 +551,14 @@
         }
 
         .section {
+        	display:none;
             opacity: 0;
             transform: translateX(20px);
             transition: all 0.4s ease;
         }
 
         .section.active {
+        display:block;
             opacity: 1;
             transform: translateX(0);
         }
@@ -771,7 +772,9 @@
             cursor: pointer;
             margin-right: 5px;
             transition: all 0.3s ease;
+            justify-content: space-around;
         }
+
 
         .table-btn.edit {
             background: var(--primary-red);
@@ -1086,6 +1089,7 @@
 
             .table-container {
                 overflow-x: auto;
+
             }
 
             .data-table {

@@ -251,7 +251,7 @@
             <div class="filters-bar">
 				<div class="caixa-pesquisa">
                 <input type="text" placeholder="Buscar produtos..." class="search-input" style="border-radius: 10px 0 0 10px;">
-                <button class="action-btn btn-primary pesquisa" style="border-radius: 0 10px 10px 0;"></button>
+                <button class="pesquisa action-btn btn-primary " style="border-radius: 0 10px 10px 0;"></button>
 				</div>
                 <select class="filter-select">
                     <option>Todas as Categorias</option>
@@ -412,11 +412,11 @@
                             <td th:text="${ordemServicos.nomeServico}"></td>
                             <td th:text="${ordemServicos.nomeProduto}"></td>
                             <td th:text="${ordemServicos.statusOS}"><span class="status-badge status-success">Concluída</span></td>
-                            <td>
-                                <button class="table-btn edit">Editar</button>
-                                <button class="table-btn delete">Deletar</button>
-                                <button class="table-btn concluir">Concluir</button>
-                                <button class="table-btn pdf">Garantia</button>
+                            <td style="display: flex;">
+                                <button class="table-btn edit" style="justify-content: space-around;">Editar</button>
+                                <button class="table-btn delete" style="justify-content: space-around";>Deletar</button>
+                                <button class="table-btn concluir" style="justify-content: space-around;">Concluir</button>
+                                <button class="table-btn pdf" style="justify-content: space-around";>Garantia</button>
                             </td>
                         </tr>
                     </tbody>
@@ -1145,23 +1145,23 @@
 			   });
 
 		       // Animação de entrada suave
-		       window.addEventListener('load', function () {
+		    //   window.addEventListener('load', function () {
 		           // Load theme preference
-		           loadTheme();
+		    //       loadTheme();
 
 		           // Mostrar dashboard por padrão
-		           document.getElementById('dashboard-section').classList.add('active');
+		    //       document.getElementById('dashboard-section').classList.add('active');
 
-		           document.querySelectorAll('.card, .quick-actions').forEach((el, index) => {
-		               el.style.opacity = '0';
-		               el.style.transform = 'translateY(20px)';
-		               setTimeout(() => {
-		                   el.style.transition = 'all 0.6s ease';
-		                   el.style.opacity = '1';
-		                   el.style.transform = 'translateY(0)';
-		               }, index * 100);
-		           });
-		       });
+		    //       document.querySelectorAll('.card, .quick-actions').forEach((el, index) => {
+		    //           el.style.opacity = '0';
+		    //           el.style.transform = 'translateY(20px)';
+		    //           setTimeout(() => {
+		    //               el.style.transition = 'all 0.6s ease';
+		    //               el.style.opacity = '1';
+		   //                el.style.transform = 'translateY(0)';
+		   //            }, index * 100);
+		   //        });
+		   //    });
 			   
 			   function GETcep() {
 			       var cep = document.getElementById('cep').value;
