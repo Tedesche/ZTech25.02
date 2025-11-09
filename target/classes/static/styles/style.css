@@ -799,7 +799,13 @@
         .table-btn.pdf:hover {
             background: #ff5533;
         }
-
+        .table-btn.concluir{
+        	background: #28C345;
+        }
+		
+		.table-btn.concluir:hover{
+			background: #1a9932;
+		}
         .table-btn.pay {
             background: #ffc107;
             color: #212529;
