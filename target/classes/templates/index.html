@@ -208,7 +208,7 @@
                     </div>
                     <div class="quick-btn">
                         <div class="quick-btn-icon">🏪</div>
-                        <div class="quick-btn-text">Relatório de Contas</div>
+                        <div class="quick-btn-text" onclick="openModal('verificacao')">Relatório de Contas</div>
                     </div>
                 </div>
             </div>
@@ -1048,7 +1048,7 @@
                 <input type="text" placeholder="Categoria">
             </div>
             <div style="display: flex; gap: 10px; margin-top: 25px;">
-                <button class="action-btn btn-primary" style="flex: 1;">Salvar Conta</button>
+                <button class="action-btn btn-primary" style="flex: 1;">Salvar Categoria</button>
                 <button class="action-btn btn-secondary" onclick="closeModal('Categoria')">Cancelar</button>
             </div>
         </div>
@@ -1065,7 +1065,7 @@
 				    <input id="nomeMarcaInput" type="text" placeholder="Marca">
 				</div>
 				<div style="display: flex; gap: 10px; margin-top: 25px;">
-				    <button type="submit" class="action-btn btn-primary" style="flex: 1;">Salvar Conta</button>
+				    <button type="submit" class="action-btn btn-primary" style="flex: 1;">Salvar Marca</button>
 				    <button type="button" class="action-btn btn-secondary" onclick="closeModal('Marca')">Cancelar</button>
 				</div>
 			</form>
@@ -1083,6 +1083,19 @@
             </div>
         </div>
     </div>
+	<div id="modalVerificacao" class="modal">
+	        <div class="modal-content">
+	            <span class="close" onclick="closeModal('verificacao')">&times;</span>
+	            <h2 style="margin-bottom: 25px; text-align: center;">Autenticação em dois fatores</h2>
+	            <div class="form-group">
+					<p style="text-align:center; margin-bottom: 15px;">Um código foi enviado para o email cadastrado. Por favor, digite-o no campo.</p>
+	                <input type="text" style="text-align: center;" placeholder="Código">
+	            </div>
+	            <div style="display: flex; gap: 10px; margin-top: 25px;">
+	                <button class="action-btn btn-primary" style="flex: 1;">Verificar</button>
+	            </div>
+	        </div>
+	    </div>
 
     <!-- <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script> -->
 	<script> 
