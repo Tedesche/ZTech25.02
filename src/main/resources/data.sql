@@ -13,8 +13,8 @@ INSERT INTO TB_FUNCIONARIO (NOME_FUN, CPF_FUN, DATA_ADM, STATUS_FUN, NIVEL_ACESS
 
 -- INSERTS PARA TB_EMAIL (associando cada email a um cliente E um funcionário)
 INSERT INTO TB_EMAIL (END_EMAIL, FK_CLIENTE, FK_FUN) VALUES 
-('eduardo.severo@empresa.com', NULL, 1),
-('bruno.costa@empresa.com', NULL, 2),
+('davi.v.franco@gmail.com', NULL, 1),
+('davi.v.franco@gmail.com', NULL, 2),
 ('carla.dias@empresa.com', NULL, 3),
 ('daniel.souza@empresa.com', NULL, 4),
 ('joao.silva@gmail.com', 1, NULL), 
