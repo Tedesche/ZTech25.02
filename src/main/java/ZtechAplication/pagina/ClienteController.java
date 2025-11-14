@@ -74,7 +74,6 @@ public class ClienteController {
 		cliente.setCpf(clienteDTO.getCpf());
 		
 		Email email = new Email();
-		email.setEmail(clienteDTO.getEndEmail());
 		email.setCliente(cliente); 
 		cliente.setEmail(email); 
 		
@@ -178,7 +177,6 @@ public class ClienteController {
             cliente.setEmail(new Email());
             cliente.getEmail().setCliente(cliente);
         }
-		cliente.getEmail().setEmail(clienteDTO.getEndEmail());
 		
         // Atualiza Telefone (garante que não seja nulo)
         if (cliente.getTelefone() == null) {

@@ -29,11 +29,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ZtechAplication.DTO.FuncionarioDTO;
-import ZtechAplication.DTO.FuncionarioDTO;
 import ZtechAplication.model.Funcionario;
 import ZtechAplication.model.Email;
 import ZtechAplication.model.Endereco;
-import ZtechAplication.model.Funcionario;
 import ZtechAplication.model.Telefone;
 import ZtechAplication.repository.FuncionarioRepository;
 
@@ -76,7 +74,7 @@ public class FuncionarioController {
 		funcionario.setCpf(funcionarioDTO.getCpf());
 		
 		Email email = new Email();
-		email.setEmail(funcionarioDTO.getEndEmail());
+		email.setEndEmail(funcionarioDTO.getEndEmail());
 		email.setFuncionario(funcionario); 
 		funcionario.setEmail(email); 
 		
@@ -180,7 +178,7 @@ public class FuncionarioController {
             funcionario.setEmail(new Email());
             funcionario.getEmail().setFuncionario(funcionario);
         }
-		funcionario.getEmail().setEmail(funcionarioDTO.getEndEmail());
+		funcionario.getEmail().setEndEmail(funcionarioDTO.getEndEmail());
 		
         // Atualiza Telefone (garante que não seja nulo)
         if (funcionario.getTelefone() == null) {
