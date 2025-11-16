@@ -337,7 +337,7 @@
                     <!-- Adicionar MODAL de serviço -->
                     ➕ Novo Serviço
                 </button>
-                <button class="action-btn btn-primary" onclick="openModal('OS')"> <!-- Adicionar MODAL de serviço -->
+                <button class="action-btn btn-primary" onclick="openModal('OrdemServico')"> <!-- Adicionar MODAL de serviço -->
                     ➕ Nova O. S.
                 </button>
             </div>
@@ -848,17 +848,66 @@
                 </div>
             </section>
             <div style="display: flex; gap: 10px; margin-top: 25px;">
-                <button class="action-btn btn-primary" style="flex: 1;">Salvar Serviço</button>
+                <button class="action-btn btn-primary" style="flex: 1;">Salvar Cliente</button>
                 <button class="action-btn btn-secondary" onclick="closeModal('Cliente')">Cancelar</button>
             </div>
         </div>
+    </div>
+    <!-- Modal de nova OS -->
+        <div id="modalOrdemServico" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('OrdemServico')">&times;</span>
+            <h2 style="margin-bottom: 25px;">Cadastrar Nova Ordem de Servico</h2>
+            <div class="form-group">
+                <label>Cliente:</label>
+                <input type="text" placeholder="Digite o nome do cliente">
+            </div>
+            <div class="form-group">
+                <label>Preço:</label>
+                <input type="number" placeholder="0,00" step="5">
+            </div>
+            <div class="form-group">
+                <label>Serviço:</label>
+                <select style="width: 85%;">
+                    <option>Selecione um Serviço</option>
+                    <option></option>
+                </select>
+                <button class="action-btn btn-primary" onclick="openModal('Servico')"
+                    style="width: 14%; padding: 12px 0;" title="Cadastrar Novo Serviço">
+                    ➕
+                </button>
+            </div>
+             <div class="form-group">
+                <label>Produto:</label>
+                <select>
+                    <option>Selecione um produto</option>
+                    <option>Smartphone Samsung - R$ 899,00</option>
+                    <option>Notebook Dell - R$ 2.499,00</option>
+                    <option>Fone de Ouvido - R$ 129,90</option>
+                </select>
+            </div>
+            <div class="form-group">
+            <label>Status:</label>
+            <select>
+            	<option>Registrada</option>
+            	<option>Em Andamento</option>
+            	<option>Cancelado</option>
+            	<option>Concluído</option>
+            </select>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                <button class="action-btn btn-primary" style="flex: 1;">Salvar Ordem de Serviço</button>
+                <button class="action-btn btn-secondary" onclick="closeModal('OrdemServico')">Cancelar</button>
+            </div>
+        </div>
+
     </div>
 
     <!-- Modal para Serviço -->
     <div id="modalServico" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('Servico')">&times;</span>
-            <h2 style="margin-bottom: 25px;">Cadastrar Novo Servico</h2>
+            <h2 style="margin-bottom: 25px;">Cadastrar Novo Serviço</h2>
             <div class="form-group">
                 <label>Nome do Servico:</label>
                 <input type="text" placeholder="Digite o nome do Serviço">
@@ -1453,6 +1502,7 @@
 		   }
 	</script>	
 	<script th:src="@{/script/script.js}"></script>
+	
    
 </body>
 
