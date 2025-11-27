@@ -89,7 +89,8 @@
 	                    <div class="theme-icon" id="themeIcon">🌙</div>
 	                    <div class="theme-text" id="themeText">Tema Escuro</div>
 	                </div>
-					<a th:href="@{login.html}" class="theme-toggle-link">
+                    
+                    <a th:href="@{/logout}" class="theme-toggle-link">
 					  <div class="theme-toggle">
 					    <div class="theme-icon" id="logoutIcon">🚪</div>
 					    <div class="theme-text" id="logoutText">Sair</div>
@@ -120,7 +121,6 @@
             </div>
         </div>
 
-        <!-- Dashboard Section -->
         <div id="dashboard-section" class="section active">
             <div class="main-content">
                 <div class="card">
@@ -214,7 +214,6 @@
             </div>
         </div>
 
-        <!-- Estoque Section -->
         <div id="estoque-section" class="section">
             <div class="section-header">
                 <h2>📦 Controle de Estoque</h2>
@@ -324,26 +323,21 @@
         </div>
 
 
-        <!-- Ordens de Serviço Section -->
         <div id="os-section" class="section">
             <div class="section-header">
                 <h2>💰 Controle de Ordens de Serviço</h2>
                 <button class="action-btn btn-primary" onclick="openModal('Cliente')"
                     style="margin-left: auto; margin-right: 10px;">
-                    <!-- Adicionar MODAL de serviço -->
                     ➕ Novo Cliente
                 </button>
                 <button class="action-btn btn-primary" onclick="openModal('Servico')" style="margin-right: 10px;">
-                    <!-- Adicionar MODAL de serviço -->
                     ➕ Novo Serviço
                 </button>
-                <button class="action-btn btn-primary" onclick="openModal('OrdemServico')"> <!-- Adicionar MODAL de serviço -->
-                    ➕ Nova O. S.
+                <button class="action-btn btn-primary" onclick="openModal('OrdemServico')"> ➕ Nova O. S.
                 </button>
             </div>
 
-            <div class="stats-row"> <!-- Aferir os campos realmente necessarios -->
-                <div class="stat-card">
+            <div class="stats-row"> <div class="stat-card">
                     <div class="stat-icon">📊</div>
                     <div class="stat-content">
                         <div class="stat-text">R$ 15.420</div>
@@ -443,7 +437,6 @@
 			</div>
         </div>
 
-        <!-- Vendas Section -->
         <div id="vendas-section" class="section">
             <div class="section-header">
                 <h2>💰 Controle de Vendas</h2>
@@ -533,7 +526,6 @@
 			</div>
         </div>
 
-        <!-- Funcionarios Section -->
         <div id="funcionarios-section" class="section">
             <div class="section-header">
                 <h2>💳 Funcionarios </h2>
@@ -594,7 +586,6 @@
                             <td th:text="${funcionarios.dataAdm}"></td>
                             <td th:text="${funcionarios.nivelAces}"></td>
                             <td th:text="${funcionarios.status_Fun}"><span class="status-badge status-normal">Pendente</span></td>
-                            <!-- atualizar os status de funcionarios -->
                             <td>
                                 <button class="table-btn edit">Editar</button>
                                 <button class="table-btn delete">Deletar</button>
@@ -624,7 +615,6 @@
 			</div>
         </div>
 
-        <!-- Contas Section -->
         <div id="contas-section" class="section">
             <div class="section-header">
                 <h2>💳 Contas a Pagar</h2>
@@ -735,7 +725,6 @@
         </div>
     </div>
 
-    <!-- Modal para Produto -->
     <div id="modalProduto" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('produto')">&times;</span>
@@ -789,7 +778,6 @@
         </div>
     </div>
 
-    <!-- Modal para Cliente -->
     <div id="modalCliente" class="modal">
         <div class="modal-content" style="max-width: 750px;">
             <span class="close" onclick="closeModal('Cliente')">&times;</span>
@@ -853,8 +841,7 @@
             </div>
         </div>
     </div>
-    <!-- Modal de nova OS -->
-        <div id="modalOrdemServico" class="modal">
+    <div id="modalOrdemServico" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('OrdemServico')">&times;</span>
             <h2 style="margin-bottom: 25px;">Cadastrar Nova Ordem de Servico</h2>
@@ -907,7 +894,6 @@
 
     </div>
 
-    <!-- Modal para Serviço -->
     <div id="modalServico" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('Servico')">&times;</span>
@@ -934,7 +920,6 @@
 
     </div>
 
-    <!-- Modal para Venda -->
     <div id="modalVenda" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('venda')">&times;</span>
@@ -967,7 +952,6 @@
         </div>
     </div>
 
-    <!-- Modal para Venda 2-->
     <div id="modalVenda2" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('venda2')">&times;</span>
@@ -1017,7 +1001,6 @@
         </div>
     </div>
 
-    <!-- Modal para funcionario -->
     <div id="modalFuncionario" class="modal">
         <div class="modal-content" style="max-width: 750px;">
             <span class="close" onclick="closeModal('Funcionario')">&times;</span>
@@ -1101,7 +1084,6 @@
         </div>
     </div>
 
-    <!-- Modal para Conta -->
     <div id="modalConta" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('conta')">&times;</span>
@@ -1139,7 +1121,6 @@
         </div>
     </div>
 
-    <!-- Modal para Categoria -->
     <div id="modalCategoria" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('Categoria')">&times;</span>
@@ -1155,7 +1136,6 @@
         </div>
     </div>
 
-    <!-- Modal para Marca -->
     <div id="modalMarca" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('Marca')">&times;</span>
@@ -1173,7 +1153,6 @@
         </div>
     </div>
 
-    <!-- Modal para Verificação de Exclusão -->
     <div id="modalExcluir" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('Excluir')">&times;</span>
@@ -1186,8 +1165,7 @@
     </div>
 	
 
-    <!-- <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script> -->
-	<script> 
+    <script> 
 		// criar uma função para zerar os modais ao fechalos
 		       function openModal(type) {
 		           document.getElementById('modal' + type.charAt(0).toUpperCase() + type.slice(1)).style.display = 'flex';

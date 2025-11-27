@@ -90,12 +90,19 @@ public class indexController {
 	public String login() {
 		return "login"; // Retorna a página de login/entrada inicial
 	}
+	
+	// --- CORREÇÃO DO REDIRECIONAMENTO EM EXCESSO ---
+	@GetMapping("/login") // Mapeamento explícito para /login
+	public String loginPage() {
+		return "login"; // Usa o mesmo template login.html
+	}
+	// -----------------------------------------------
 
 	
 	// Método para carregar dados para a página inicial/dashboard
 		@GetMapping("/inicio")
 		public String inicio(Model model,
-				// --- MUDANÇA AQUI: Recebendo os números das páginas da URL ---
+				// ---  Recebendo os números das páginas da URL ---
 				@RequestParam(value = "pageEstoque", defaultValue = "0") int pageEstoque,
 				@RequestParam(value = "pageOS", defaultValue = "0") int pageOS,
 				@RequestParam(value = "pageVendas", defaultValue = "0") int pageVendas,
@@ -103,7 +110,7 @@ public class indexController {
 				@RequestParam(value = "pageClientes", defaultValue = "0") int pageClientes
 			) {
 			
-			// --- MUDANÇA AQUI: Definindo o tamanho da página em um só lugar ---
+			// ---  Definindo o tamanho da página em um só lugar ---
 			int pageSize = 10; // 10 itens por página
 
 			// Crie os "pedidos de página" usando as variáveis que recebemos
@@ -267,10 +274,10 @@ public class indexController {
 
         // 2. Valida o OTP
         if (otpService.validateOtp(username, otp)) {
-            // DEU CERTO!
+            
             
             // 3. Carrega o usuário real do banco para obter as ROLES corretas
-            // --- CORREÇÃO AQUI ---
+          
             // Usando "findByUsername" e tratando o Optional
             Usuario usuario = usuarioRepository.findByUsername(username)
                     .orElseThrow(() -> new RuntimeException("Usuário não encontrado após verificação OTP: " + username));
@@ -289,10 +296,9 @@ public class indexController {
             return "redirect:/inicio"; // Manda para a página principal
 
         } else {
-            // DEU ERRADO!
+     
             // Manda de volta para a página de verificação com mensagem de erro
             return "redirect:/login-verificacao?error=true";
         }
 	}
 }
-    
