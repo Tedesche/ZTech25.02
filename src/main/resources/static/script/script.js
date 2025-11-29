@@ -97,6 +97,9 @@ const produtoMarcaSelect = document.getElementById('produtoMarcaSelect');
  * @param {String} placeholder
  * @param {String} campoId - O NOME do campo de ID (ex: 'idCategoria', 'idMarca')
  */
+// Em static/script/script.js
+
+// 1. ATUALIZE A FUNÇÃO GENÉRICA (Adicione o parâmetro campoId)
 function popularSelect(selectElement, lista, placeholder, campoId = 'id') {
     selectElement.innerHTML = ''; 
 
@@ -109,42 +112,38 @@ function popularSelect(selectElement, lista, placeholder, campoId = 'id') {
 
     lista.forEach(item => {
         const option = document.createElement('option');
-        // CORREÇÃO AQUI: Usa o nome do campo passado por parâmetro
+        // AQUI ESTAVA O ERRO: Agora usa o nome do campo correto (idCategoria ou idMarca)
         option.value = item[campoId]; 
         option.textContent = item.nome; 
         selectElement.appendChild(option);
     });
 }
 
-/**
- * NOVA FUNÇÃO REUTILIZÁVEL 1: Carrega apenas as categorias
- */
+// 2. ATUALIZE AS CHAMADAS (Avise qual é o nome do ID)
+
 async function carregarCategorias() {
     try {
         const response = await fetch('/api/categorias');
         if (!response.ok) throw new Error('Falha ao buscar categorias');
-        
         const categorias = await response.json();
+        
+        // CORREÇÃO: Passar 'idCategoria'
         popularSelect(produtoCategoriaSelect, categorias, "Selecione uma categoria", "idCategoria");
     } catch (error) {
-        console.error("Erro ao carregar categorias:", error);
-        produtoCategoriaSelect.innerHTML = '<option value="">Erro ao carregar</option>';
+        console.error("Erro:", error);
     }
 }
 
-/**
- * NOVA FUNÇÃO REUTILIZÁVEL 2: Carrega apenas as marcas
- */
 async function carregarMarcas() {
     try {
         const response = await fetch('/api/marcas');
         if (!response.ok) throw new Error('Falha ao buscar marcas');
-
         const marcas = await response.json();
+
+        // CORREÇÃO: Passar 'idMarca'
         popularSelect(produtoMarcaSelect, marcas, "Selecione uma marca", "idMarca");
     } catch (error) {
-        console.error("Erro ao carregar marcas:", error);
-        produtoMarcaSelect.innerHTML = '<option value="">Erro ao carregar</option>';
+        console.error("Erro:", error);
     }
 }
 
@@ -253,7 +252,7 @@ async function salvarProduto() {
     const valor = document.getElementById('prodValor').value;
     const qtd = document.getElementById('prodQtd').value;
     const descricao = document.getElementById('prodDesc').value;
-    const idCategoria = document.getElementById('produtoCategoriaSelect').value;
+    const idCategoria = 1;
     const idMarca = document.getElementById('produtoMarcaSelect').value;
 
     // 2. Validação simples no Frontend

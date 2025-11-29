@@ -31,42 +31,29 @@ import ZtechAplication.repository.ServicoRepository;
 public class MarcaController {
 
 	@Autowired
-	private MarcaRepository classeRepo;
+	private MarcaRepository marcaRepository;
 
 	@GetMapping("/marcas")
 	public ResponseEntity<List<Marca>> listarMarcas() {
-	    List<Marca> marcas = classeRepo.findAll();
+	    List<Marca> marcas = marcaRepository.findAll();
 	    return ResponseEntity.ok(marcas);
 	}
 	
-	// Novo metodo de Salvar
-	@PostMapping("/api/marcas/salvar")
-	@ResponseBody
-	public ResponseEntity<?> marcaSalvar (@RequestBody Marca marca) {
-		try { //validação do campo
-			if  ( marca.getNome() == null || marca.getNome().trim().isEmpty() ){
-				return ResponseEntity
-						.status(HttpStatus.BAD_REQUEST)
-						.body("O nome da MarcaNõ pode ser vazia.");
-			}
-			Marca marcaSalva = classeRepo.save(marca);
-			
-			//da um retorno 200, positovo
-			return ResponseEntity.ok(marcaSalva);
-			
-		}	catch (Exception e) {
-			return ResponseEntity
-					.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Erro ao salvar a Marca " + e.getMessage());
-		}
-		
-	}
-	 
-	// metodo para a modal de produto
-	@GetMapping("/api/marcas")
+	// 1. Listar Marcas (Resolve o erro: GET /api/marcas 404)
+    @GetMapping("/api/marcas")
     @ResponseBody
-    public List<Marca> getMarcasApi() {
-        return classeRepo.findAll();
+    public ResponseEntity<List<Marca>> listarMarcasApi() {
+        return ResponseEntity.ok(marcaRepository.findAll());
+    }
+    
+    // 2. Salvar Marca (Já parecia ter algo, mas confirme se está assim)
+    @PostMapping("/api/marcas/salvar")
+    @ResponseBody
+    public ResponseEntity<?> salvarMarcaApi(@RequestBody Marca marca) {
+        if (marca.getNome() == null || marca.getNome().trim().isEmpty()) {
+             return ResponseEntity.badRequest().body("Nome inválido");
+        }
+        return ResponseEntity.ok(marcaRepository.save(marca));
     }
 	
 		
