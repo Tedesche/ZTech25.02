@@ -14,10 +14,75 @@
        
         .error { color: #D8000C; background-color: #FFBABA; border: 1px solid #D8000C; padding: 10px; border-radius: 4px; margin-top: 1rem; }
     </style>
+    <script>
+	       // Theme Toggle Functionality
+	       let isDarkTheme = false;
+
+	       function toggleTheme() {
+	           const body = document.body;
+	           const themeIcon = document.getElementById('themeIcon');
+	           const themeText = document.getElementById('themeText');
+
+	           isDarkTheme = !isDarkTheme;
+
+	           if (isDarkTheme) {
+	               body.classList.add('dark-theme');
+	               themeIcon.textContent = '☀️';
+	               themeText.textContent = 'Tema Claro';
+	           } else {
+	               body.classList.remove('dark-theme');
+	               themeIcon.textContent = '🌙';
+	               themeText.textContent = 'Tema Escuro';
+	           }
+
+	           // Save theme preference
+	           localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
+	       }
+
+	       // Load saved theme
+	       function loadTheme() {
+	           const savedTheme = localStorage.getItem('theme');
+	           if (savedTheme === 'dark') {
+	               toggleTheme();
+	           }
+	       }
+	       function updateModalHeaders() {
+	           const modalHeaders = document.querySelectorAll('.modal-content h2');
+	           modalHeaders.forEach(header => {
+	               if (isDarkTheme) {
+	                   header.style.color = 'var(--text-primary-dark)';
+	               } else {
+	                   header.style.color = 'var(--text-primary-light)';
+	               }
+	           });
+	       }
+
+	       // Listen for theme changes to update modal headers
+	       document.body.addEventListener('transitionend', function (e) {
+	           if (e.target === document.body) {
+	               updateModalHeaders();
+	           }
+	       });
+	       
+	       </script>
 </head>
 <body>
 
-    <div class="modal-content" style="">
+				<div class="caixa-botoes" style="justify-content: flex-end;">
+	                <div class="theme-toggle" onclick="toggleTheme()">
+	                    <div class="theme-icon" id="themeIcon">🌙</div>
+	                    <div class="theme-text" id="themeText">Tema Escuro</div>
+	                </div>
+                    
+                    <a th:href="@{/logout}" class="theme-toggle-link">
+					  <div class="theme-toggle">
+					    <div class="theme-icon" id="logoutIcon">🚪</div>
+					    <div class="theme-text" id="logoutText">Sair</div>
+					  </div>
+					</a>
+				</div>
+
+    <div class="modal-content" style="position: absolute; top:29%; left:36%;">
 		<h2 style="margin-bottom: 25px; text-align: center;">Autenticação em dois fatores</h2>
 			            <div class="form-group">
 							<p style="text-align:center; margin-bottom: 15px;">Um código foi enviado para o email cadastrado. Por favor, digite-o no campo.</p>
@@ -29,12 +94,13 @@
         <form th:action="@{/verificar-otp}" method="post" class="form-group">
             <div class="form-group">
                 <label for="otp">Código de Verificação</label>
-                <input type="text" id="otp" name="otp" maxlength="6" class="action-btn btn-primary" required autofocus 
+                <input type="text" id="otp" name="otp" maxlength="6" class="action-btn verifica" required autofocus 
                        pattern="\d{6}" title="O código deve ter 6 números."/>
             </div>
             <button class="action-btn btn-primary" type="submit">Verificar</button>
         </form>
     </div>
-
+    </div>
+<script th:src="@{/script/script.js}"></script>
 </body>
 </html>
