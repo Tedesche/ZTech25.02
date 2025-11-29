@@ -43,28 +43,41 @@
 	           }
 	       }
 
-	       function showSection(section) {
-	           // Atualizar botões ativos
-	           document.querySelectorAll('.nav-btn').forEach(btn => {
-	               btn.classList.remove('active');
-	           });
-	           event.target.classList.add('active');
+		   // --- FUNÇÃO DE NAVEGAÇÃO ENTRE ABAS (SPA) ---
+		   function showSection(sectionId) {
+		       // 1. Atualizar botões do menu (Visual)
+		       document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+		       
+		       // Tenta encontrar o botão que chama essa seção e ativa ele
+		       // (Pode ser necessário ajustar o seletor dependendo de como está seu HTML exato)
+		       const activeBtn = document.querySelector(`.nav-btn[onclick*="${sectionId}"]`);
+		       if (activeBtn) activeBtn.classList.add('active');
 
-	           // Ocultar todas as seções
-	           document.querySelectorAll('.section').forEach(sec => {
-	               sec.style.display = 'none';
-	               sec.classList.remove('active');
-	           });
+		       // 2. Esconder todas as seções
+		       document.querySelectorAll('.section').forEach(sec => {
+		           sec.style.display = 'none';
+		           sec.classList.remove('active');
+		       });
 
-	           // Mostrar seção selecionada com animação
-	           const targetSection = document.getElementById(section + '-section');
-	           if (targetSection) {
-	               targetSection.style.display = 'block';
-	               setTimeout(() => {
-	                   targetSection.classList.add('active');
-	               }, 50);
-	           }
-	       }
+		       // 3. Mostrar a seção desejada
+		       const targetSection = document.getElementById(sectionId + '-section');
+		       if (targetSection) {
+		           targetSection.style.display = 'block';
+		           // Pequeno delay para animação CSS funcionar
+		           setTimeout(() => targetSection.classList.add('active'), 10);
+		       }
+
+		       // 4. CARREGAR DADOS DINAMICAMENTE (A Lógica Nova!)
+		       switch (sectionId) {
+		           case 'estoque':
+		               atualizarTabelaProdutos(); // <--- Chama nossa nova função
+		               break;
+		           case 'vendas':
+		               // atualizarTabelaVendas(); // Futuro...
+		               break;
+		           // ... outros casos
+		       }
+		   }
 
 	   </script>
 	
@@ -284,21 +297,10 @@
                             <th>Ações</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr th:each="produto :${paginaDeProdutos.content}">
-                            <td th:text="${produto.IdProduto}"></td>
-                            <td th:text="${produto.nome}"></td>
-                            <td th:text="${produto.valor}"></td>
-                            <td th:text="${produto.quantidade}"></td>
-                            <td th:text="${produto.descricao}"></td>
-                            <td th:text="${produto.categoria}"></td>
-                            <td th:text="${produto.marca}"></td>
-                            <td>
-                                <button class="table-btn edit">Editar</button>
-                                <button class="table-btn delete" onclick="openModal('Excluir')">Excluir</button>
-                            </td>
-                        </tr>
-                    </tbody>
+					<tbody id="tbody-produtos"> 
+					     <tr th:each="produto :${paginaDeProdutos.content}">
+					         </tr>
+					</tbody>
                 </table>
             </div>
 			<div class="pagination-controls" th:if="${paginaDeProdutos.totalPages > 1}" 
@@ -725,58 +727,53 @@
         </div>
     </div>
 
-    <div id="modalProduto" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('produto')">&times;</span>
-            <h2 style="margin-bottom: 25px;">Cadastrar Novo Produto</h2>
-            <div class="form-group">
-                <label>Nome do Produto:</label>
-                <input type="text" placeholder="Digite o nome do produto">
-            </div>
-            <div class="form-group">
-                <label>Custo:</label>
-                <input type="number" placeholder="0,00" step="5">
-            </div>
-            <div class="form-group">
-                <label>Preço Revenda:</label>
-                <input type="number" placeholder="0,00" step="5">
-            </div>
-            <div class="form-group">
-                <label>Quantidade em Estoque:</label>
-                <input type="number" placeholder="0">
-            </div>
-            <div class="form-group">
-                <label>Descrição do Produto:</label>
-                <textarea id="detalhes-pedido" name="detalhesPedido" rows="3"
-                    placeholder="Digite aqui a descrição do Produto...">
-                </textarea>
-            </div>
-            <div class="form-group">
-                <label for="produtoCategoriaSelect">Categoria:</label>
-                <select id="produtoCategoriaSelect" name="categoria" style="width: 85%;">
-                    <option value="" >Selecione uma categoria</option>
-                </select>
-                <button class="action-btn btn-primary" onclick="openModal('Categoria')"
-                    style="width: 14%; padding: 12px 0;" title="Cadastrar Nova Categoria">
-                    ➕
-                </button>
-            </div>
-            <div class="form-group">
-                <label for="produtoMarcaSelect">Marca:</label>
-                <select id="produtoMarcaSelect" name="marca" style="width: 85%;">
-                    <option value="" >Selecione uma categoria</option>
-                </select>
-                <button class="action-btn btn-primary" onclick="openModal('Marca')" style="width: 14%; padding: 12px 0;"
-                    title="Cadastrar Nova Marca">
-                    ➕
-                </button>
-            </div>
-            <div style="display: flex; gap: 10px; margin-top: 25px;">
-                <button class="action-btn btn-primary" style="flex: 1;">Salvar Produto</button>
-                <button class="action-btn btn-secondary" onclick="closeModal('produto')">Cancelar</button>
-            </div>
-        </div>
-    </div>
+	<div id="modalProduto" class="modal">
+	    <div class="modal-content">
+	        <span class="close" onclick="closeModal('produto')">&times;</span>
+	        <h2 style="margin-bottom: 25px;">Cadastrar Novo Produto</h2>
+	        
+	        <input type="hidden" id="prodId">
+
+	        <div class="form-group">
+	            <label>Nome do Produto:</label>
+	            <input type="text" id="prodNome" placeholder="Digite o nome do produto">
+	        </div>
+	        <div class="form-group">
+	            <label>Custo:</label>
+	            <input type="number" id="prodCusto" placeholder="0,00" step="0.01">
+	        </div>
+	        <div class="form-group">
+	            <label>Preço Revenda:</label>
+	            <input type="number" id="prodValor" placeholder="0,00" step="0.01">
+	        </div>
+	        <div class="form-group">
+	            <label>Quantidade em Estoque:</label>
+	            <input type="number" id="prodQtd" placeholder="0">
+	        </div>
+	        <div class="form-group">
+	            <label>Descrição do Produto:</label>
+	            <textarea id="prodDesc" rows="3" placeholder="Digite aqui a descrição..."></textarea>
+	        </div>
+
+	        <div class="form-group">
+	             <label for="produtoCategoriaSelect">Categoria:</label>
+	             <select id="produtoCategoriaSelect" style="width: 85%;">
+	                  <option value="">Selecione uma categoria</option>
+	             </select>
+	             </div>
+	        <div class="form-group">
+	             <label for="produtoMarcaSelect">Marca:</label>
+	             <select id="produtoMarcaSelect" style="width: 85%;">
+	                  <option value="">Selecione uma marca</option>
+	             </select>
+	             </div>
+
+	        <div style="display: flex; gap: 10px; margin-top: 25px;">
+	            <button class="action-btn btn-primary" style="flex: 1;" onclick="salvarProduto()">Salvar Produto</button>
+	            <button class="action-btn btn-secondary" onclick="closeModal('produto')">Cancelar</button>
+	        </div>
+	    </div>
+	</div>
 
     <div id="modalCliente" class="modal">
         <div class="modal-content" style="max-width: 750px;">

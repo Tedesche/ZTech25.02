@@ -36,7 +36,8 @@ public class SecurityConfig {
                 .requestMatchers(toH2Console()).permitAll()
                 .requestMatchers("/", "/login", "/inicio", "/login-verificacao", "/verificar-otp").permitAll() 
                 .requestMatchers("/index").permitAll()
-                .requestMatchers("/api/marcas", "/api/categorias").permitAll()
+                .requestMatchers("/api/marcas", "/api/categorias").permitAll() //url para abastecer os textlist em produto
+                .requestMatchers("/api/marcas/salvar" ).permitAll()
                 .requestMatchers("/api/marcas/salvar" ).permitAll()
                 .anyRequest().authenticated()
             )

@@ -92,28 +92,25 @@ const produtoMarcaSelect = document.getElementById('produtoMarcaSelect');
 //    (Isso evita repetir código)
 /**
  * Limpa e popula um <select> com dados de uma API.
- * @param {HTMLSelectElement} selectElement - O elemento <select>
- * @param {Array} lista - A lista de dados (ex: [{id: 1, nome: 'Categoria 1'}])
- * @param {String} placeholder - O texto inicial (ex: "Selecione uma categoria")
+ * @param {HTMLSelectElement} selectElement
+ * @param {Array} lista
+ * @param {String} placeholder
+ * @param {String} campoId - O NOME do campo de ID (ex: 'idCategoria', 'idMarca')
  */
-function popularSelect(selectElement, lista, placeholder) {
-    // Limpa opções antigas (exceto a primeira, se for o placeholder)
+function popularSelect(selectElement, lista, placeholder, campoId = 'id') {
     selectElement.innerHTML = ''; 
 
-    // Adiciona o placeholder
     const placeholderOption = document.createElement('option');
     placeholderOption.value = "";
     placeholderOption.textContent = placeholder;
-    placeholderOption.disabled = true; // Opcional: faz não ser selecionável
-    placeholderOption.selected = true; // Opcional: deixa selecionado por padrão
+    placeholderOption.disabled = true;
+    placeholderOption.selected = true;
     selectElement.appendChild(placeholderOption);
 
-    // Adiciona as opções da lista
     lista.forEach(item => {
         const option = document.createElement('option');
-        // O 'value' deve ser o ID (chave estrangeira)
-        option.value = item.id; 
-        // O texto visível é o nome
+        // CORREÇÃO AQUI: Usa o nome do campo passado por parâmetro
+        option.value = item[campoId]; 
         option.textContent = item.nome; 
         selectElement.appendChild(option);
     });
@@ -128,7 +125,7 @@ async function carregarCategorias() {
         if (!response.ok) throw new Error('Falha ao buscar categorias');
         
         const categorias = await response.json();
-        popularSelect(produtoCategoriaSelect, categorias, "Selecione uma categoria");
+        popularSelect(produtoCategoriaSelect, categorias, "Selecione uma categoria", "idCategoria");
     } catch (error) {
         console.error("Erro ao carregar categorias:", error);
         produtoCategoriaSelect.innerHTML = '<option value="">Erro ao carregar</option>';
@@ -144,7 +141,7 @@ async function carregarMarcas() {
         if (!response.ok) throw new Error('Falha ao buscar marcas');
 
         const marcas = await response.json();
-        popularSelect(produtoMarcaSelect, marcas, "Selecione uma marca");
+        popularSelect(produtoMarcaSelect, marcas, "Selecione uma marca", "idMarca");
     } catch (error) {
         console.error("Erro ao carregar marcas:", error);
         produtoMarcaSelect.innerHTML = '<option value="">Erro ao carregar</option>';
@@ -182,4 +179,203 @@ if (btnAbrirModalProduto) {
             alert("Não foi possível carregar os dados. Tente novamente.");
         }
     });
+}
+
+
+// ----------- ATUALIZAR TABELAS A BAIXO ----------------------------------------------
+// --- FUNÇÃO PARA ATUALIZAR TABELA DE PRODUTOS ---
+async function atualizarTabelaProdutos() {
+    const tbody = document.getElementById('tbody-produtos');
+    if (!tbody) return; // Segurança
+
+    // Mostra um "Carregando..."
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">Carregando estoque atualizado...</td></tr>';
+
+    try {
+        // Chama o novo endpoint do Java
+        const response = await fetch('/produto/api/produto/listar');
+        if (!response.ok) throw new Error('Erro na API de produtos');
+        
+        const listaProdutos = await response.json();
+
+        // Limpa a tabela
+        tbody.innerHTML = '';
+
+        if (listaProdutos.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">Nenhum produto encontrado.</td></tr>';
+            return;
+        }
+
+        // Desenha as linhas
+        listaProdutos.forEach(prod => {
+            const tr = document.createElement('tr');
+            
+            // Formata o valor para R$ (segurança se for nulo)
+            const valorFormatado = prod.valor 
+                ? prod.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) 
+                : 'R$ 0,00';
+            
+            // Trata nulos de categoria/marca
+            const categoria = prod.categoria ? prod.categoria : '-';
+            const marca = prod.marca ? prod.marca : '-';
+
+            tr.innerHTML = `
+                <td>${prod.idProduto}</td>
+                <td>${prod.nome}</td>
+                <td>${valorFormatado}</td>
+                <td>${prod.quantidade}</td>
+                <td>${prod.descricao || ''}</td>
+                <td>${categoria}</td>
+                <td>${marca}</td>
+                <td>
+                    <button class="table-btn edit" onclick="editarProduto(${prod.idProduto})">Editar</button>
+                    <button class="table-btn delete" onclick="deletarProduto(${prod.idProduto})">Excluir</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+    } catch (error) {
+        console.error('Erro:', error);
+        tbody.innerHTML = '<tr><td colspan="8" style="color:red; text-align:center">Erro ao carregar dados.</td></tr>';
+    }
+}
+
+
+
+// ---------- SALVAR DAS MODALS A BAIXO -------------------------------------------
+// --- FUNÇÃO PARA SALVAR (CADASTRAR/EDITAR) PRODUTO ---
+async function salvarProduto() {
+    // 1. Coleta os dados dos inputs pelo ID que criamos
+    const id = document.getElementById('prodId').value; // Vazio se for novo
+    const nome = document.getElementById('prodNome').value;
+    const custo = document.getElementById('prodCusto').value;
+    const valor = document.getElementById('prodValor').value;
+    const qtd = document.getElementById('prodQtd').value;
+    const descricao = document.getElementById('prodDesc').value;
+    const idCategoria = document.getElementById('produtoCategoriaSelect').value;
+    const idMarca = document.getElementById('produtoMarcaSelect').value;
+
+    // 2. Validação simples no Frontend
+    if (!nome || !idCategoria || !idMarca) {
+        alert("Por favor, preencha Nome, Categoria e Marca.");
+        return;
+    }
+
+    // 3. Monta o Objeto DTO (igual ao Java espera)
+    const produtoDTO = {
+        idProduto: id ? parseInt(id) : null,
+        nome: nome,
+        custo: custo ? parseFloat(custo) : 0.0,
+        valor: valor ? parseFloat(valor) : 0.0,
+        quantidade: qtd ? parseInt(qtd) : 0,
+        descricao: descricao,
+        idCategoria: parseInt(idCategoria),
+        idMarca: parseInt(idMarca)
+        // Nota: Não precisamos mandar os nomes de categoria/marca, só os IDs
+    };
+
+    // 4. Pega o Token CSRF (Segurança do Spring)
+    const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    try {
+        const response = await fetch('/produto/api/produto/salvar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                [header]: token
+            },
+            body: JSON.stringify(produtoDTO)
+        });
+
+        if (response.ok) {
+            alert("Produto salvo com sucesso!");
+            
+            // 5. Atualiza a tabela SEM recarregar a página
+            closeModal('produto');
+            atualizarTabelaProdutos(); 
+            
+            // 6. Limpa o formulário para o próximo
+            limparFormularioProduto();
+        } else {
+            const erroMsg = await response.text();
+            alert("Erro ao salvar: " + erroMsg);
+        }
+
+    } catch (error) {
+        console.error("Erro de rede:", error);
+        alert("Erro ao conectar com o servidor.");
+    }
+}
+
+// --- FUNÇÕES DE AÇÃO (EDITAR E DELETAR) ---
+
+// Função chamada pelo botão "Excluir" da tabela
+async function deletarProduto(id) {
+    if (!confirm("Tem certeza que deseja excluir este produto?")) return;
+
+    const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    try {
+        const response = await fetch(`/produto/api/deletar/${id}`, {
+            method: 'DELETE', // Importante: Método DELETE
+            headers: {
+                [header]: token
+            }
+        });
+
+        if (response.ok) {
+            alert("Produto removido!");
+            atualizarTabelaProdutos(); // Atualiza a tela sem recarregar
+        } else {
+            alert("Erro ao remover. Verifique se o produto não tem vendas associadas.");
+        }
+    } catch (error) {
+        console.error("Erro:", error);
+    }
+}
+
+// Função chamada pelo botão "Editar" da tabela
+async function editarProduto(id) {
+    try {
+        // 1. Busca os dados do produto para preencher a modal
+        const response = await fetch(`/produto/api/${id}`);
+        if (!response.ok) throw new Error("Erro ao buscar produto");
+        const produto = await response.json();
+
+        // 2. Preenche os campos da modal (usando os IDs que criamos)
+        document.getElementById('prodId').value = produto.idProduto;
+        document.getElementById('prodNome').value = produto.nome;
+        document.getElementById('prodCusto').value = produto.custo;
+        document.getElementById('prodValor').value = produto.valor;
+        document.getElementById('prodQtd').value = produto.quantidade;
+        document.getElementById('prodDesc').value = produto.descricao;
+        
+        // 3. Seleciona a Categoria e Marca corretas
+        // (Isso assume que os selects já foram carregados previamente)
+        if(produto.idCategoria) document.getElementById('produtoCategoriaSelect').value = produto.idCategoria;
+        if(produto.idMarca) document.getElementById('produtoMarcaSelect').value = produto.idMarca;
+
+        // 4. Abre a modal
+        openModal('produto');
+
+    } catch (error) {
+        console.error("Erro:", error);
+        alert("Não foi possível carregar os dados para edição.");
+    }
+}
+
+// Função auxiliar para limpar o form
+function limparFormularioProduto() {
+    document.getElementById('prodId').value = '';
+    document.getElementById('prodNome').value = '';
+    document.getElementById('prodCusto').value = '';
+    document.getElementById('prodValor').value = '';
+    document.getElementById('prodQtd').value = '';
+    document.getElementById('prodDesc').value = '';
+    // Reseta selects para a primeira opção
+    document.getElementById('produtoCategoriaSelect').selectedIndex = 0;
+    document.getElementById('produtoMarcaSelect').selectedIndex = 0;
 }

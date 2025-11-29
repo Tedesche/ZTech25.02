@@ -10,19 +10,24 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller; // Alterado para Controller
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 // Removido DeleteMapping, GetMapping, etc. pois @RequestMapping já cobre ou serão usados individualmente.
 // Mantidos GetMapping e PostMapping onde apropriado.
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 // import org.springframework.web.bind.annotation.RequestMethod; // Usar anotações específicas como @PostMapping
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 // Removido RestController
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -278,6 +283,103 @@ public class ProdutoController {
 		}
 		return listaDeDTOs; 
 	}
+	
+	// NOVOS METODOS ----------------------------------------------------------------------------
+	// 1. API para Listar Produtos (JSON)
+    @GetMapping("/api/produto/listar")
+    @ResponseBody 
+    public ResponseEntity<List<ProdutoDTO>> apiListarProdutos() {
+        // Busca todos os produtos
+        List<Produto> listaProdutos = produtoRepository.findAll();
+        // Converte para DTO usando seu método auxiliar
+        List<ProdutoDTO> listaDTO = listaProdutos.stream()
+            .map(this::converterParaDTO)
+            .collect(Collectors.toList());
+            
+        return ResponseEntity.ok(listaDTO);
+    }
+
+    // 2. API para Salvar Produto (JSON)
+    @PostMapping("/api/produto/salvar")
+    @ResponseBody
+    public ResponseEntity<?> apiSalvarProduto(@RequestBody ProdutoDTO produtoDTO) {
+        try {
+            // Validação básica
+            if (produtoDTO.getNome() == null || produtoDTO.getNome().trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("O nome do produto é obrigatório.");
+            }
+
+            // Busca a Categoria pelo ID (que vem do <select>)
+            if (produtoDTO.getIdCategoria() == null) {
+                return ResponseEntity.badRequest().body("A categoria é obrigatória.");
+            }
+            Categoria categoria = categoriaRepository.findById(produtoDTO.getIdCategoria())
+                .orElseThrow(() -> new IllegalArgumentException("Categoria não encontrada com ID: " + produtoDTO.getIdCategoria()));
+
+            // Busca a Marca pelo ID (que vem do <select>)
+            if (produtoDTO.getIdMarca() == null) {
+                return ResponseEntity.badRequest().body("A marca é obrigatória.");
+            }
+            Marca marca = marcaRepository.findById(produtoDTO.getIdMarca())
+                .orElseThrow(() -> new IllegalArgumentException("Marca não encontrada com ID: " + produtoDTO.getIdMarca()));
+
+            // Prepara o Produto
+            Produto produto = new Produto();
+            
+            // Se tiver ID, é uma edição: busca o produto original para manter dados que não mudaram
+            if (produtoDTO.getIdProduto() != null) {
+                 produto = produtoRepository.findById(produtoDTO.getIdProduto())
+                     .orElse(new Produto());
+            }
+            
+            produto.setNome(produtoDTO.getNome());
+            produto.setCusto(produtoDTO.getCusto());
+            produto.setValor(produtoDTO.getValor());
+            produto.setQuantidade(produtoDTO.getQuantidade());
+            produto.setDescricao(produtoDTO.getDescricao());
+            
+            // Define os relacionamentos
+            produto.setCategoria(categoria);
+            produto.setMarca(marca);
+
+            Produto produtoSalvo = produtoRepository.save(produto);
+            
+            return ResponseEntity.ok(converterParaDTO(produtoSalvo));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .body("Erro ao salvar produto: " + e.getMessage());
+        }
+    }
+    
+    // API para buscar UM produto (usado na edição)
+    @GetMapping("/api/{id}")
+    @ResponseBody
+    public ResponseEntity<ProdutoDTO> apiBuscarProduto(@PathVariable Integer id) {
+        return produtoRepository.findById(id)
+                .map(this::converterParaDTO)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // API para Deletar (retorna JSON, não redireciona)
+    @DeleteMapping("/api/deletar/{id}")
+    @ResponseBody
+    public ResponseEntity<?> apiDeletarProduto(@PathVariable Integer id) {
+        try {
+            if (!produtoRepository.existsById(id)) {
+                return ResponseEntity.notFound().build();
+            }
+            produtoRepository.deleteById(id);
+            return ResponseEntity.ok("Deletado com sucesso");
+        } catch (Exception e) {
+            // Captura erro de chave estrangeira (se produto já foi vendido)
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body("Erro: Produto não pode ser excluído pois possui vínculos.");
+        }
+    }
+	
+	
 	
     // Método auxiliar para converter Produto para ProdutoDTO
 	private ProdutoDTO converterParaDTO(Produto produto) {

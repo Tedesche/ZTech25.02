@@ -31,7 +31,14 @@ import ZtechAplication.repository.ServicoRepository;
 public class CategoriaController {
 
 	@Autowired
-	private CategoriaRepository classeRepo;
+    private CategoriaRepository categoriaRepository;
+
+    // --- ADICIONE ESTE MÉTODO ---
+    @GetMapping("/api/categorias")
+    @ResponseBody
+    public ResponseEntity<List<Categoria>> listarCategoriasApi() {
+        return ResponseEntity.ok(categoriaRepository.findAll());
+    }
 
 	@PostMapping("/enviar")
     public ResponseEntity<Map<String, String>> receberDados(@RequestBody Map<String, String> dados) {
@@ -46,14 +53,14 @@ public class CategoriaController {
         
         Categoria categoria = new Categoria();
         categoria.setNome(nome);
-		classeRepo.save(categoria);
+        categoriaRepository.save(categoria);
         return ResponseEntity.ok(resposta);
     }
 	
 	@PostMapping("/cadastrar")
 	@ResponseBody
 	public ResponseEntity<?> cadastrarCategoriaViaAjax(@RequestBody Categoria categoria) {
-	    classeRepo.save(categoria);
+		categoriaRepository.save(categoria);
 	    return ResponseEntity.ok("Categoria cadastrada com sucesso!");
 	}
 	
@@ -65,7 +72,7 @@ public class CategoriaController {
 	@GetMapping("/api/categorias")
     @ResponseBody
     public List<Categoria> getCategoriasApi() {
-        return classeRepo.findAll();
+        return categoriaRepository.findAll();
     }
 }
 
