@@ -1,15 +1,11 @@
 package ZtechAplication.model;
 
-import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -19,7 +15,7 @@ public class Endereco {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "idEndereco")  // Mapeia para a coluna existente
+	@Column(name = "idEndereco")
 	private int idEndereco;
 	private String rua;
 	private String cep;
@@ -28,11 +24,13 @@ public class Endereco {
 	private int numeroCasa;
 	
 	@OneToOne
-    @JoinColumn(name = "fk_Cliente", nullable = false)
+    // CORREÇÃO: nullable = true para permitir salvar Funcionário sem ter Cliente vinculado
+    @JoinColumn(name = "fk_Cliente", nullable = true) 
     private Cliente cliente;
 	
     @OneToOne
-    @JoinColumn(name = "fk_Fun", nullable = false)
+    // CORREÇÃO: nullable = true para permitir salvar Cliente sem ter Funcionário vinculado
+    @JoinColumn(name = "fk_Fun", nullable = true) 
     private Funcionario funcionario;
 	
 	public int getIdEndereco() {
@@ -83,5 +81,4 @@ public class Endereco {
 	public void setFuncionario(Funcionario funcionario) {
 		this.funcionario = funcionario;
 	}
-
 }

@@ -1,15 +1,11 @@
 package ZtechAplication.model;
 
-import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -19,16 +15,18 @@ public class Telefone {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "idTelefone")  // Mapeia para a coluna existente
+	@Column(name = "idTelefone")
 	private int idTelefone;
 	private String telefone;
     
 	@OneToOne
-    @JoinColumn(name = "fk_Cliente", nullable = false)
+    // CORREÇÃO: nullable = true para permitir salvar sem Cliente (caso seja de funcionário)
+    @JoinColumn(name = "fk_Cliente", nullable = true)
     private Cliente cliente;
 	
     @OneToOne
-    @JoinColumn(name = "fk_Fun", nullable = false)
+    // CORREÇÃO: nullable = true para permitir salvar sem Funcionário (caso seja de cliente)
+    @JoinColumn(name = "fk_Fun", nullable = true)
     private Funcionario funcionario;
 
     // Getters e Setters
@@ -55,13 +53,12 @@ public class Telefone {
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
+    
 	public Funcionario getFuncionario() {
 		return funcionario;
 	}
+    
 	public void setFuncionario(Funcionario funcionario) {
 		this.funcionario = funcionario;
 	}
-    
-    
-
 }
