@@ -187,25 +187,31 @@ if (btnAbrirModalProduto) {
 
 // ----------- ATUALIZAR TABELAS A BAIXO ----------------------------------------------
 // --- FUNÇÃO PARA ATUALIZAR TABELA DE PRODUTOS ---
-async function atualizarTabelaProdutos() {
-    const tbody = document.getElementById('tbody-produtos');
-    if (!tbody) return; // Segurança
+let paginaAtual = 0;
 
-    // Mostra um "Carregando..."
-    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">Carregando estoque atualizado...</td></tr>';
+async function atualizarTabelaProdutos(pagina = 0) { // Recebe a página (padrão 0)
+    const tbody = document.getElementById('tbody-produtos');
+    
+    // Atualiza a variável global
+    paginaAtual = pagina;
+
+    tbody.innerHTML = '<tr><td colspan="8">Carregando...</td></tr>';
 
     try {
-        // Chama o novo endpoint do Java
-        const response = await fetch('/produto/api/produto/listar');
-        if (!response.ok) throw new Error('Erro na API de produtos');
+        // AQUI ESTÁ O TRUQUE: Passamos ?page=X na URL
+        const response = await fetch(`/produto/api/produto/listar?page=${pagina}`);
         
-        const listaProdutos = await response.json();
+        if (!response.ok) throw new Error('Erro na API');
+        
+        // O JSON agora não é mais uma lista simples, é um objeto "Page"
+        // Ele tem: content (a lista), totalPages, number (página atual), etc.
+        const pageData = await response.json(); 
+        const listaProdutos = pageData.content; // A lista real está aqui dentro
 
-        // Limpa a tabela
         tbody.innerHTML = '';
 
         if (listaProdutos.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">Nenhum produto encontrado.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8">Nenhum produto encontrado.</td></tr>';
             return;
         }
 
@@ -238,12 +244,41 @@ async function atualizarTabelaProdutos() {
             tbody.appendChild(tr);
         });
 
-    } catch (error) {
-        console.error('Erro:', error);
-        tbody.innerHTML = '<tr><td colspan="8" style="color:red; text-align:center">Erro ao carregar dados.</td></tr>';
-    }
-}
+		// 3. ATUALIZAR OS BOTÕES DE PAGINAÇÃO
+		        atualizarBotoesPaginacao(pageData);
 
+		    } catch (error) {
+		        console.error('Erro:', error);
+		    }
+		}
+		
+		// Nova função para controlar os botões
+		function atualizarBotoesPaginacao(pageData) {
+		    // Supondo que você tenha uma div no HTML com id="paginacao-container"
+		    const container = document.getElementById('paginacao-container');
+		    if (!container) return;
+
+		    let html = '';
+
+		    // Botão Anterior
+		    // Se não for a primeira página (first), mostra o botão
+		    if (!pageData.first) {
+		        html += `<button class="action-btn btn-secondary"
+				 onclick="atualizarTabelaProdutos(${pageData.number - 1})">&larr; Anterior</button>`;
+		    }
+
+		    // Mostra "Página X de Y"
+		    html += ` <span>Página ${pageData.number + 1} de ${pageData.totalPages}</span> `;
+
+		    // Botão Próximo
+		    // Se não for a última página (last), mostra o botão
+		    if (!pageData.last) {
+		        html += `<button class="action-btn btn-primary"
+				onclick="atualizarTabelaProdutos(${pageData.number + 1})">Próximo &rarr;</button>`;
+		    }
+
+		    container.innerHTML = html;
+		}
 
 
 // ---------- SALVAR DAS MODALS A BAIXO -------------------------------------------

@@ -286,17 +286,20 @@ public class ProdutoController {
 	
 	// NOVOS METODOS ----------------------------------------------------------------------------
 	// 1. API para Listar Produtos (JSON)
-    @GetMapping("/api/produto/listar")
+	@GetMapping("/api/produto/listar")
     @ResponseBody 
-    public ResponseEntity<List<ProdutoDTO>> apiListarProdutos() {
-        // Busca todos os produtos
-        List<Produto> listaProdutos = produtoRepository.findAll();
-        // Converte para DTO usando seu método auxiliar
-        List<ProdutoDTO> listaDTO = listaProdutos.stream()
-            .map(this::converterParaDTO)
-            .collect(Collectors.toList());
+    public ResponseEntity<Page<ProdutoDTO>> apiListarProdutos(
+            // AQUI VOCÊ DEFINE O TAMANHO DA PÁGINA (size = 10)
+            @PageableDefault(size = 10, page = 0) Pageable pageable) {
+        
+        // 1. Busca a PÁGINA de produtos (não mais a lista toda)
+        Page<Produto> paginaProdutos = produtoRepository.findAll(pageable);
+        
+        // 2. Converte a Página de Entidades para Página de DTOs
+        // O método .map() do objeto Page faz a conversão item por item automaticamente
+        Page<ProdutoDTO> paginaDTO = paginaProdutos.map(this::converterParaDTO);
             
-        return ResponseEntity.ok(listaDTO);
+        return ResponseEntity.ok(paginaDTO);
     }
 
     // 2. API para Salvar Produto (JSON)
