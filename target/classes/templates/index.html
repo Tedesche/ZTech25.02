@@ -729,6 +729,7 @@
 
 	<div id="modalProduto" class="modal">
 	    <div class="modal-content">
+	    	<div id="toast-container"></div>
 	        <span class="close" onclick="closeModal('produto')">&times;</span>
 	        <h2 style="margin-bottom: 25px;">Cadastrar Novo Produto</h2>
 	        
@@ -1475,6 +1476,15 @@
 		           
 		       }
 		   }
+		       /*<![CDATA[*/
+		       var mensagemServidor = /*[[${mensagem}]]*/ null;
+		       
+		       if (mensagemServidor) {
+		           // Chama a função JS que criamos no passo 3
+		           // Certifique-se de que o script.js já foi carregado antes deste bloco
+		           mostrarNotificacao(mensagemServidor, 'sucesso'); // Ou faça lógica para detectar erro
+		       }
+		       /*]]>*/
 	</script>	
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 	<script th:src="@{/script/script.js}"></script>

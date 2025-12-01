@@ -2,6 +2,16 @@
 
 // Em static/script/script.js
 // ... (dentro do DOMContentLoaded)
+document.addEventListener("DOMContentLoaded", function() {
+    // Verifica se há mensagem de sucesso pendente (vinda de um reload)
+    const msgSucesso = sessionStorage.getItem('mensagemSucesso');
+    if (msgSucesso) {
+        mostrarNotificacao(msgSucesso, 'sucesso');
+        sessionStorage.removeItem('mensagemSucesso'); // Limpa para não mostrar de novo
+    }
+
+    // ... restante do seu código ...
+});
 
 const formNovaMarca = document.getElementById('formNovaMarca');
 const modalNovaMarca = 'modalMarca'; // ID da div da modal
@@ -40,28 +50,22 @@ if (formNovaMarca) {
                 body: JSON.stringify(dadosMarca) // Converte o objeto JS em JSON
             });
 
-            if (response.ok) {
-                // SUCESSO!
-                const marcaSalva = await response.json();
-                console.log('Marca salva:', marcaSalva);
-                
-                // Fechar a modal
-                closeModal(modalNovaMarca); // (usando sua função)
-                
-                // Limpar o campo
-                nomeMarcaInput.value = '';
-                
-                // Opcional: Adicionar a nova marca na tabela dinamicamente (mais avançado)
-                
-                // Por enquanto, a solução mais simples é recarregar a página
-                // para ver a nova marca na lista.
-				// 4. ADICIONE A NOVA CHAMADA
-				                // Recarrega a lista de marcas na modal de produto
-				                await carregarMarcas();
-                alert('Marca salva com sucesso!');
-                location.reload(); 
+			// ... dentro de formNovaMarca.addEventListener ...
 
-            } else {
+			if (response.ok) {
+			    const marcaSalva = await response.json();
+			    console.log('Marca salva:', marcaSalva);
+			    
+			    closeModal(modalNovaMarca); 
+			    nomeMarcaInput.value = '';
+			    
+			    // TRUQUE PARA RELOAD: Salva uma flag no navegador antes de recarregar
+			    sessionStorage.setItem('mensagemSucesso', 'Marca salva com sucesso!');
+			    
+			    location.reload(); 
+
+			} else {
+			
                 // Erro (Ex: nome vazio, erro do servidor)
                 const erroTexto = await response.text();
                 marcaErrorMsg.textContent = erroTexto;
@@ -288,19 +292,22 @@ async function salvarProduto() {
             body: JSON.stringify(produtoDTO)
         });
 
-        if (response.ok) {
-            alert("Produto salvo com sucesso!");
-            
-            // 5. Atualiza a tabela SEM recarregar a página
-            closeModal('produto');
-            atualizarTabelaProdutos(); 
-            
-            // 6. Limpa o formulário para o próximo
-            limparFormularioProduto();
-        } else {
-            const erroMsg = await response.text();
-            alert("Erro ao salvar: " + erroMsg);
-        }
+		// ... dentro do if (response.ok) em salvarProduto ...
+
+		if (response.ok) {
+		    // SUBSTIUA: alert("Produto salvo com sucesso!");
+		    // POR:
+		    mostrarNotificacao("Produto salvo com sucesso!", "sucesso");
+		    
+		    closeModal('produto');
+		    atualizarTabelaProdutos(); 
+		    limparFormularioProduto();
+		} else {
+		    const erroMsg = await response.text();
+		    // SUBSTIUA: alert("Erro ao salvar: " + erroMsg);
+		    // POR:
+		    mostrarNotificacao("Erro ao salvar: " + erroMsg, "erro");
+		}
 
     } catch (error) {
         console.error("Erro de rede:", error);
@@ -377,4 +384,34 @@ function limparFormularioProduto() {
     // Reseta selects para a primeira opção
     document.getElementById('produtoCategoriaSelect').selectedIndex = 0;
     document.getElementById('produtoMarcaSelect').selectedIndex = 0;
+}
+/**
+ * Exibe uma notificação tipo "Toast".
+ * @param {string} mensagem - O texto a ser exibido.
+ * @param {string} tipo - 'sucesso' ou 'erro'.
+ */
+function mostrarNotificacao(mensagem, tipo = 'sucesso') {
+    const container = document.getElementById('toast-container');
+    
+    // Cria o elemento da notificação
+    const toast = document.createElement('div');
+    toast.className = `toast ${tipo}`;
+    toast.innerText = mensagem;
+
+    // Adiciona ao container
+    container.appendChild(toast);
+
+    // Pequeno delay para ativar a transição de CSS (fade in)
+    setTimeout(() => {
+        toast.classList.add('mostrar');
+    }, 100);
+
+    // Remove a notificação após 3 segundos
+    setTimeout(() => {
+        toast.classList.remove('mostrar');
+        // Espera a transição de fade out terminar para remover do DOM
+        setTimeout(() => {
+            toast.remove();
+        }, 500);
+    }, 3000);
 }
