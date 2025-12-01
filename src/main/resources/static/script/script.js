@@ -293,7 +293,7 @@ async function salvarProduto() {
     const valor = document.getElementById('prodValor').value;
     const qtd = document.getElementById('prodQtd').value;
     const descricao = document.getElementById('prodDesc').value;
-    const idCategoria = 1;
+    const idCategoria =document.getElementById('produtoCategoriaSelect').value;
     const idMarca = document.getElementById('produtoMarcaSelect').value;
 
     // 2. Validação simples no Frontend
