@@ -244,37 +244,39 @@ async function atualizarTabelaProdutos(pagina = 0) { // Recebe a página (padrã
             tbody.appendChild(tr);
         });
 
-		// 3. ATUALIZAR OS BOTÕES DE PAGINAÇÃO
-		        atualizarBotoesPaginacao(pageData);
+		// AQUI: Passamos 'atualizarTabelaProdutos' como string
+		    atualizarBotoesPaginacao(pageData, 'atualizarTabelaProdutos');
 
 		    } catch (error) {
 		        console.error('Erro:', error);
 		    }
 		}
 		
-		// Nova função para controlar os botões
-		function atualizarBotoesPaginacao(pageData) {
-		    // Supondo que você tenha uma div no HTML com id="paginacao-container"
+		/**
+		 * Gera os botões de paginação dinamicamente.
+		 * @param {Object} pageData - O objeto Page retornado pelo Spring (com content, totalPages, number, etc.)
+		 * @param {String} nomeFuncaoCallback - O NOME da função JS que busca os dados (ex: 'atualizarTabelaProdutos')
+		 */
+		function atualizarBotoesPaginacao(pageData, nomeFuncaoCallback) {
+		    // 1. Pega o container de paginação. 
+		    // Dica: Use o mesmo ID 'paginacao-container' em todas as páginas HTML para facilitar.
 		    const container = document.getElementById('paginacao-container');
 		    if (!container) return;
 
 		    let html = '';
 
-		    // Botão Anterior
-		    // Se não for a primeira página (first), mostra o botão
+		    // 2. Botão ANTERIOR
 		    if (!pageData.first) {
-		        html += `<button class="action-btn btn-secondary"
-				 onclick="atualizarTabelaProdutos(${pageData.number - 1})">&larr; Anterior</button>`;
+		        // Truque: Injetamos o nome da função dentro do onclick
+		        html += `<button class="page-btn" onclick="${nomeFuncaoCallback}(${pageData.number - 1})"> < Anterior </button>`;
 		    }
 
-		    // Mostra "Página X de Y"
-		    html += ` <span>Página ${pageData.number + 1} de ${pageData.totalPages}</span> `;
+		    // 3. Texto informativo (Página 1 de 5)
+		    html += ` <span class="page-info">Página ${pageData.number + 1} de ${pageData.totalPages}</span> `;
 
-		    // Botão Próximo
-		    // Se não for a última página (last), mostra o botão
+		    // 4. Botão PRÓXIMO
 		    if (!pageData.last) {
-		        html += `<button class="action-btn btn-primary"
-				onclick="atualizarTabelaProdutos(${pageData.number + 1})">Próximo &rarr;</button>`;
+		        html += `<button class="page-btn" onclick="${nomeFuncaoCallback}(${pageData.number + 1})"> Próximo > </button>`;
 		    }
 
 		    container.innerHTML = html;
