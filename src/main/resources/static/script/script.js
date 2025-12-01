@@ -427,28 +427,280 @@ function limparFormularioProduto() {
  * @param {string} mensagem - O texto a ser exibido.
  * @param {string} tipo - 'sucesso' ou 'erro'.
  */
+/**
+ * Exibe uma notificação usando Toastify
+ * @param {string} mensagem - O texto a ser exibido.
+ * @param {string} tipo - 'sucesso' ou 'erro'.
+ */
 function mostrarNotificacao(mensagem, tipo = 'sucesso') {
-    const container = document.getElementById('toast-container');
+    // Define a cor baseada no tipo (igual ao gerador de senhas)
+    const corFundo = tipo === 'sucesso' ? '#84cc16' : '#dc2626';
+
+    Toastify({
+        text: mensagem,
+        duration: 3000,           // Duração em milissegundos
+        close: true,              // Botão de fechar (opcional, mas bom ter)
+        gravity: "top",           // "top" ou "bottom"
+        position: "right",        // "left", "center" ou "right"
+        style: {
+            background: corFundo,
+            borderRadius: "8px",  // Um pouco de arredondamento para ficar bonito
+            boxShadow: "0 3px 6px rgba(0,0,0,0.16)"
+        }
+    }).showToast();
+}
+async function salvarCategoria() {
+    // 1. Pegar o valor do input pelo ID que criamos
+    const nome = document.getElementById('inputNomeCategoria').value;
+
+    if (!nome) {
+        mostrarNotificacao('O nome da categoria é obrigatório!', 'erro');
+        return;
+    }
+
+    // 2. Montar o objeto
+    const categoriaDTO = { nome: nome };
+
+    // 3. Pegar tokens de segurança (padrão do Spring)
+    const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    try {
+        // 4. Enviar para o Backend (Ajuste a URL conforme seu Controller)
+        // Exemplo: '/api/categorias/salvar' ou '/produto/api/categoria/salvar'
+        const response = await fetch('/api/categorias/cadastrar', { 
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                [header]: token
+            },
+            body: JSON.stringify(categoriaDTO)
+        });
+
+        if (response.ok) {
+            mostrarNotificacao('Categoria salva com sucesso!', 'sucesso');
+            document.getElementById('inputNomeCategoria').value = ''; // Limpa o campo
+            closeModal('Categoria'); // Fecha o modal
+            // atualizarTabelaCategorias(); // Se tiver tabela, chame aqui
+        } else {
+            mostrarNotificacao('Erro ao salvar categoria.', 'erro');
+        }
+    } catch (error) {
+        console.error(error);
+        mostrarNotificacao('Erro de conexão com o servidor.', 'erro');
+    }
+}
+async function salvarCliente() {
+    // 1. Coleta (Adicione IDs nos inputs de email e telefone no HTML se não tiver)
+    const nome = document.getElementById('cliNome').value;
+    const cpf = document.getElementById('cliCPF').value;
+    const email = document.getElementById('cliEmail').value; 
+    const telefone = document.getElementById('cliTelefone').value;
     
-    // Cria o elemento da notificação
-    const toast = document.createElement('div');
-    toast.className = `toast ${tipo}`;
-    toast.innerText = mensagem;
+    // Dados do Endereço (já tinham IDs no seu HTML original)
+    const cep = document.getElementById('cep').value;
+    const rua = document.getElementById('rua').value;
+    const bairro = document.getElementById('bairro').value;
+    const numero = document.getElementById('numero').value;
+    const cidade = document.getElementById('cidade').value;
 
-    // Adiciona ao container
-    container.appendChild(toast);
+    if (!nome || !cpf) {
+        mostrarNotificacao('Nome e CPF são obrigatórios!', 'erro');
+        return;
+    }
 
-    // Pequeno delay para ativar a transição de CSS (fade in)
-    setTimeout(() => {
-        toast.classList.add('mostrar');
-    }, 100);
+    // 2. Objeto (Ajuste conforme seu ClienteDTO Java)
+    const clienteDTO = {
+        nome: nome,
+        cpf: cpf,
+        // email: email,
+        // telefone: telefone,
+        endereco: { // Supondo que seu Java espere um objeto endereço aninhado
+            cep: cep,
+            rua: rua,
+            bairro: bairro,
+            numero: numero,
+            cidade: cidade
+        }
+    };
 
-    // Remove a notificação após 3 segundos
-    setTimeout(() => {
-        toast.classList.remove('mostrar');
-        // Espera a transição de fade out terminar para remover do DOM
-        setTimeout(() => {
-            toast.remove();
-        }, 500);
-    }, 3000);
+    // 3. Segurança CSRF
+    const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    try {
+        const response = await fetch('/cliente/cadastrar', { // <-- CONFIRA ESSA URL NO SEU JAVA
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', [header]: token },
+            body: JSON.stringify(clienteDTO)
+        });
+
+        if (response.ok) {
+            mostrarNotificacao('Cliente salvo com sucesso!', 'sucesso');
+            closeModal('Cliente');
+            // Limpar campos...
+            document.getElementById('cliNome').value = '';
+            document.getElementById('cliCpf').value = '';
+        } else {
+            const erro = await response.text();
+            mostrarNotificacao('Erro: ' + erro, 'erro');
+        }
+    } catch (e) {
+        mostrarNotificacao('Erro de conexão.', 'erro');
+    }
+}
+async function salvarServico() {
+    const nome = document.getElementById('servNome').value;
+    const descricao = document.getElementById('servDescricao').value;
+    const preco = document.getElementById('servPreco').value;
+
+    if (!nome || !preco) {
+        mostrarNotificacao('Nome e Preço são obrigatórios!', 'erro');
+        return;
+    }
+
+    const servicoDTO = {
+        nome: nome,
+        descricao: descricao,
+        valor: parseFloat(preco) // Convertendo para número
+    };
+
+    const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    try {
+        const response = await fetch('/api/servicos/salvar', { // <-- CONFIRA A URL
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', [header]: token },
+            body: JSON.stringify(servicoDTO)
+        });
+
+        if (response.ok) {
+            mostrarNotificacao('Serviço salvo!', 'sucesso');
+            closeModal('Servico');
+            document.getElementById('servNome').value = '';
+            document.getElementById('servPreco').value = '';
+        } else {
+            mostrarNotificacao('Erro ao salvar serviço.', 'erro');
+        }
+    } catch (e) {
+        mostrarNotificacao('Erro de conexão.', 'erro');
+    }
+}
+async function salvarFuncionario() {
+    const nome = document.getElementById('funcNome').value;
+    const cpf = document.getElementById('funcCpf').value;
+    // ... pegue os outros valores ...
+    const nivelAcesso = document.getElementById('funcAcesso').value;
+
+    if (!nome || !cpf) {
+        mostrarNotificacao('Nome e CPF são obrigatórios!', 'erro');
+        return;
+    }
+
+    const funcionarioDTO = {
+        nome: nome,
+        cpf: cpf,
+        dataNascimento: document.getElementById('funcDataNasc').value,
+        email: document.getElementById('funcEmail').value,
+        telefone: document.getElementById('funcTelefone').value,
+        endereco: {
+            cep: document.getElementById('funcCep').value,
+            rua: document.getElementById('funcRua').value,
+            bairro: document.getElementById('funcBairro').value,
+            numero: document.getElementById('funcNumero').value,
+            cidade: document.getElementById('funcCidade').value
+        },
+        nivelAcesso: nivelAcesso,
+        salario: parseFloat(document.getElementById('funcSalario').value || 0)
+    };
+
+    const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    try {
+        const response = await fetch('/api/funcionarios/salvar', { // Verifique a URL
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', [header]: token },
+            body: JSON.stringify(funcionarioDTO)
+        });
+
+        if (response.ok) {
+            mostrarNotificacao('Funcionário salvo com sucesso!', 'sucesso');
+            closeModal('Funcionario');
+            // Limpar campos...
+        } else {
+            mostrarNotificacao('Erro ao salvar funcionário.', 'erro');
+        }
+    } catch (e) {
+        mostrarNotificacao('Erro de conexão.', 'erro');
+    }
+}
+async function salvarOS() {
+    const cliente = document.getElementById('osCliente').value;
+    const preco = document.getElementById('osPreco').value;
+    const status = document.getElementById('osStatus').value;
+    
+    // IDs de Serviço e Produto (se for enviar apenas o ID, precisa tratar o select)
+    // Exemplo simplificado:
+    const idServico = document.getElementById('osServico').value; 
+
+    const osDTO = {
+        nomeCliente: cliente,
+        valor: parseFloat(preco || 0),
+        statusOS: status,
+        // servico: { id: idServico } // Depende de como seu Java espera receber
+    };
+
+    const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    try {
+        const response = await fetch('/api/ordens/salvar', { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', [header]: token },
+            body: JSON.stringify(osDTO)
+        });
+
+        if (response.ok) {
+            mostrarNotificacao('O.S. salva com sucesso!', 'sucesso');
+            closeModal('OrdemServico');
+        } else {
+            mostrarNotificacao('Erro ao salvar O.S.', 'erro');
+        }
+    } catch (e) {
+        mostrarNotificacao('Erro de conexão.', 'erro');
+    }
+}
+async function salvarMarca() {
+    const nome = document.getElementById('nomeMarcaInput').value;
+
+    if (!nome) {
+        mostrarNotificacao('Digite o nome da marca!', 'erro');
+        return;
+    }
+
+    const marcaDTO = { nome: nome };
+    const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    try {
+        const response = await fetch('/api/marcas/salvar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', [header]: token },
+            body: JSON.stringify(marcaDTO)
+        });
+
+        if (response.ok) {
+            mostrarNotificacao('Marca salva com sucesso!', 'sucesso');
+            document.getElementById('nomeMarcaInput').value = '';
+            closeModal('Marca');
+            // Se tiver dropdown de marcas na tela, recarregue-o aqui
+            // carregarMarcas(); 
+        } else {
+            mostrarNotificacao('Erro ao salvar marca.', 'erro');
+        }
+    } catch (e) {
+        mostrarNotificacao('Erro ao conectar.', 'erro');
+    }
 }
