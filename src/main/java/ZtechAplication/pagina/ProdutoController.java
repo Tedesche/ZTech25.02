@@ -47,58 +47,6 @@ public class ProdutoController {
 	
 	// --- MÉTODOS DE VISUALIZAÇÃO (Telas HTML) ---
 
-	@GetMapping(value = "/cadastrarForm")
-	public ModelAndView cadastrarForm() {
-		ModelAndView mv = new ModelAndView("cadastroProduto");
-		mv.addObject("produtoDTO", new ProdutoDTO());
-		mv.addObject("categoria", new Categoria());
-        mv.addObject("categorias", categoriaRepository.findAll());
-        mv.addObject("marcas", marcaRepository.findAll());
-		return mv;
-	}
-	
-	@PostMapping(value = "/cadastrar")
-	public String cadastrarProduto(@Validated @ModelAttribute("produtoDTO") ProdutoDTO produtoDTO, BindingResult result, RedirectAttributes attributes, Model model) {
-		if (result.hasErrors()) {
-			attributes.addFlashAttribute("mensagem", "Verifique os campos obrigatórios.");
-            attributes.addFlashAttribute("produtoDTO", produtoDTO);
-			return "redirect:/produto/cadastrarForm";
-		}
-		
-		Categoria categoria = categoriaRepository.findById(produtoDTO.getIdCategoria())
-                .orElseThrow(() -> new IllegalArgumentException("Categoria inválida: " + produtoDTO.getIdCategoria()));
-		Marca marca = marcaRepository.findById(produtoDTO.getIdMarca())
-                .orElseThrow(() -> new IllegalArgumentException("Marca inválida: " + produtoDTO.getIdMarca()));
-		
-		Produto produto = new Produto();
-		produto.setNome(produtoDTO.getNome());
-		produto.setCusto(produtoDTO.getCusto());
-		produto.setValor(produtoDTO.getValor());
-		produto.setQuantidade(produtoDTO.getQuantidade());
-		produto.setDescricao(produtoDTO.getDescricao());
-		produto.setCategoria(categoria);
-		produto.setMarca(marca);
-		
-		produtoRepository.save(produto);
-		attributes.addFlashAttribute("mensagem", "Produto cadastrado com sucesso!");
-		return "redirect:/produto/listar";
-	}
-	
-	@GetMapping(value = "/listar")
-	public String listarProdutos(Model model, @PageableDefault(size = 10) Pageable pageable) {
-		Page<Produto> paginaProdutos = produtoRepository.findAll(pageable);
-        Page<ProdutoDTO> paginaProdutoDTOs = paginaProdutos.map(this::converterParaDTO);
-
-        model.addAttribute("categorias", categoriaRepository.findAll());
-        model.addAttribute("marcas", marcaRepository.findAll());
-		model.addAttribute("paginaProdutos", paginaProdutoDTOs);
-        
-        if (!model.containsAttribute("termo")) {
-            model.addAttribute("termo", null);
-        }
-		return "estoque";
-	}
-	
     // --- MÉTODO REINSERIDO (Necessário para o indexController) ---
     public List<ProdutoDTO> getProdutoDTO(List<Produto> produtos) {
         List<ProdutoDTO> listaDeDTOs = new ArrayList<>();

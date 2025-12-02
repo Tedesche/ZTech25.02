@@ -26,25 +26,6 @@ public class ServicoController {
     @Autowired
     private ServicoRepository classeRepo;
 
-    // --- MÉTODOS DE VIEW (Antigos) ---
-    @GetMapping(value = "/cadastrarForm")
-    public ModelAndView cadastrarForm() {
-        ModelAndView mv = new ModelAndView("cadastro_servico");
-        mv.addObject("servico", new Servico());
-        return mv;
-    }
-    
-    @PostMapping(value = "/cadastrar")
-    public String cadastrarServico(@Validated @ModelAttribute("servico") Servico servico, BindingResult result,
-            RedirectAttributes attributes, Model model) {
-        if (result.hasErrors()) {
-            attributes.addFlashAttribute("mensagem", "Verifique os campos...");
-            return "redirect:/servico/cadastrarServico";
-        }
-        classeRepo.save(servico);
-        attributes.addFlashAttribute("mensagem", "Serviço cadastrado com sucesso!");
-        return "redirect:/ordens/listar";
-    }
 
     // --- MÉTODOS API (Novos para o Dashboard) ---
 
