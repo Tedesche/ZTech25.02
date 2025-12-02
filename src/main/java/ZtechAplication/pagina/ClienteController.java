@@ -166,7 +166,7 @@ public class ClienteController {
         return listaDeDTOs;
     }
 
-    // --- NOVOS MÉTODOS API (JSON) ------------------------------------------------------------
+    // --- MÉTODOS API (JSON) ------------------------------------------------------------
 
     @GetMapping("/api/cliente/listar")
     @ResponseBody
@@ -174,6 +174,15 @@ public class ClienteController {
         Page<Cliente> paginaClientes = clienteRepository.findAll(pageable);
         Page<ClienteDTO> paginaDTO = paginaClientes.map(this::converterParaDTO);
         return ResponseEntity.ok(paginaDTO);
+    }
+    
+    // --- NOVA API PARA O SELECT DO DASHBOARD (Retorna todos sem paginação) ---
+    @GetMapping("/api/cliente/todos")
+    @ResponseBody
+    public ResponseEntity<List<ClienteDTO>> apiListarTodosClientes() {
+        List<Cliente> clientes = clienteRepository.findAll();
+        List<ClienteDTO> dtos = getClienteDTO(clientes);
+        return ResponseEntity.ok(dtos);
     }
 
     @PostMapping("/api/cliente/salvar")
@@ -188,7 +197,6 @@ public class ClienteController {
             if (clienteDTO.getIdCliente() != null) {
                 cliente = clienteRepository.findById(clienteDTO.getIdCliente()).orElse(new Cliente());
             } else {
-                // Validação de CPF apenas na criação
                 if (clienteRepository.findByCpf(clienteDTO.getCpf()).isPresent()) {
                     return ResponseEntity.badRequest().body("CPF já cadastrado.");
                 }

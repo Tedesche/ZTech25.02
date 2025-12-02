@@ -1,88 +1,77 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZTech Pro - Sistema de Gestão Empresarial</title>
-    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" th:href="@{/styles/style.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
-	<meta name="_csrf" th:content="${_csrf.token}"/>
-	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
-	<script>
-	       // Theme Toggle Functionality
-	       let isDarkTheme = false;
+    <script>
+           // Theme Toggle Functionality
+           let isDarkTheme = false;
 
-	       function toggleTheme() {
-	           const body = document.body;
-	           const themeIcon = document.getElementById('themeIcon');
-	           const themeText = document.getElementById('themeText');
+           function toggleTheme() {
+               const body = document.body;
+               const themeIcon = document.getElementById('themeIcon');
+               const themeText = document.getElementById('themeText');
 
-	           isDarkTheme = !isDarkTheme;
+               isDarkTheme = !isDarkTheme;
 
-	           if (isDarkTheme) {
-	               body.classList.add('dark-theme');
-	               themeIcon.textContent = '☀️';
-	               themeText.textContent = 'Tema Claro';
-	           } else {
-	               body.classList.remove('dark-theme');
-	               themeIcon.textContent = '🌙';
-	               themeText.textContent = 'Tema Escuro';
-	           }
+               if (isDarkTheme) {
+                   body.classList.add('dark-theme');
+                   themeIcon.textContent = '☀️';
+                   themeText.textContent = 'Tema Claro';
+               } else {
+                   body.classList.remove('dark-theme');
+                   themeIcon.textContent = '🌙';
+                   themeText.textContent = 'Tema Escuro';
+               }
 
-	           // Save theme preference
-	           localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
-	       }
+               // Save theme preference
+               localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
+           }
 
-	       // Load saved theme
-	       function loadTheme() {
-	           const savedTheme = localStorage.getItem('theme');
-	           if (savedTheme === 'dark') {
-	               toggleTheme();
-	           }
-	       }
+           // Load saved theme
+           function loadTheme() {
+               const savedTheme = localStorage.getItem('theme');
+               if (savedTheme === 'dark') {
+                   toggleTheme();
+               }
+           }
 
-		   // --- FUNÇÃO DE NAVEGAÇÃO ENTRE ABAS (SPA) ---
-		   function showSection(sectionId) {
-		       // 1. Atualizar botões do menu (Visual)
-		       document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-		       
-		       // Tenta encontrar o botão que chama essa seção e ativa ele
-		       // (Pode ser necessário ajustar o seletor dependendo de como está seu HTML exato)
-		       const activeBtn = document.querySelector(`.nav-btn[onclick*="${sectionId}"]`);
-		       if (activeBtn) activeBtn.classList.add('active');
+           // --- FUNÇÃO DE NAVEGAÇÃO ENTRE ABAS (SPA) ---
+           function showSection(sectionId) {
+               // 1. Atualizar botões do menu (Visual)
+               document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+               
+               // Tenta encontrar o botão que chama essa seção e ativa ele
+               const activeBtn = document.querySelector(`.nav-btn[onclick*="${sectionId}"]`);
+               if (activeBtn) activeBtn.classList.add('active');
 
-		       // 2. Esconder todas as seções
-		       document.querySelectorAll('.section').forEach(sec => {
-		           sec.style.display = 'none';
-		           sec.classList.remove('active');
-		       });
+               // 2. Esconder todas as seções
+               document.querySelectorAll('.section').forEach(sec => {
+                   sec.style.display = 'none';
+                   sec.classList.remove('active');
+               });
 
-		       // 3. Mostrar a seção desejada
-		       const targetSection = document.getElementById(sectionId + '-section');
-		       if (targetSection) {
-		           targetSection.style.display = 'block';
-		           // Pequeno delay para animação CSS funcionar
-		           setTimeout(() => targetSection.classList.add('active'), 10);
-		       }
+               // 3. Mostrar a seção desejada
+               const targetSection = document.getElementById(sectionId + '-section');
+               if (targetSection) {
+                   targetSection.style.display = 'block';
+                   // Pequeno delay para animação CSS funcionar
+                   setTimeout(() => targetSection.classList.add('active'), 10);
+               }
 
-		       // 4. CARREGAR DADOS DINAMICAMENTE (A Lógica Nova!)
-		       switch (sectionId) {
-		           case 'estoque':
-		               atualizarTabelaProdutos(); // <--- Chama nossa nova função
-		               break;
-		           case 'vendas':
-		               // atualizarTabelaVendas(); // Futuro...
-		               break;
-		           // ... outros casos
-		       }
-		   }
-
-	   </script>
-	
-	
-	
+               // 4. CARREGAR DADOS DINAMICAMENTE
+               if (typeof atualizarTabelaProdutos === 'function' && sectionId === 'estoque') {
+                   atualizarTabelaProdutos();
+               }
+           }
+       </script>
 </head>
 
 <body>
@@ -97,19 +86,19 @@
                     </div>
                 </div>
 
-				<div class="caixa-botoes">
-	                <div class="theme-toggle" onclick="toggleTheme()">
-	                    <div class="theme-icon" id="themeIcon">🌙</div>
-	                    <div class="theme-text" id="themeText">Tema Escuro</div>
-	                </div>
+                <div class="caixa-botoes">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-icon" id="themeIcon">🌙</div>
+                        <div class="theme-text" id="themeText">Tema Escuro</div>
+                    </div>
                     
                     <a th:href="@{/logout}" class="theme-toggle-link">
-					  <div class="theme-toggle">
-					    <div class="theme-icon" id="logoutIcon">🚪</div>
-					    <div class="theme-text" id="logoutText">Sair</div>
-					  </div>
-					</a>
-				</div>
+                      <div class="theme-toggle">
+                        <div class="theme-icon" id="logoutIcon">🚪</div>
+                        <div class="theme-text" id="logoutText">Sair</div>
+                      </div>
+                    </a>
+                </div>
             </div>
 
             <div class="nav">
@@ -153,7 +142,6 @@
                     </div>
                     <div class="action-buttons">
                         <button class="action-btn btn-primary" style="width: 320px" onclick="openModal('produto')">Novo Produto</button>
-                        
                     </div>
                 </div>
 
@@ -174,7 +162,6 @@
                     </div>
                     <div class="action-buttons">
                         <button class="action-btn btn-primary" style="width: 320px" onclick="openModal('venda')">Nova Venda</button>
-                        
                     </div>
                 </div>
 
@@ -195,7 +182,6 @@
                     </div>
                     <div class="action-buttons">
                         <button class="action-btn btn-primary" style="width: 320px" onclick="openModal('conta')">Nova Conta</button>
-                       
                     </div>
                 </div>
             </div>
@@ -257,14 +243,13 @@
                         <div class="stat-label">Fornecedores</div>
                     </div>
                 </div>
-
             </div>
 
             <div class="filters-bar">
-				<div class="caixa-pesquisa">
+                <div class="caixa-pesquisa">
                 <input type="text" placeholder="Buscar produtos..." class="search-input" style="border-radius: 10px 0 0 10px;">
                 <button class="pesquisa action-btn btn-primary " style="border-radius: 0 10px 10px 0;"></button>
-				</div>
+                </div>
                 <select class="filter-select">
                     <option>Todas as Categorias</option>
                     <option>Eletrônicos</option>
@@ -280,9 +265,6 @@
              <button class="action-btn btn-primary">Relatório</button>
             </div>
 
-
-
-
             <div class="table-container">
                 <table class="data-table">
                     <thead>
@@ -297,17 +279,16 @@
                             <th>Ações</th>
                         </tr>
                     </thead>
-					<tbody id="tbody-produtos"> 
-					     <tr th:each="produto :${paginaDeProdutos.content}">
-					         </tr>
-					</tbody>
+                    <tbody id="tbody-produtos"> 
+                         <tr th:each="produto :${paginaDeProdutos.content}">
+                             </tr>
+                    </tbody>
                 </table>
-			<div id="paginacao-container" class="pagination-controls"
-				 style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 20px; margin-bottom: 20px;">
-				 </div>
+            <div id="paginacao-container" class="pagination-controls"
+                 style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 20px; margin-bottom: 20px;">
+                 </div>
             </div>
         </div>
-
 
         <div id="os-section" class="section">
             <div class="section-header">
@@ -354,10 +335,10 @@
             </div>
 
             <div class="filters-bar">
-				<div class="caixa-pesquisa">
-					<input type="text" placeholder="Buscar produtos..." class="search-input" style="border-radius: 10px 0 0 10px;">
-				   	<button class="action-btn btn-primary pesquisa" style="border-radius: 0 10px 10px 0;"></button>
-				</div>
+                <div class="caixa-pesquisa">
+                    <input type="text" placeholder="Buscar..." class="search-input" style="border-radius: 10px 0 0 10px;">
+                    <button class="action-btn btn-primary pesquisa" style="border-radius: 0 10px 10px 0;"></button>
+                </div>
                 <select class="filter-select">
                     <option>Todos os Status</option>
                     <option>Concluída</option>
@@ -402,25 +383,25 @@
                     </tbody>
                 </table>
             </div>
-			<div class="pagination-controls" th:if="${paginaDeOrdensServico.totalPages > 1}" 
-			     style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 20px;">
+            <div class="pagination-controls" th:if="${paginaDeOrdensServico.totalPages > 1}" 
+                 style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 20px;">
 
-			    <a th:if="${paginaDeOrdensServico.hasPrevious()}"
-			       th:href="@{/inicio(pageOS=${paginaDeOrdensServico.number - 1}, tab='os')}"
-			       class="action-btn btn-secondary">
-			       &larr; Anterior
-			    </a>
+                <a th:if="${paginaDeOrdensServico.hasPrevious()}"
+                   th:href="@{/inicio(pageOS=${paginaDeOrdensServico.number - 1}, tab='os')}"
+                   class="action-btn btn-secondary">
+                   &larr; Anterior
+                </a>
 
-			    <span th:text="|Página ${paginaDeOrdensServico.number + 1} de ${paginaDeOrdensServico.totalPages}|"
-			          style="font-weight: bold;">
-			    </span>
+                <span th:text="|Página ${paginaDeOrdensServico.number + 1} de ${paginaDeOrdensServico.totalPages}|"
+                      style="font-weight: bold;">
+                </span>
 
-			    <a th:if="${paginaDeOrdensServico.hasNext()}"
-			       th:href="@{/inicio(pageOS=${paginaDeOrdensServico.number + 1}, tab='os')}"
-			       class="action-btn btn-primary">
-			       Próximo &rarr;
-			    </a>
-			</div>
+                <a th:if="${paginaDeOrdensServico.hasNext()}"
+                   th:href="@{/inicio(pageOS=${paginaDeOrdensServico.number + 1}, tab='os')}"
+                   class="action-btn btn-primary">
+                   Próximo &rarr;
+                </a>
+            </div>
         </div>
 
         <div id="vendas-section" class="section">
@@ -491,25 +472,25 @@
                 </table>
             </div>
 
-			<div class="pagination-controls" th:if="${paginaDeVendas.totalPages > 1}" 
-			     style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 20px;">
+            <div class="pagination-controls" th:if="${paginaDeVendas.totalPages > 1}" 
+                 style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 20px;">
 
-			    <a th:if="${paginaDeVendas.hasPrevious()}"
-			       th:href="@{/inicio(pageVendas=${paginaDeVendas.number - 1}, tab='vendas')}"
-			       class="action-btn btn-secondary">
-			       &larr; Anterior
-			    </a>
+                <a th:if="${paginaDeVendas.hasPrevious()}"
+                   th:href="@{/inicio(pageVendas=${paginaDeVendas.number - 1}, tab='vendas')}"
+                   class="action-btn btn-secondary">
+                   &larr; Anterior
+                </a>
 
-			    <span th:text="|Página ${paginaDeVendas.number + 1} de ${paginaDeVendas.totalPages}|"
-			          style="font-weight: bold;">
-			    </span>
+                <span th:text="|Página ${paginaDeVendas.number + 1} de ${paginaDeVendas.totalPages}|"
+                      style="font-weight: bold;">
+                </span>
 
-			    <a th:if="${paginaDeVendas.hasNext()}"
-			       th:href="@{/inicio(pageVendas=${paginaDeVendas.number + 1}, tab='vendas')}"
-			       class="action-btn btn-primary">
-			       Próximo &rarr;
-			    </a>
-			</div>
+                <a th:if="${paginaDeVendas.hasNext()}"
+                   th:href="@{/inicio(pageVendas=${paginaDeVendas.number + 1}, tab='vendas')}"
+                   class="action-btn btn-primary">
+                   Próximo &rarr;
+                </a>
+            </div>
         </div>
 
         <div id="funcionarios-section" class="section">
@@ -538,10 +519,10 @@
             </div>
 
             <div class="filters-bar">
-				<div class="caixa-pesquisa">
-					<input type="text" placeholder="Buscar produtos..." class="search-input" style="border-radius: 10px 0 0 10px;">
-			 		<button class="action-btn btn-primary pesquisa" style="border-radius: 0 10px 10px 0;"></button>
-				</div>
+                <div class="caixa-pesquisa">
+                    <input type="text" placeholder="Buscar..." class="search-input" style="border-radius: 10px 0 0 10px;">
+                    <button class="action-btn btn-primary pesquisa" style="border-radius: 0 10px 10px 0;"></button>
+                </div>
                 <select class="filter-select">
                     <option>Todos os Status</option>
                     <option>Efetivo</option>
@@ -580,25 +561,25 @@
                     </tbody>
                 </table>
             </div>
-			<div class="pagination-controls" th:if="${paginaDeFuncionarios.totalPages > 1}" 
-			     style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 20px;">
+            <div class="pagination-controls" th:if="${paginaDeFuncionarios.totalPages > 1}" 
+                 style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 20px;">
 
-			    <a th:if="${paginaDeFuncionarios.hasPrevious()}"
-			       th:href="@{/inicio(pageFuncionarios=${paginaDeFuncionarios.number - 1}, tab='funcionarios')}"
-			       class="action-btn btn-secondary">
-			       &larr; Anterior
-			    </a>
+                <a th:if="${paginaDeFuncionarios.hasPrevious()}"
+                   th:href="@{/inicio(pageFuncionarios=${paginaDeFuncionarios.number - 1}, tab='funcionarios')}"
+                   class="action-btn btn-secondary">
+                   &larr; Anterior
+                </a>
 
-			    <span th:text="|Página ${paginaDeFuncionarios.number + 1} de ${paginaDeFuncionarios.totalPages}|"
-			          style="font-weight: bold;">
-			    </span>
+                <span th:text="|Página ${paginaDeFuncionarios.number + 1} de ${paginaDeFuncionarios.totalPages}|"
+                      style="font-weight: bold;">
+                </span>
 
-			    <a th:if="${paginaDeFuncionarios.hasNext()}"
-			       th:href="@{/inicio(pageFuncionarios=${paginaDeFuncionarios.number + 1}, tab='funcionarios')}"
-			       class="action-btn btn-primary">
-			       Próximo &rarr;
-			    </a>
-			</div>
+                <a th:if="${paginaDeFuncionarios.hasNext()}"
+                   th:href="@{/inicio(pageFuncionarios=${paginaDeFuncionarios.number + 1}, tab='funcionarios')}"
+                   class="action-btn btn-primary">
+                   Próximo &rarr;
+                </a>
+            </div>
         </div>
 
         <div id="contas-section" class="section">
@@ -640,10 +621,10 @@
                 </div>
             </div>
             <div class="filters-bar">
-				<div class="caixa-pesquisa">
-				 	<input type="text" placeholder="Buscar produtos..." class="search-input" style="border-radius: 10px 0 0 10px;">
-				    <button class="action-btn btn-primary pesquisa" style="border-radius: 0 10px 10px 0;"></button>
-				</div>
+                <div class="caixa-pesquisa">
+                    <input type="text" placeholder="Buscar..." class="search-input" style="border-radius: 10px 0 0 10px;">
+                    <button class="action-btn btn-primary pesquisa" style="border-radius: 0 10px 10px 0;"></button>
+                </div>
                 <select class="filter-select">
                     <option>Todas as Categorias</option>
                     <option>Aluguel</option>
@@ -674,7 +655,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        </tr>
                         <tr>
                             <td>C004</td>
                             <td>Internet e Telefone</td>
@@ -711,62 +691,62 @@
         </div>
     </div>
 
-	<div id="modalProduto" class="modal">
-	    <div class="modal-content">
-	    	<div id="toast-container"></div>
-	        <span class="close" onclick="closeModal('produto')">&times;</span>
-	        <h2 style="margin-bottom: 25px;">Cadastrar Novo Produto</h2>
-	        
-	        <input type="hidden" id="prodId">
+    <div id="modalProduto" class="modal">
+        <div class="modal-content">
+            <div id="toast-container"></div>
+            <span class="close" onclick="closeModal('produto')">&times;</span>
+            <h2 style="margin-bottom: 25px;">Cadastrar Novo Produto</h2>
+            
+            <input type="hidden" id="prodId">
 
-	        <div class="form-group">
-	            <label>Nome do Produto:</label>
-	            <input type="text" id="prodNome" placeholder="Digite o nome do produto">
-	        </div>
-	        <div class="form-group">
-	            <label>Custo:</label>
-	            <input type="number" id="prodCusto" placeholder="0,00" step="0.01">
-	        </div>
-	        <div class="form-group">
-	            <label>Preço Revenda:</label>
-	            <input type="number" id="prodValor" placeholder="0,00" step="0.01">
-	        </div>
-	        <div class="form-group">
-	            <label>Quantidade em Estoque:</label>
-	            <input type="number" id="prodQtd" placeholder="0">
-	        </div>
-	        <div class="form-group">
-	            <label>Descrição do Produto:</label>
-	            <textarea id="prodDesc" rows="3" placeholder="Digite aqui a descrição..."></textarea>
-	        </div>
+            <div class="form-group">
+                <label>Nome do Produto:</label>
+                <input type="text" id="prodNome" placeholder="Digite o nome do produto">
+            </div>
+            <div class="form-group">
+                <label>Custo:</label>
+                <input type="number" id="prodCusto" placeholder="0,00" step="0.01">
+            </div>
+            <div class="form-group">
+                <label>Preço Revenda:</label>
+                <input type="number" id="prodValor" placeholder="0,00" step="0.01">
+            </div>
+            <div class="form-group">
+                <label>Quantidade em Estoque:</label>
+                <input type="number" id="prodQtd" placeholder="0">
+            </div>
+            <div class="form-group">
+                <label>Descrição do Produto:</label>
+                <textarea id="prodDesc" rows="3" placeholder="Digite aqui a descrição..."></textarea>
+            </div>
 
-	        <div class="form-group">
-	             <label for="produtoCategoriaSelect">Categoria:</label>
-	             <select id="produtoCategoriaSelect" style="width: 85%;">
-	                  <option value="">Selecione uma categoria</option>
-	             </select>
-	             <button class="action-btn btn-primary" onclick="openModal('Categoria')"
-                    style="width: 14%; padding: 12px 0;" title="Cadastrar Novo Serviço">
+            <div class="form-group">
+                 <label for="produtoCategoriaSelect">Categoria:</label>
+                 <select id="produtoCategoriaSelect" style="width: 85%;">
+                      <option value="">Selecione uma categoria</option>
+                 </select>
+                 <button class="action-btn btn-primary" onclick="openModal('Categoria')"
+                    style="width: 14%; padding: 12px 0;" title="Cadastrar Nova Categoria">
                     ➕
                 </button>
-	             </div>
-	        <div class="form-group">
-	             <label for="produtoMarcaSelect">Marca:</label>
-	             <select id="produtoMarcaSelect" style="width: 85%;">
-	                  <option value="">Selecione uma marca</option>
-	             </select>
-	             <button class="action-btn btn-primary" onclick="openModal('Marca')"
-                    style="width: 14%; padding: 12px 0;" title="Cadastrar Novo Serviço">
+                 </div>
+            <div class="form-group">
+                 <label for="produtoMarcaSelect">Marca:</label>
+                 <select id="produtoMarcaSelect" style="width: 85%;">
+                      <option value="">Selecione uma marca</option>
+                 </select>
+                 <button class="action-btn btn-primary" onclick="openModal('Marca')"
+                    style="width: 14%; padding: 12px 0;" title="Cadastrar Nova Marca">
                     ➕
                 </button>
-	             </div>
+                 </div>
 
-	        <div style="display: flex; gap: 10px; margin-top: 25px;">
-	            <button class="action-btn btn-primary" style="flex: 1;" onclick="salvarProduto()">Salvar Produto</button>
-	            <button class="action-btn btn-secondary" onclick="closeModal('produto')">Cancelar</button>
-	        </div>
-	    </div>
-	</div>
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                <button class="action-btn btn-primary" style="flex: 1;" onclick="salvarProduto()">Salvar Produto</button>
+                <button class="action-btn btn-secondary" onclick="closeModal('produto')">Cancelar</button>
+            </div>
+        </div>
+    </div>
 
     <div id="modalCliente" class="modal">
         <div class="modal-content" style="max-width: 750px;">
@@ -787,41 +767,39 @@
                         <input type="email" id="cliEmail" placeholder="exemplo@exemplo.com">
                     </div>
                     <div class="form-group">
-                        <label>Telefonel:</label>
-                        <input type="tel" id="cliTel"placeholder="(11) 99999-9999">
+                        <label>Telefone:</label>
+                        <input type="tel" id="cliTel" placeholder="(11) 99999-9999">
                     </div>
                 </div>
                 <div style="width: 50%;">
                     <div style="display: flex; gap: 5px;">
                         <div class="form-group" style="width: 100%;">
                             <label>CEP:</label>
-                            <input type="text" id="cep" placeholder="Digite ou Busque o CEP">
+                            <input type="text" id="cliCep" placeholder="Digite o CEP" onblur="buscarCep('cli')">
                         </div>
-                        <button class="action-btn btn-primary" onclick="GETcep()"
+                        <button class="action-btn btn-primary" onclick="buscarCep('cli')"
                             style="width: 14%; height: 40px; margin-top: auto; margin-bottom: 22px; padding: 10px 0; float: inline-end;"
-                            title="Cadastrar Nova Marca">
-                            ➕
+                            title="Buscar CEP">
+                            🔍
                         </button>
                     </div>
                     <div class="form-group">
                         <label>Rua:</label>
-                        <input type="text" id="rua" placeholder="Digite o nome da Rua">
+                        <input type="text" id="cliRua" placeholder="Rua">
                     </div>
                     <div style="display: flex; gap: 5px;">
                         <div class="form-group" style="width: 70%;">
                             <label>Bairro:</label>
-                            <input type="text" id="bairro" placeholder="Digite o Bairro">
+                            <input type="text" id="cliBairro" placeholder="Bairro">
                         </div>
                         <div class="form-group" style="width: 30%;">
                             <label>Numero:</label>
-                            <input type="number" id="numero" placeholder="xxxx" step="5">
+                            <input type="number" id="cliNumero" placeholder="Nº">
                         </div>
                     </div>
                     <div class="form-group">
                         <label>Cidade:</label>
-                        <input type="text" id="cidade" placeholder="Digite o nome da Cidade">
-                    </div>
-                    <div class="form-group">
+                        <input type="text" id="cliCidade" placeholder="Cidade">
                     </div>
                 </div>
             </section>
@@ -831,38 +809,59 @@
             </div>
         </div>
     </div>
-    <div id="modalOrdemServico" class="modal">
+
+<div id="modalOrdemServico" class="modal">
         <div class="modal-content">
-    <div class="form-group">
-        <label>Cliente:</label>
-        <input type="text" id="osCliente" placeholder="Nome do cliente">
-    </div>
-    <div class="form-group">
-        <label>Preço:</label>
-        <input type="number" id="osPreco" placeholder="0,00" step="5">
-    </div>
-    <div class="form-group">
-        <label>Serviço:</label>
-        <select id="osServico" style="width: 85%;">
-            <option value="">Selecione um Serviço</option>
-            </select>
+            <span class="close" onclick="closeModal('OrdemServico')">&times;</span>
+            <h2 style="margin-bottom: 25px;">Cadastrar Nova O.S.</h2>
+            
+            <div class="form-group">
+                <label for="osCliente">Cliente:</label>
+                <select id="osCliente" style="width: 100%; padding: 8px;">
+                    <option value="">Carregando clientes...</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="osServico">Serviço (Mão de Obra):</label>
+                <select id="osServico" style="width: 100%; padding: 8px;">
+                     <option value="">Carregando serviços...</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="osProduto">Produto (Peça utilizada):</label>
+                <select id="osProduto" style="width: 100%; padding: 8px;">
+                     <option value="">Carregando produtos...</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Quantidade:</label>
+                <input type="number" id="osQuantidade" value="1" min="1">
+            </div>
+
+            <div class="form-group">
+                <label>Preço Total (R$):</label>
+                <input type="number" id="osPreco" placeholder="0,00" step="5">
+            </div>
+            
+            <div class="form-group">
+                <label>Status:</label>
+                <select id="osStatus">
+                    <option value="REGISTRADA">Registrada</option>
+                    <option value="EM_ANDAMENTO">Em Andamento</option>
+                    <option value="CONCLUIDA">Concluída</option>
+                    <option value="CANCELADA">Cancelado</option>
+                </select>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                <button class="action-btn btn-primary" style="flex: 1;" onclick="salvarOS()">Salvar O.S.</button>
+                <button class="action-btn btn-secondary" onclick="closeModal('OrdemServico')">Cancelar</button>
+            </div>
         </div>
-    <div class="form-group">
-        <label>Status:</label>
-        <select id="osStatus">
-            <option value="REGISTRADA">Registrada</option>
-            <option value="EM_ANDAMENTO">Em Andamento</option>
-            <option value="CONCLUIDA">Concluído</option>
-            <option value="CANCELADA">Cancelado</option>
-        </select>
     </div>
-    
-    <div style="display: flex; gap: 10px; margin-top: 25px;">
-        <button class="action-btn btn-primary" style="flex: 1;" onclick="salvarOS()">Salvar O.S.</button>
-        <button class="action-btn btn-secondary" onclick="closeModal('OrdemServico')">Cancelar</button>
-    </div>
-</div>
-</div>
 
     <div id="modalServico" class="modal">
         <div class="modal-content">
@@ -887,7 +886,6 @@
                 <button class="action-btn btn-secondary" onclick="closeModal('Servico')">Cancelar</button>
             </div>
         </div>
-
     </div>
 
     <div id="modalVenda" class="modal">
@@ -920,7 +918,6 @@
                 <button class="action-btn btn-secondary" onclick="closeModal('venda')">Cancelar</button>
             </div>
         </div>
-    </div>
     </div>
 
     <div id="modalVenda2" class="modal">
@@ -980,72 +977,66 @@
                 <div style="width: 50%;">
                     <div class="form-group">
                         <label>Nome:</label>
-                        <input type="text" id="funcNome" placeholder="Digite o Nome Completo">
+                        <input type="text" id="funcNome" placeholder="Nome Completo">
                     </div>
                     <div class="form-group">
                         <label>CPF:</label>
-                        <input type="text" id="funcCpf" placeholder="Digite o CPF">
+                        <input type="text" id="funcCpf" placeholder="CPF">
                     </div>
-                  	<div class="form-group">
-                		<label>Data de Nascimento:</label>
-                		<input id="funcDataNasc" type="date">
-            		</div>
+                    <div class="form-group">
+                        <label>Data de Nascimento:</label>
+                        <input id="funcDataNasc" type="date">
+                    </div>
                     <div class="form-group">
                         <label>Email:</label>
-                        <input type="email" id="funcEmail" placeholder="exemplo@exemplo.com">
+                        <input type="email" id="funcEmail" placeholder="email@exemplo.com">
                     </div>
                     <div class="form-group">
-                        <label>Telefonel:</label>
+                        <label>Telefone:</label>
                         <input type="tel" id="funcTel" placeholder="(11) 99999-9999">
                     </div>
-                    
                 </div>
                 <div style="width: 50%;">
                     <div style="display: flex; gap: 5px;">
                         <div class="form-group" style="width: 100%;">
                             <label>CEP:</label>
-                            <input type="text" id="cep" placeholder="Digite ou Busque o CEP">
+                            <input type="text" id="funcCep" placeholder="CEP" onblur="buscarCep('func')">
                         </div>
-                        <button class="action-btn btn-primary" onclick="GETcep()"
-                            style="width: 14%; height: 40px; margin-top: auto; margin-bottom: 22px; padding: 10px 0; float: inline-end;"
-                            title="Cadastrar Nova Marca">
-                            ➕
+                        <button class="action-btn btn-primary" onclick="buscarCep('func')"
+                            style="width: 14%; height: 40px; margin-top: auto; margin-bottom: 22px; padding: 10px 0; float: inline-end;">
+                            🔍
                         </button>
                     </div>
                     <div class="form-group">
                         <label>Rua:</label>
-                        <input type="text" id="rua" placeholder="Digite o nome da Rua">
+                        <input type="text" id="funcRua" placeholder="Rua">
                     </div>
                     <div style="display: flex; gap: 5px;">
                         <div class="form-group" style="width: 70%;">
                             <label>Bairro:</label>
-                            <input type="text" id="bairro" placeholder="Digite o Bairro">
+                            <input type="text" id="funcBairro" placeholder="Bairro">
                         </div>
                         <div class="form-group" style="width: 30%;">
                             <label>Numero:</label>
-                            <input type="number" id="numero" placeholder="xxxx" step="5">
+                            <input type="number" id="funcNumero" placeholder="Nº">
                         </div>
                     </div>
                     <div class="form-group">
                         <label>Cidade:</label>
-                        <input type="text" id="cidade" placeholder="Digite o nome da Cidade">
+                        <input type="text" id="funcCidade" placeholder="Cidade">
                     </div>
                     <div class="form-group">
-                                <div class="form-group">
-                <label>Nivel de Acesso:</label>
-                <select id="funcAcesso">
-                    <option>Selecione um Nivel de Acesso</option>
-                    <option>Admin</option>
-                    <option>Funcionario</option>
-                </select>
-            </div>
+                        <label>Nivel de Acesso:</label>
+                        <select id="funcAcesso">
+                            <option value="FUNCIONARIO">Funcionario</option>
+                            <option value="ADMIN">Admin</option>
+                        </select>
                     </div>
                 </div>
-                
             </section>
             <div class="form-group" style="flex: 1;">
                 <label>Salario:</label>
-                <input type="number" id="funcSalario" value="1" step="100" min="100">
+                <input type="number" id="funcSalario" value="1500" step="100">
             </div>
             
             <div style="display: flex; gap: 10px; margin-top: 25px;">
@@ -1109,18 +1100,18 @@
 
     <div id="modalMarca" class="modal">
         <div class="modal-content">
-    <span class="close" onclick="closeModal('Marca')">&times;</span>
-    <h2 style="margin-bottom: 25px;">Cadastrar Nova Marca</h2>
-    
-    <div class="form-group">
-        <label>Marca:</label>
-        <input id="nomeMarcaInput" type="text" placeholder="Marca">
-    </div>
-    <div style="display: flex; gap: 10px; margin-top: 25px;">
-        <button type="button" class="action-btn btn-primary" style="flex: 1;" onclick="salvarMarca()">Salvar Marca</button>
-        <button type="button" class="action-btn btn-secondary" onclick="closeModal('Marca')">Cancelar</button>
-    </div>
-</div>
+            <span class="close" onclick="closeModal('Marca')">&times;</span>
+            <h2 style="margin-bottom: 25px;">Cadastrar Nova Marca</h2>
+            
+            <div class="form-group">
+                <label>Marca:</label>
+                <input id="nomeMarcaInput" type="text" placeholder="Marca">
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                <button type="button" class="action-btn btn-primary" style="flex: 1;" onclick="salvarMarca()">Salvar Marca</button>
+                <button type="button" class="action-btn btn-secondary" onclick="closeModal('Marca')">Cancelar</button>
+            </div>
+        </div>
     </div>
 
     <div id="modalExcluir" class="modal">
@@ -1136,329 +1127,286 @@
 	
 
     <script> 
-		// criar uma função para zerar os modais ao fechalos
-		       function openModal(type) {
-		           document.getElementById('modal' + type.charAt(0).toUpperCase() + type.slice(1)).style.display = 'flex';
-		           
-		           //inicializa os dados da choice
-		           inicializarChoicesServicos();
-		       }
+        // criar uma função para zerar os modais ao fechalos
+        function openModal(type) {
+            document.getElementById('modal' + type.charAt(0).toUpperCase() + type.slice(1)).style.display = 'flex';
+            
+            //inicializa os dados da choice
+            if(typeof inicializarChoicesServicos === 'function') {
+                inicializarChoicesServicos();
+            }
+        }
 
-		       function closeModal(type) {
-		           document.getElementById('modal' + type.charAt(0).toUpperCase() + type.slice(1)).style.display = 'none';
-		       }
+        function closeModal(type) {
+            document.getElementById('modal' + type.charAt(0).toUpperCase() + type.slice(1)).style.display = 'none';
+        }
 
-		       // Fechar modal ao clicar fora dele
-		       window.onclick = function (event) {
-		           if (event.target.classList.contains('modal')) {
-		               event.target.style.display = 'none';
-		           }
-		       }
-			   
-			   // NOVA FUNÇÃO para ler o parâmetro 'tab' da URL
-			   function ativarAbaPelaUrl() {
-			       const params = new URLSearchParams(window.location.search);
-			       const abaAtiva = params.get('tab'); // ex: 'estoque'
+        // Fechar modal ao clicar fora dele
+        window.onclick = function (event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+        
+        // NOVA FUNÇÃO para ler o parâmetro 'tab' da URL
+        function ativarAbaPelaUrl() {
+            const params = new URLSearchParams(window.location.search);
+            const abaAtiva = params.get('tab'); // ex: 'estoque'
 
-			       if (abaAtiva) {
-			           // Simula um clique no botão da aba correta
-			           const botaoAtivo = document.querySelector(`.nav-btn[onclick="showSection('${abaAtiva}')"]`);
-			           if(botaoAtivo) {
-			               botaoAtivo.click(); // Usa sua função showSection para abrir a aba
-			           }
-			       } else {
-			           // Comportamento padrão: mostrar dashboard
-			           document.getElementById('dashboard-section').classList.add('active');
-			           // Marca o botão 'dashboard' como ativo
-			           document.querySelector('.nav-btn[onclick="showSection(\'dashboard\')"]').classList.add('active');
-			       }
-			   }
+            if (abaAtiva) {
+                // Simula um clique no botão da aba correta
+                const botaoAtivo = document.querySelector(`.nav-btn[onclick*="${abaAtiva}"]`);
+                if(botaoAtivo) {
+                    botaoAtivo.click(); // Usa sua função showSection para abrir a aba
+                }
+            } else {
+                // Comportamento padrão: mostrar dashboard
+                document.getElementById('dashboard-section').classList.add('active');
+                // Marca o botão 'dashboard' como ativo
+                document.querySelector('.nav-btn[onclick="showSection(\'dashboard\')"]').classList.add('active');
+            }
+        }
 
-			   // ACHE ISSO NO SEU CÓDIGO (no final do script):
-			   window.addEventListener('load', function () {
-			       // Load theme preference
-			       loadTheme();
+        // ACHE ISSO NO SEU CÓDIGO (no final do script):
+        window.addEventListener('load', function () {
+            // Load theme preference
+            loadTheme();
 
-			       // SUBSTITUA O CÓDIGO ANTIGO DE MOSTRAR O DASHBOARD POR ISSO:
-			       ativarAbaPelaUrl(); 
-			       
-			       // O resto da sua função 'load' (animações, etc.)
-			       document.querySelectorAll('.card, .quick-actions').forEach((el, index) => {
-			           el.style.opacity = '0';
-			           el.style.transform = 'translateY(20px)';
-			           setTimeout(() => {
-			               el.style.transition = 'all 0.6s ease';
-			               el.style.opacity = '1';
-			               el.style.transform = 'translateY(0)';
-			           }, index * 100);
-			       });
-			   });
+            // SUBSTITUA O CÓDIGO ANTIGO DE MOSTRAR O DASHBOARD POR ISSO:
+            ativarAbaPelaUrl(); 
+            
+            // O resto da sua função 'load' (animações, etc.)
+            document.querySelectorAll('.card, .quick-actions').forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    el.style.transition = 'all 0.6s ease';
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
 
-		       // Animação de entrada suave
-		    //   window.addEventListener('load', function () {
-		           // Load theme preference
-		    //       loadTheme();
+        function GETcep() {
+            var cep = document.getElementById('cep').value;
+            
+            // Remove traços e pontos para a API
+            cep = cep.replace(/\D/g, '');
 
-		           // Mostrar dashboard por padrão
-		    //       document.getElementById('dashboard-section').classList.add('active');
+            if (cep.length !== 8) {
+                alert("CEP inválido. Deve conter 8 números.");
+                return;
+            }
 
-		    //       document.querySelectorAll('.card, .quick-actions').forEach((el, index) => {
-		    //           el.style.opacity = '0';
-		    //           el.style.transform = 'translateY(20px)';
-		    //           setTimeout(() => {
-		    //               el.style.transition = 'all 0.6s ease';
-		    //               el.style.opacity = '1';
-		   //                el.style.transform = 'translateY(0)';
-		   //            }, index * 100);
-		   //        });
-		   //    });
-			   
-			   function GETcep() {
-			       var cep = document.getElementById('cep').value;
-			       
-			       // Remove traços e pontos para a API
-			       cep = cep.replace(/\D/g, '');
+            var url = "https://viacep.com.br/ws/" + cep + "/json/";
 
-			       if (cep.length !== 8) {
-			           alert("CEP inválido. Deve conter 8 números.");
-			           return;
-			       }
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.erro) {
+                        // Se o CEP não for encontrado, avisa o usuário
+                        alert("CEP não encontrado!");
+                        // Limpa os campos
+                        document.getElementById('rua').value = "";
+                        document.getElementById('bairro').value = "";
+                        document.getElementById('cidade').value = "";
+                    } else {
+                        // Preenche os campos do formulário com os dados
+                        document.getElementById('rua').value = data.logradouro;
+                        document.getElementById('bairro').value = data.bairro;
+                        document.getElementById('cidade').value = data.localidade; // O campo correto é 'localidade'
+                    }
+                }).catch(error => {
+                    console.error(error);
+                    alert("Houve um erro ao buscar o CEP.");
+                });
+        }
 
-			       var url = "https://viacep.com.br/ws/" + cep + "/json/";
+        // Funcionalidade de busca simples
+        document.addEventListener('input', function (e) {
+            if (e.target.classList.contains('search-input')) {
+                const searchTerm = e.target.value.toLowerCase();
+                const table = e.target.closest('.section').querySelector('.data-table tbody');
+                const rows = table.querySelectorAll('tr');
 
-			       fetch(url)
-			           .then(response => response.json())
-			           .then(data => {
-			               if (data.erro) {
-			                   // Se o CEP não for encontrado, avisa o usuário
-			                   alert("CEP não encontrado!");
-			                   // Limpa os campos
-			                   document.getElementById('rua').value = "";
-			                   document.getElementById('bairro').value = "";
-			                   document.getElementById('cidade').value = "";
-			               } else {
-			                   // Preenche os campos do formulário com os dados
-			                   document.getElementById('rua').value = data.logradouro;
-			                   document.getElementById('bairro').value = data.bairro;
-			                   document.getElementById('cidade').value = data.localidade; // O campo correto é 'localidade'
-			               }
-			           }).catch(error => {
-			               console.error(error);
-			               alert("Houve um erro ao buscar o CEP.");
-			           });
-			   }
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(searchTerm) ? '' : 'none';
+                });
+            }
+        });
 
-		       // Simulação de ações da tabela
-		       /*
-		       document.addEventListener('click', function(e) {
-		           if (e.target.classList.contains('table-btn')) {
-		               const action = Array.from(e.target.classList).find(cls => cls !== 'table-btn');
-		               const row = e.target.closest('tr');
-		               const id = row.cells[0].textContent;
-		               
-		               switch(action) {
-		                   case 'delete':
-		                       if (confirm(`Confirma a exclusão do item ${id}?`)) {
-		                           row.style.opacity = '0';
-		                           setTimeout(() => row.remove(), 300);
-		                       }
-		                       break;
-		                   case 'view':
-		                       alert(`Visualizando detalhes do item ${id}`);
-		                       break;
-		                   case 'pay':
-		                       if (confirm(`Confirma o pagamento da conta ${id}?`)) {
-		                           const statusCell = row.querySelector('.status-badge');
-		                           statusCell.textContent = 'Pago';
-		                           statusCell.className = 'status-badge status-success';
-		                       }
-		                       break;
-		               }
-		           }
-		       });
-		       */
+        // Update modal headers for dark theme
+        function updateModalHeaders() {
+            const modalHeaders = document.querySelectorAll('.modal-content h2');
+            modalHeaders.forEach(header => {
+                if (isDarkTheme) {
+                    header.style.color = 'var(--text-primary-dark)';
+                } else {
+                    header.style.color = 'var(--text-primary-light)';
+                }
+            });
+        }
 
-		       // Funcionalidade de busca simples
-		       document.addEventListener('input', function (e) {
-		           if (e.target.classList.contains('search-input')) {
-		               const searchTerm = e.target.value.toLowerCase();
-		               const table = e.target.closest('.section').querySelector('.data-table tbody');
-		               const rows = table.querySelectorAll('tr');
+        // Listen for theme changes to update modal headers
+        document.body.addEventListener('transitionend', function (e) {
+            if (e.target === document.body) {
+                updateModalHeaders();
+            }
+        });
 
-		               rows.forEach(row => {
-		                   const text = row.textContent.toLowerCase();
-		                   row.style.display = text.includes(searchTerm) ? '' : 'none';
-		               });
-		           }
-		       });
+        // funções da modal de venda
+        document.addEventListener('DOMContentLoaded', () => {
+            // Array para guardar os itens do carrinho em memória
+            let carrinho = [];
 
-		       // Update modal headers for dark theme
-		       function updateModalHeaders() {
-		           const modalHeaders = document.querySelectorAll('.modal-content h2');
-		           modalHeaders.forEach(header => {
-		               if (isDarkTheme) {
-		                   header.style.color = 'var(--text-primary-dark)';
-		               } else {
-		                   header.style.color = 'var(--text-primary-light)';
-		               }
-		           });
-		       }
+            // Seleciona os elementos do DOM
+            const produtoSelect = document.getElementById('produto-select');
+            const quantidadeInput = document.getElementById('produto-quantidade');
+            const btnAdicionar = document.getElementById('btn-adicionar-produto');
+            const listaCarrinho = document.getElementById('carrinho-itens-lista');
+            const totalCarrinhoSpan = document.getElementById('valor-total-carrinho');
+            const btnFinalizar = document.getElementById('btn-finalizar-venda');
 
-		       // Listen for theme changes to update modal headers
-		       document.body.addEventListener('transitionend', function (e) {
-		           if (e.target === document.body) {
-		               updateModalHeaders();
-		           }
-		       });
+            // Evento para o botão de adicionar produto
+            if(btnAdicionar){
+                btnAdicionar.addEventListener('click', () => {
+                    const produtoOption = produtoSelect.options[produtoSelect.selectedIndex];
+                    if (!produtoOption.value) {
+                        alert('Por favor, selecione um produto.');
+                        return;
+                    }
 
-		       // funções da modal de venda
-		       document.addEventListener('DOMContentLoaded', () => {
-		           // Array para guardar os itens do carrinho em memória
-		           let carrinho = [];
+                    const [nome, preco] = produtoOption.value.split('|');
+                    const quantidade = parseInt(quantidadeInput.value);
+                    const precoNumerico = parseFloat(preco);
 
-		           // Seleciona os elementos do DOM
-		           const produtoSelect = document.getElementById('produto-select');
-		           const quantidadeInput = document.getElementById('produto-quantidade');
-		           const btnAdicionar = document.getElementById('btn-adicionar-produto');
-		           const listaCarrinho = document.getElementById('carrinho-itens-lista');
-		           const totalCarrinhoSpan = document.getElementById('valor-total-carrinho');
-		           const btnFinalizar = document.getElementById('btn-finalizar-venda');
+                    // Adiciona o produto ao array do carrinho
+                    carrinho.push({
+                        nome: nome,
+                        preco: precoNumerico,
+                        quantidade: quantidade,
+                        subtotal: precoNumerico * quantidade
+                    });
 
-		           // Evento para o botão de adicionar produto
-		           btnAdicionar.addEventListener('click', () => {
-		               const produtoOption = produtoSelect.options[produtoSelect.selectedIndex];
-		               if (!produtoOption.value) {
-		                   alert('Por favor, selecione um produto.');
-		                   return;
-		               }
+                    // Atualiza a exibição do carrinho
+                    atualizarCarrinhoDisplay();
 
-		               const [nome, preco] = produtoOption.value.split('|');
-		               const quantidade = parseInt(quantidadeInput.value);
-		               const precoNumerico = parseFloat(preco);
+                    // Limpa os campos para a próxima adição
+                    produtoSelect.selectedIndex = 0;
+                    quantidadeInput.value = 1;
+                });
+            }
 
-		               // Adiciona o produto ao array do carrinho
-		               carrinho.push({
-		                   nome: nome,
-		                   preco: precoNumerico,
-		                   quantidade: quantidade,
-		                   subtotal: precoNumerico * quantidade
-		               });
+            // Função para renderizar o carrinho na tela
+            function atualizarCarrinhoDisplay() {
+                // Limpa a lista atual
+                listaCarrinho.innerHTML = '';
 
-		               // Atualiza a exibição do carrinho
-		               atualizarCarrinhoDisplay();
+                if (carrinho.length === 0) {
+                    listaCarrinho.innerHTML = '<p class="carrinho-vazio">Nenhum item adicionado ainda.</p>';
+                    totalCarrinhoSpan.textContent = '0,00';
+                    return;
+                }
 
-		               // Limpa os campos para a próxima adição
-		               produtoSelect.selectedIndex = 0;
-		               quantidadeInput.value = 1;
-		           });
+                let valorTotal = 0;
 
-		           // Função para renderizar o carrinho na tela
-		           function atualizarCarrinhoDisplay() {
-		               // Limpa a lista atual
-		               listaCarrinho.innerHTML = '';
+                // Cria e adiciona cada item do carrinho na lista
+                carrinho.forEach((item, index) => {
+                    valorTotal += item.subtotal;
 
-		               if (carrinho.length === 0) {
-		                   listaCarrinho.innerHTML = '<p class="carrinho-vazio">Nenhum item adicionado ainda.</p>';
-		                   totalCarrinhoSpan.textContent = '0,00';
-		                   return;
-		               }
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'carrinho-item';
+                    itemDiv.innerHTML = `
+                <span>${item.quantidade}x ${item.nome}</span>
+                <span>R$ ${item.subtotal.toFixed(2).replace('.', ',')}</span>
+                <button class="btn-remover-item" data-index="${index}" style="background:none; border:none; color:red; cursor:pointer;">&times;</button>`;
+                    listaCarrinho.appendChild(itemDiv);
+                });
 
-		               let valorTotal = 0;
+                // Atualiza o valor total
+                totalCarrinhoSpan.textContent = valorTotal.toFixed(2).replace('.', ',');
 
-		               // Cria e adiciona cada item do carrinho na lista
-		               carrinho.forEach((item, index) => {
-		                   valorTotal += item.subtotal;
+                // Adiciona eventos de clique aos botões de remover
+                document.querySelectorAll('.btn-remover-item').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const indexParaRemover = parseInt(e.target.dataset.index);
+                        // Remove o item do array
+                        carrinho.splice(indexParaRemover, 1);
+                        // Atualiza a exibição novamente
+                        atualizarCarrinhoDisplay();
+                    });
+                });
+            }
 
-		                   const itemDiv = document.createElement('div');
-		                   itemDiv.className = 'carrinho-item';
-		                   itemDiv.innerHTML = `
-		               <span>${item.quantidade}x ${item.nome}</span>
-		               <span>R$ ${item.subtotal.toFixed(2).replace('.', ',')}</span>
-		               <button class="btn-remover-item" data-index="${index}" style="background:none; border:none; color:red; cursor:pointer;">&times;</button>`;
-		                   listaCarrinho.appendChild(itemDiv);
-		               });
+            // Lógica para finalizar a venda
+            if(btnFinalizar){
+                btnFinalizar.addEventListener('click', () => {
+                    if (carrinho.length === 0) {
+                        mostrarNotificacao('O carrinho está vazio!', 'erro'); // Trocamos o alert
+                        return;
+                    }
 
-		               // Atualiza o valor total
-		               totalCarrinhoSpan.textContent = valorTotal.toFixed(2).replace('.', ',');
+                    const dadosVenda = {
+                        cliente: document.getElementById('cliente-nome').value,
+                        itens: carrinho,
+                        total: carrinho.reduce((acc, item) => acc + item.subtotal, 0)
+                    };
 
-		               // Adiciona eventos de clique aos botões de remover
-		               document.querySelectorAll('.btn-remover-item').forEach(button => {
-		                   button.addEventListener('click', (e) => {
-		                       const indexParaRemover = parseInt(e.target.dataset.index);
-		                       // Remove o item do array
-		                       carrinho.splice(indexParaRemover, 1);
-		                       // Atualiza a exibição novamente
-		                       atualizarCarrinhoDisplay();
-		                   });
-		               });
-		           }
+                    console.log('Dados da Venda:', dadosVenda);
+                    
+                    // Sucesso!
+                    mostrarNotificacao('Venda finalizada com sucesso!', 'sucesso'); // Trocamos o alert
+                    
+                    // Fecha a modal e limpa o carrinho (opcional)
+                    closeModal('venda2');
+                    carrinho = [];
+                    document.getElementById('carrinho-itens-lista').innerHTML = '<p class="carrinho-vazio">Carrinho limpo.</p>';
+                    document.getElementById('valor-total-carrinho').textContent = '0,00';
+                });
+            }
+        });
+    
+        
+            // verificar esta função para a modal de serviços e possiveisoutra modals onde possuem campos de dropslist
+        // Variável para guardar a instância do Choices, para não inicializar várias vezes
+        let choicesInstance = null;
 
-		           // Lógica para finalizar a venda
-		           btnFinalizar.addEventListener('click', () => {
-		        	    if (carrinho.length === 0) {
-		        	        mostrarNotificacao('O carrinho está vazio!', 'erro'); // Trocamos o alert
-		        	        return;
-		        	    }
+        function inicializarChoicesServicos() {
+        // Encontra o elemento <input> de serviços
+        const servicosInput = document.getElementById('servicos-input');
 
-		        	    const dadosVenda = {
-		        	        cliente: document.getElementById('cliente-nome').value,
-		        	        itens: carrinho,
-		        	        total: carrinho.reduce((acc, item) => acc + item.subtotal, 0)
-		        	    };
-
-		        	    console.log('Dados da Venda:', dadosVenda);
-		        	    
-		        	    // Sucesso!
-		        	    mostrarNotificacao('Venda finalizada com sucesso!', 'sucesso'); // Trocamos o alert
-		        	    
-		        	    // Fecha a modal e limpa o carrinho (opcional)
-		        	    closeModal('venda2');
-		        	    carrinho = [];
-		        	    document.getElementById('carrinho-itens-lista').innerHTML = '<p class="carrinho-vazio">Carrinho limpo.</p>';
-		        	    document.getElementById('valor-total-carrinho').textContent = '0,00';
-		        	});
-		       });
-		   
-		       
-		           // verificar esta função para a modal de serviços e possiveisoutra modals onde possuem campos de dropslist
-		       // Variável para guardar a instância do Choices, para não inicializar várias vezes
-		       let choicesInstance = null;
-
-		       function inicializarChoicesServicos() {
-		       // Encontra o elemento <input> de serviços
-		       const servicosInput = document.getElementById('servicos-input');
-
-		       // Se o elemento existe E AINDA NÃO FOI INICIALIZADO
-		       if (servicosInput && !choicesInstance) {
-		           
-		           // Inicializa a biblioteca
-		           choicesInstance = new Choices(servicosInput, {
-		           choices: [
-		               { value: 'Troca de tela | 380.00', label: 'Troca de tela | 380.00' },
-		               { value: 'Troca de Bateria | 250.00', label: 'Troca de Bateria | 250.00' },
-		               { value: 'Limpeza Química | 150.00', label: 'Limpeza Química | 150.00' },
-		               { value: 'Reparo Placa Mãe | 550.00', label: 'Reparo Placa Mãe | 550.00' }
-		           ],
-		           removeItemButton: true,
-		           addItemText: (value) => `Pressione Enter para adicionar <b>"${value}"</b>`,
-		           noResultsText: 'Nenhum resultado encontrado',
-		           });
-		           
-		       }
-		   }
-		       /*<![CDATA[*/
-		       var mensagemServidor = /*[[${mensagem}]]*/ null;
-		       
-		       if (mensagemServidor) {
-		           // Chama a função JS que criamos no passo 3
-		           // Certifique-se de que o script.js já foi carregado antes deste bloco
-		           mostrarNotificacao(mensagemServidor, 'sucesso'); // Ou faça lógica para detectar erro
-		       }
-		       /*]]>*/
-	</script>	
-	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-	<script th:src="@{/script/script.js}"></script>
-	
+        // Se o elemento existe E AINDA NÃO FOI INICIALIZADO
+        if (servicosInput && !choicesInstance) {
+            
+            // Inicializa a biblioteca
+            choicesInstance = new Choices(servicosInput, {
+            choices: [
+                { value: 'Troca de tela | 380.00', label: 'Troca de tela | 380.00' },
+                { value: 'Troca de Bateria | 250.00', label: 'Troca de Bateria | 250.00' },
+                { value: 'Limpeza Química | 150.00', label: 'Limpeza Química | 150.00' },
+                { value: 'Reparo Placa Mãe | 550.00', label: 'Reparo Placa Mãe | 550.00' }
+            ],
+            removeItemButton: true,
+            addItemText: (value) => `Pressione Enter para adicionar <b>"${value}"</b>`,
+            noResultsText: 'Nenhum resultado encontrado',
+            });
+            
+        }
+    }
+        /*<![CDATA[*/
+        var mensagemServidor = /*[[${mensagem}]]*/ null;
+        
+        if (mensagemServidor) {
+            // Chama a função JS que criamos no passo 3
+            // Certifique-se de que o script.js já foi carregado antes deste bloco
+            mostrarNotificacao(mensagemServidor, 'sucesso'); // Ou faça lógica para detectar erro
+        }
+        /*]]>*/
+    </script>   
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script th:src="@{/script/script.js}"></script>
+    
    
 </body>
 
