@@ -349,8 +349,8 @@ async function atualizarTabelaProdutos(page = 0) {
             lista.forEach(p => { 
                 const tr = document.createElement('tr');
                 const valorFormatado = p.valor ? p.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 'R$ 0,00';
-                 tr.innerHTML = `<td>${p.idProduto}</td><td>${p.nome}</td><td>${valorFormatado}</td><td>${p.quantidade}</td><td>${p.descricao || ''}</td><td>${p.categoria || '-'}</td><td>${p.marca || '-'}</td><td style="display: flex; gap: 5px; justify-content: center;"><button class="table-btn edit" onclick="editarProduto(${p.idProduto})">Editar</button><button class="table-btn delete" onclick="deletarProduto(${p.idProduto})">Deletar</button></td>`;
-                tbody.appendChild(tr);
+				tr.innerHTML = `<td>${p.idProduto}</td><td>${p.nome}</td><td>${valorFormatado}</td><td>${p.quantidade}</td><td>${p.descricao || ''}</td><td>${p.categoria || '-'}</td><td>${p.marca || '-'}</td><td><div class="acoes-container"><button class="table-btn edit" onclick="editarProduto(${p.idProduto})">Editar</button><button class="table-btn delete" onclick="deletarProduto(${p.idProduto})">Deletar</button></div></td>`; 
+				tbody.appendChild(tr);
             });
             // Callback correto: atualizarTabelaProdutos
             gerarPaginacao(data, 'paginacao-produtos', atualizarTabelaProdutos);
@@ -489,8 +489,11 @@ async function atualizarTabelaOrdens(page = 0) {
                 const tr = document.createElement('tr');
                 const valorFormatado = os.valor ? os.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 'R$ 0,00';
                 let badgeClass = os.statusOS === 'CONCLUIDA' ? 'status-success' : (os.statusOS === 'CANCELADA' ? 'status-danger' : 'status-normal');
-                tr.innerHTML = `<td>${os.idOS}</td><td>${os.nomeCliente || '-'}</td><td>${os.dataInicio || ''}</td><td>${os.dataFim || '-'}</td><td>${valorFormatado}</td><td>${os.nomeServico || '-'}</td><td>${os.nomeProduto || '-'}</td><td><span class="status-badge ${badgeClass}">${os.statusOS || 'Registrada'}</span></td><td style="display: flex; gap: 5px; justify-content: center;"><button class="table-btn edit" onclick="editarOS(${os.idOS})">Editar</button><button class="table-btn delete" onclick="deletarOS(${os.idOS})">Deletar</button></td>`;
-                tbody.appendChild(tr);
+				tr.innerHTML = `<td>${os.idOS}</td><td>${os.nomeCliente || '-'}</td><td>${os.dataInicio || ''}</td><td>${os.dataFim ||
+				'-'}</td><td>${valorFormatado}</td><td>${os.nomeServico || '-'}</td><td>${os.nomeProduto ||
+				'-'}</td><td><span class="status-badge ${badgeClass}">${os.statusOS || 'Registrada'}
+				</span></td><td><div class="acoes-container"><button class="table-btn edit" onclick="editarOS(${os.idOS})">Editar</button><button class="table-btn delete" onclick="deletarOS(${os.idOS})">Deletar</button></div></td>`;               
+				 tbody.appendChild(tr);
             });
             // Correção: Callback mudado para atualizarTabelaOrdens
             gerarPaginacao(data, 'paginacao-ordens', atualizarTabelaOrdens);
@@ -782,8 +785,8 @@ async function atualizarTabelaVendas(page = 0) {
                 const lucroFormatado = venda.lucro ? venda.lucro.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 'R$ 0,00';
                 
                 // MANTIDO EXATAMENTE COMO VOCÊ ENVIOU (10 Colunas, Botões juntos)
-                tr.innerHTML = `<td>${venda.idVenda}</td><td>${venda.dataInicio || ''}</td><td>${venda.horaInicio || ''}</td><td>${venda.nomeCliente || '-'}</td><td>${venda.nomeProduto || '-'}</td><td>${venda.quantidade}</td><td>${valorFormatado}</td><td>${lucroFormatado}</td><td><span class="status-badge status-success">Concluída</span></td><td style="display: flex; gap: 5px; justify-content: center;"><button class="table-btn edit" onclick="editarVenda(${venda.idVenda})">Editar</button><button class="table-btn delete" onclick="deletarVenda(${venda.idVenda})">Deletar</button></td>`;
-                tbody.appendChild(tr);
+				tr.innerHTML = `<td>${venda.idVenda}</td><td>${venda.dataInicio || ''}</td><td>${venda.horaInicio || ''}</td><td>${venda.nomeCliente || '-'}</td><td>${venda.nomeProduto || '-'}</td><td>${venda.quantidade}</td><td>${valorFormatado}</td><td>${lucroFormatado}</td><td><span class="status-badge status-success">Concluída</span></td><td><div class="acoes-container"><button class="table-btn edit" onclick="editarVenda(${venda.idVenda})">Editar</button><button class="table-btn delete" onclick="deletarVenda(${venda.idVenda})">Deletar</button></div></td>`;
+				tbody.appendChild(tr);
             });
 
             // ATENÇÃO: Certifique-se que no seu HTML a div de paginação tem id="paginacao-vendas"
@@ -819,8 +822,8 @@ async function atualizarTabelaFuncionarios(page = 0) {
             lista.forEach(func => {
                 const tr = document.createElement('tr');
                 let statusClass = (func.statusFuncionario === 'ATIVO' || func.statusFuncionario === 'EFETIVO') ? 'status-success' : 'status-danger';
-                tr.innerHTML = `<td>${func.idFuncionario}</td><td>${func.nomeFuncionario}</td><td>${func.cpf}</td><td>${func.dataAdm || '-'}</td><td>${func.nivelAces || '-'}</td><td><span class="status-badge ${statusClass}">${func.statusFuncionario || 'Ativo'}</span></td><td style="display: flex; gap: 5px;"><button class="table-btn edit" onclick="editarFuncionario(${func.idFuncionario})">Editar</button><button class="table-btn delete" onclick="deletarFuncionario(${func.idFuncionario})">Deletar</button></td>`;
-                tbody.appendChild(tr);
+				tr.innerHTML = `<td>${func.idFuncionario}</td><td>${func.nomeFuncionario}</td><td>${func.cpf}</td><td>${func.dataAdm || '-'}</td><td>${func.nivelAces || '-'}</td><td><span class="status-badge ${statusClass}">${func.statusFuncionario || 'Ativo'}</span></td><td><div class="acoes-container"><button class="table-btn edit" onclick="editarFuncionario(${func.idFuncionario})">Editar</button><button class="table-btn delete" onclick="deletarFuncionario(${func.idFuncionario})">Deletar</button></div></td>`;
+				tbody.appendChild(tr);
             });
             // Correção: Callback mudado para atualizarTabelaFuncionarios
             gerarPaginacao(data, 'paginacao-funcionarios', atualizarTabelaFuncionarios);
