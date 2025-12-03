@@ -1,6 +1,6 @@
 /**
  * ZTech Pro - Main Script
- * Autor: Tedesche / Versão Final Consolidada (Atualizada com AJAX)
+ * Autor: Tedesche / Versão Final Consolidada (Correção Definitiva NaN e Títulos)
  */
 
 // =================================================================================
@@ -62,7 +62,7 @@ function popularSelect(selectElement, lista, placeholder, campoId = 'id') {
     lista.forEach(item => {
         const option = document.createElement('option');
         
-        // Tenta identificar o ID correto
+        // Tenta identificar o ID correto de várias formas
         const valorId = item[campoId] || item.id || item.idProduto || item.idCliente || item.idServico;
         option.value = valorId; 
         
@@ -127,33 +127,29 @@ function buscarCep(prefixo) {
 
 /**
  * Método ÚNICO para gerar controles de paginação.
- * @param {Object} data - O objeto Page retornado pelo Spring Boot (contém content, totalPages, number, etc.)
- * @param {String} idContainer - O ID da <div> onde os botões vão aparecer (ex: 'paginacao-produtos')
- * @param {Function} funcaoCallback - A função que deve ser chamada ao clicar (ex: atualizarTabelaProdutos)
  */
 function gerarPaginacao(data, idContainer, funcaoCallback) {
     const container = document.getElementById(idContainer);
     if (!container) return;
 
-    container.innerHTML = ''; // Limpa botões antigos
+    container.innerHTML = ''; 
 
-    // Se não tiver páginas ou for apenas 1, não mostra nada (ou apenas o texto, se preferir)
     if (data.totalPages <= 1) return;
 
     // 1. Botão ANTERIOR
     const btnPrev = document.createElement('button');
-    btnPrev.innerHTML = '&larr; Anterior'; // Seta esquerda
+    btnPrev.innerHTML = '&larr; Anterior'; 
     btnPrev.className = 'action-btn btn-secondary';
-    btnPrev.disabled = data.first; // Desabilita se for a 1ª página
+    btnPrev.disabled = data.first; 
     
     if (!data.first) {
         btnPrev.onclick = function() {
-            funcaoCallback(data.number - 1); // Chama a função passando a página anterior
+            funcaoCallback(data.number - 1); 
         };
     }
     container.appendChild(btnPrev);
 
-    // 2. Texto Informativo (Ex: Página 1 de 5)
+    // 2. Texto Informativo
     const spanInfo = document.createElement('span');
     spanInfo.style.cssText = 'font-weight: bold; margin: 0 15px;';
     spanInfo.innerText = `Página ${data.number + 1} de ${data.totalPages}`;
@@ -161,13 +157,13 @@ function gerarPaginacao(data, idContainer, funcaoCallback) {
 
     // 3. Botão PRÓXIMO
     const btnNext = document.createElement('button');
-    btnNext.innerHTML = 'Próximo &rarr;'; // Seta direita
+    btnNext.innerHTML = 'Próximo &rarr;'; 
     btnNext.className = 'action-btn btn-primary';
-    btnNext.disabled = data.last; // Desabilita se for a última página
+    btnNext.disabled = data.last; 
     
     if (!data.last) {
         btnNext.onclick = function() {
-            funcaoCallback(data.number + 1); // Chama a função passando a próxima página
+            funcaoCallback(data.number + 1); 
         };
     }
     container.appendChild(btnNext);
@@ -179,7 +175,7 @@ function gerarPaginacao(data, idContainer, funcaoCallback) {
 
 document.addEventListener("DOMContentLoaded", function() {
     
-    // Verifica aba ativa
+    // Verifica aba ativa na URL
     const params = new URLSearchParams(window.location.search);
     const abaAtiva = params.get('tab');
     
@@ -189,12 +185,11 @@ document.addEventListener("DOMContentLoaded", function() {
              if(btn) btn.click();
          }, 100);
     } else {
-        // Carrega tabelas iniciais se necessário
         const sectionEstoque = document.getElementById('estoque-section');
         if(sectionEstoque && sectionEstoque.classList.contains('active')) atualizarTabelaProdutos();
     }
 
-    // Inicializa Carrinho
+    // Inicializa lógica do Carrinho de Compras
     inicializarLogicaCarrinho();
 
     // Botões estáticos
@@ -221,6 +216,28 @@ function openModal(type) {
     if (modal) {
         modal.style.display = 'flex';
 
+        // --- Reseta o título para o padrão "Cadastrar" ao abrir ---
+        const h2 = modal.querySelector('h2');
+        if (h2) {
+            const titulosPadrao = {
+                'produto': 'Cadastrar Novo Produto',
+                'OrdemServico': 'Cadastrar Nova O.S.',
+                'os': 'Cadastrar Nova O.S.',
+                'venda': 'Registrar Nova Venda',
+                'venda2': 'Registrar Nova Venda',
+                'Funcionario': 'Cadastrar Novo Funcionário',
+                'funcionario': 'Cadastrar Novo Funcionário',
+                'conta': 'Cadastrar Conta a Pagar',
+                'Categoria': 'Cadastrar Nova Categoria',
+                'Marca': 'Cadastrar Nova Marca',
+                'Cliente': 'Cadastrar Novo Cliente',
+                'Servico': 'Cadastrar Novo Serviço'
+            };
+            if (titulosPadrao[type]) {
+                h2.textContent = titulosPadrao[type];
+            }
+        }
+
         // Lazy Load dos dados
         if (type === 'OrdemServico' || type === 'os') carregarDadosOS();
         if (type === 'venda') carregarDadosVendaModal();     
@@ -241,11 +258,14 @@ function closeModal(type) {
     if(modal) {
         modal.style.display = 'none';
         
+        // Mapeamento de campos hidden de ID para limpar
         const mapIds = {
             'venda': 'vendaId',
             'os': 'osId',
             'OrdemServico': 'osId',
-            'produto': 'prodId'
+            'produto': 'prodId',
+            'Funcionario': 'funcId',
+            'funcionario': 'funcId'
         };
         
         const key = type === 'os' ? 'OrdemServico' : type;
@@ -254,6 +274,7 @@ function closeModal(type) {
             if(hiddenId) hiddenId.value = '';
         }
 
+        // Limpa inputs visíveis
         const inputs = modal.querySelectorAll('input:not([type="hidden"]), select, textarea');
         inputs.forEach(input => input.value = '');
     }
@@ -347,6 +368,11 @@ async function editarProduto(id) {
         if(produto.idMarca) document.getElementById('produtoMarcaSelect').value = produto.idMarca;
         
         openModal('produto');
+        
+        // --- Mudar Titulo para Editar ---
+        const h2 = document.querySelector('#modalProduto h2');
+        if(h2) h2.textContent = 'Editar Produto';
+        
     } catch (e) { mostrarNotificacao("Erro ao carregar produto.", "erro"); }
 }
 
@@ -354,7 +380,6 @@ async function atualizarTabelaProdutos() {
     const tbody = document.getElementById('tbody-produtos');
     if (!tbody) return;
 
-    // 1. Capturar valores dos filtros
     const termo = document.getElementById('buscaProdutoInput') ? document.getElementById('buscaProdutoInput').value : '';
     const idCat = document.getElementById('filtroCategoria') ? document.getElementById('filtroCategoria').value : '';
     const idMarca = document.getElementById('filtroMarca') ? document.getElementById('filtroMarca').value : '';
@@ -362,8 +387,6 @@ async function atualizarTabelaProdutos() {
     tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Carregando estoque...</td></tr>';
 
     try {
-        // 2. Montar URL com parâmetros
-        // URLSearchParams facilita a criação da query string (ex: ?termo=abc&idCategoria=1)
         const params = new URLSearchParams({
             size: 20,
             sort: 'idProduto,desc'
@@ -386,9 +409,7 @@ async function atualizarTabelaProdutos() {
                 return;
             }
 
-            // ... (restante do código de renderização das linhas igual ao anterior) ...
             lista.forEach(p => { 
-                // ... monta tr ...
                 const tr = document.createElement('tr');
                 const valorFormatado = p.valor ? p.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 'R$ 0,00';
                  tr.innerHTML = `
@@ -463,15 +484,15 @@ async function editarOS(id) {
         if (!response.ok) throw new Error("Erro na API");
         const os = await response.json();
 
-        const elId = document.getElementById('osId');
-        // Oculto no modal, deve existir ou ser criado
+        let elId = document.getElementById('osId');
         if(!elId) {
              const hiddenInput = document.createElement('input');
              hiddenInput.type = 'hidden';
              hiddenInput.id = 'osId';
              document.querySelector('#modalOrdemServico .modal-content').appendChild(hiddenInput);
+             elId = hiddenInput;
         }
-        document.getElementById('osId').value = os.idOS || os.IdOS;
+        elId.value = os.idOS || os.IdOS;
 
         if(document.getElementById('osCliente')) document.getElementById('osCliente').value = os.idCliente;
         if(document.getElementById('osServico')) document.getElementById('osServico').value = os.idServico;
@@ -481,6 +502,11 @@ async function editarOS(id) {
         if(document.getElementById('osPreco')) document.getElementById('osPreco').value = os.valor;
 
         openModal('OrdemServico');
+
+        // --- Mudar Titulo para Editar ---
+        const h2 = document.querySelector('#modalOrdemServico h2');
+        if(h2) h2.textContent = 'Editar O.S.';
+
     } catch (e) {
         console.error(e);
         mostrarNotificacao("Erro ao carregar OS para edição.", "erro");
@@ -489,7 +515,6 @@ async function editarOS(id) {
 
 async function salvarOS() {
     let elId = document.getElementById('osId');
-    // Cria se não existir
     if(!elId) {
          elId = document.createElement('input');
          elId.type = 'hidden';
@@ -532,7 +557,7 @@ async function salvarOS() {
         if (res.ok) {
             mostrarNotificacao('O.S. Salva com sucesso!', 'sucesso');
             closeModal('OrdemServico');
-            atualizarTabelaOrdens(); // Atualiza sem reload
+            atualizarTabelaOrdens(); 
         } else {
             const txt = await res.text();
             mostrarNotificacao('Erro: ' + txt, 'erro');
@@ -549,7 +574,7 @@ async function deletarOS(id) {
         });
         if (response.ok) {
             mostrarNotificacao("Removido com sucesso!", "sucesso");
-            atualizarTabelaOrdens(); // Atualiza sem reload
+            atualizarTabelaOrdens(); 
         } else {
             mostrarNotificacao("Erro ao remover.", "erro");
         }
@@ -557,10 +582,9 @@ async function deletarOS(id) {
 }
 
 async function atualizarTabelaOrdens() {
-    const tbody = document.getElementById('tbody-ordens'); // Certifique-se de ter id="tbody-ordens" na sua table
+    const tbody = document.getElementById('tbody-ordens'); 
     if (!tbody) {
-        // Fallback se o ID não existir no HTML (tente achar pelo contexto ou avise)
-        console.warn('ID tbody-ordens não encontrado. Adicione id="tbody-ordens" na tabela de OS.');
+        console.warn('ID tbody-ordens não encontrado.');
         return;
     }
 
@@ -584,7 +608,6 @@ async function atualizarTabelaOrdens() {
                 const tr = document.createElement('tr');
                 const valorFormatado = os.valor ? os.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 'R$ 0,00';
                 
-                // Badge de Status
                 let badgeClass = 'status-normal';
                 if(os.statusOS === 'CONCLUIDA') badgeClass = 'status-success';
                 if(os.statusOS === 'CANCELADA') badgeClass = 'status-danger';
@@ -623,7 +646,6 @@ async function atualizarTabelaOrdens() {
 async function carregarDadosVendaModal() {
     const elCliente = document.getElementById('vendaCliente');
     const elProduto = document.getElementById('vendaProduto');
-    // Verifica se os elementos existem (para modal de venda simples, se houver)
     if (!elCliente) return;
 
     if (elCliente.options.length > 1) return;
@@ -647,10 +669,8 @@ async function editarVenda(id) {
         const response = await fetch(`/vendas/api/venda/${id}`);
         const venda = await response.json();
 
-        // Cria input hidden se não existir
         let elId = document.getElementById('vendaId');
         if(!elId) {
-             // Tenta achar um form dentro do modal de venda simples
              const modalVenda = document.getElementById('modalVenda');
              if(modalVenda) {
                  elId = document.createElement('input');
@@ -666,6 +686,11 @@ async function editarVenda(id) {
         if(document.getElementById('vendaQuantidade')) document.getElementById('vendaQuantidade').value = venda.quantidade;
 
         openModal('venda');
+
+        // --- Mudar Titulo para Editar ---
+        const h2 = document.querySelector('#modalVenda h2');
+        if(h2) h2.textContent = 'Editar Venda';
+
     } catch (e) {
         mostrarNotificacao("Erro ao carregar venda", "erro");
     }
@@ -701,7 +726,7 @@ async function salvarVenda() {
         if (response.ok) {
             mostrarNotificacao("Venda salva!", "sucesso");
             closeModal('venda');
-            atualizarTabelaVendas(); // Atualiza sem reload
+            atualizarTabelaVendas(); 
         } else {
             const erro = await response.text();
             mostrarNotificacao("Erro: " + erro, "erro");
@@ -715,7 +740,7 @@ async function deletarVenda(id) {
         const response = await fetch(`/vendas/api/venda/deletar/${id}`, { method: 'DELETE', headers: getAuthHeaders() });
         if (response.ok) {
             mostrarNotificacao("Venda removida!", "sucesso");
-            atualizarTabelaVendas(); // Atualiza sem reload
+            atualizarTabelaVendas(); 
         } else {
             mostrarNotificacao("Erro ao remover.", "erro");
         }
@@ -727,35 +752,63 @@ async function deletarVenda(id) {
 
 let carrinho = [];
 
+// --- CORREÇÃO DEFINITIVA DO NAN ---
 async function carregarDadosVenda2() {
-    const elProd = document.getElementById('produto-select'); 
-    const elCli = document.getElementById('cliente-nome'); // Note: no HTML parece ser input text, vamos checar
-    
-    // Se no HTML "cliente-nome" for Input Text, o usuário digita. 
-    // Se for Select (como sugerido para funcionar com ID), precisamos alterar o HTML ou usar datalist.
-    // O código anterior usava popularSelect em 'venda2ClienteSelect', mas no HTML estava 'cliente-nome'.
-    // Vou assumir a lógica do script anterior: popular o select de produtos.
-    
-    if(!elProd) return;
+    const elProd = document.getElementById('produto-select');
+    const elCli = document.getElementById('venda2ClienteSelect'); // ID corrigido
 
     try {
-        const resProd = await fetch('/produto/api/produto/listar?size=1000');
-        
-        if(resProd.ok) {
+        const [resCli, resProd] = await Promise.all([
+            fetch('/cliente/api/cliente/todos'),
+            fetch('/produto/api/produto/listar?size=1000')
+        ]);
+
+        // Clientes
+        if (elCli && resCli.ok) {
+            const clientes = await resCli.json();
+            popularSelect(elCli, clientes, "Selecione um Cliente", "idCliente");
+        }
+
+        // Produtos (COM PROTEÇÃO CONTRA NAN)
+        if (elProd && resProd.ok) {
             const data = await resProd.json();
-            const lista = data.content || data;
-            
+            const listaProdutos = data.content || data;
+
             elProd.innerHTML = '<option value="">Selecione um produto</option>';
-            lista.forEach(p => {
+            
+            listaProdutos.forEach(p => {
                 const opt = document.createElement('option');
-                // Value customizado: nome|preco para o front, mas precisamos do ID para salvar
-                // Vamos usar: id|nome|preco
-                opt.value = `${p.idProduto}|${p.nome}|${p.valor}`;
-                opt.textContent = `${p.nome} - R$ ${p.valor ? p.valor.toFixed(2) : '0.00'}`;
+                
+                // Pega o ID correto (tenta várias opções)
+                const idFinal = p.idProduto || p.id || p.idServico;
+                
+                // Garante que o valor seja numérico e não nulo
+                let valorNumerico = 0.00;
+                
+                // Força conversão segura de valor
+                if(p.valor !== undefined && p.valor !== null) {
+                    let v = parseFloat(p.valor);
+                    if(!isNaN(v)) valorNumerico = v;
+                }
+
+                const nomeFinal = p.nome || p.nomeProduto || "Produto sem nome";
+
+                if(!idFinal) return; // Se não tem ID, ignora para não quebrar
+
+                opt.value = idFinal;
+                opt.textContent = `${nomeFinal} - R$ ${valorNumerico.toFixed(2)}`;
+                
+                // Salva atributos seguros
+                opt.dataset.nome = nomeFinal;
+                opt.dataset.preco = valorNumerico.toString(); // Salva string limpa
+                
                 elProd.appendChild(opt);
             });
         }
-    } catch(e) { console.error(e); }
+    } catch (e) {
+        console.error("Erro ao carregar dados da venda:", e);
+        mostrarNotificacao("Erro ao carregar listas de clientes ou produtos.", "erro");
+    }
 }
 
 function inicializarLogicaCarrinho() {
@@ -764,73 +817,71 @@ function inicializarLogicaCarrinho() {
     const produtoSelect = document.getElementById('produto-select');
     const quantidadeInput = document.getElementById('produto-quantidade');
     
-    if(btnAdd && produtoSelect) {
-        btnAdd.addEventListener('click', () => {
-            const produtoOption = produtoSelect.options[produtoSelect.selectedIndex];
-            if (!produtoOption.value) {
-                mostrarNotificacao('Por favor, selecione um produto.', 'erro');
-                return;
-            }
+    // Configuração do botão "Adicionar ao Carrinho"
+	// Dentro da função inicializarLogicaCarrinho()
 
-            // Agora esperamos 3 partes: id|nome|preco
-            const parts = produtoOption.value.split('|');
-            let id, nome, preco;
-            
-            if(parts.length === 3) {
-                [id, nome, preco] = parts;
-            } else {
-                // Fallback para o formato antigo (nome|preco) se não tiver ID
-                [nome, preco] = parts;
-                id = null; // Vai dar erro no backend se não tiver ID
-            }
+	if(btnAdd && produtoSelect) {
+	    btnAdd.addEventListener('click', () => {
+	        const selectedOption = produtoSelect.options[produtoSelect.selectedIndex];
+	        
+	        if (!selectedOption.value) {
+	            mostrarNotificacao('Por favor, selecione um produto.', 'erro');
+	            return;
+	        }
 
-            const quantidade = parseInt(quantidadeInput.value);
-            const precoNumerico = parseFloat(preco);
+	        // --- AQUI ESTÁ A CORREÇÃO DO NaN ---
+	        // O código antigo usava .split('|'). O novo DEVE usar .dataset
+	        const id = parseInt(selectedOption.value);
+	        
+	        // Pega o nome guardado no atributo invisível data-nome
+	        const nome = selectedOption.dataset.nome || "Produto sem nome"; 
+	        
+	        // Pega o preço e garante que vire número. Se falhar, vira 0.0
+	        let preco = parseFloat(selectedOption.dataset.preco);
+	        if (isNaN(preco)) preco = 0.0; 
 
-            carrinho.push({
-                idProduto: id,
-                nome: nome,
-                preco: precoNumerico,
-                quantidade: quantidade,
-                subtotal: precoNumerico * quantidade
-            });
-            
-            atualizarCarrinhoDisplay();
-            
-            produtoSelect.selectedIndex = 0;
-            quantidadeInput.value = 1;
-        });
-    }
+	        const quantidade = parseInt(quantidadeInput.value) || 1;
 
+	        carrinho.push({
+	            idProduto: id,
+	            nome: nome,
+	            preco: preco,
+	            quantidade: quantidade,
+	            subtotal: preco * quantidade
+	        });
+	        
+	        atualizarCarrinhoDisplay();
+	        
+	        // Reseta os campos
+	        produtoSelect.selectedIndex = 0;
+	        quantidadeInput.value = 1;
+	    });
+	}
+
+    // Configuração do botão "Finalizar Venda"
     if(btnFin) {
         btnFin.addEventListener('click', async () => {
-            if(carrinho.length === 0) { mostrarNotificacao("Carrinho vazio!", "erro"); return; }
+            if(carrinho.length === 0) { 
+                mostrarNotificacao("Carrinho vazio!", "erro"); 
+                return; 
+            }
             
-            // Tenta pegar cliente pelo nome ou ID.
-            // Nota: O backend precisa do ID do cliente. Se 'cliente-nome' for texto, 
-            // precisaria buscar o ID. Para simplificar, vamos assumir que existe um cliente padrão ou que o campo foi alterado para select.
-            // Para este script funcionar 100%, o campo de cliente no HTML deveria ser um <select> populado com IDs.
-            // Vou usar um ID fixo ou tentar ler o value se for select.
+            const cliSelect = document.getElementById('venda2ClienteSelect');
+            if (!cliSelect || !cliSelect.value) {
+                mostrarNotificacao("Selecione um cliente!", "erro");
+                return;
+            }
+            const cliId = cliSelect.value;
             
-            const cliInput = document.getElementById('cliente-nome');
-            let cliId = 1; // ID Default para teste se não for select
-            if(cliInput && cliInput.tagName === 'SELECT') cliId = cliInput.value;
-            
-            // Loop para salvar itens
-            let sucessos = 0;
-            let erros = 0;
-
             btnFin.disabled = true;
             btnFin.textContent = "Processando...";
 
-            for(let item of carrinho) {
-                if(!item.idProduto) {
-                    // Pula se não tiver ID (produtos hardcoded antigos)
-                    continue; 
-                }
+            let sucessos = 0;
+            let erros = 0;
 
+            for(let item of carrinho) {
                 const dto = {
-                    idCliente: parseInt(cliId), // Ajuste conforme seu HTML
+                    idCliente: parseInt(cliId),
                     idProduto: parseInt(item.idProduto),
                     quantidade: item.quantidade,
                     dataInicio: new Date().toISOString().split('T')[0],
@@ -839,11 +890,16 @@ function inicializarLogicaCarrinho() {
                 
                 try {
                     const res = await fetch('/vendas/api/venda/salvar', {
-                        method: 'POST', headers: getAuthHeaders(), body: JSON.stringify(dto)
+                        method: 'POST', 
+                        headers: getAuthHeaders(), 
+                        body: JSON.stringify(dto)
                     });
+                    
                     if(res.ok) sucessos++;
                     else erros++;
-                } catch(e) { erros++; }
+                } catch(e) { 
+                    erros++; 
+                }
             }
             
             btnFin.disabled = false;
@@ -854,12 +910,12 @@ function inicializarLogicaCarrinho() {
                 carrinho = [];
                 atualizarCarrinhoDisplay();
                 closeModal('venda2');
-                atualizarTabelaVendas(); // Atualiza tabela
+                atualizarTabelaVendas(); 
             } else if (sucessos > 0) {
                  mostrarNotificacao(`Parcial: ${sucessos} itens salvos, ${erros} erros.`, "erro");
                  atualizarTabelaVendas();
             } else {
-                mostrarNotificacao("Erro ao salvar venda. Verifique os dados.", "erro");
+                mostrarNotificacao("Erro ao salvar venda.", "erro");
             }
         });
     }
@@ -907,7 +963,7 @@ function atualizarCarrinhoDisplay() {
 }
 
 async function atualizarTabelaVendas() {
-    const tbody = document.getElementById('tbody-vendas'); // Adicione id="tbody-vendas" no seu HTML
+    const tbody = document.getElementById('tbody-vendas'); 
     if (!tbody) return;
 
     tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;">Carregando vendas...</td></tr>';
@@ -1102,112 +1158,10 @@ async function salvarCategoria() {
     } catch (e) { mostrarNotificacao('Erro conexão', 'erro'); }
 }
 
-// --- CARREGAR DADOS NO MODAL PARA EDIÇÃO ---
-async function editarOS(id) {
-    await carregarDadosOS(); // Garante que as listas (clientes, serviços) estão carregadas
-    try {
-        // 1. Busca os dados da O.S. pelo ID
-        const response = await fetch(`/ordens/api/ordem/${id}`);
-        if (!response.ok) throw new Error("Erro na API");
-        const os = await response.json();
-
-        // 2. Garante que o campo oculto de ID existe
-        const elId = document.getElementById('osId');
-        if(!elId) {
-             const hiddenInput = document.createElement('input');
-             hiddenInput.type = 'hidden';
-             hiddenInput.id = 'osId';
-             document.querySelector('#modalOrdemServico .modal-content').appendChild(hiddenInput);
-        }
-        document.getElementById('osId').value = os.idOS || os.IdOS;
-
-        // 3. Preenche os campos do formulário com os dados recebidos
-        if(document.getElementById('osCliente')) document.getElementById('osCliente').value = os.idCliente;
-        if(document.getElementById('osServico')) document.getElementById('osServico').value = os.idServico;
-        if(document.getElementById('osProduto')) document.getElementById('osProduto').value = os.idProduto;
-        if(document.getElementById('osQuantidade')) document.getElementById('osQuantidade').value = os.quantidade;
-        if(document.getElementById('osStatus')) document.getElementById('osStatus').value = os.statusOS;
-        if(document.getElementById('osPreco')) document.getElementById('osPreco').value = os.valor;
-
-        // 4. Abre o modal
-        openModal('OrdemServico');
-    } catch (e) {
-        console.error(e);
-        mostrarNotificacao("Erro ao carregar OS para edição.", "erro");
-    }
-}
-
-// --- DELETAR O.S. ---
-async function deletarOS(id) {
-    if (!confirm("Deseja deletar esta O.S.?")) return;
-    try {
-        const response = await fetch(`/ordens/api/ordem/deletar/${id}`, { 
-            method: 'DELETE', 
-            headers: getAuthHeaders() 
-        });
-        if (response.ok) {
-            mostrarNotificacao("Removido com sucesso!", "sucesso");
-            // Atualiza a tabela visualmente sem recarregar a página
-            atualizarTabelaOrdens(); 
-        } else {
-            mostrarNotificacao("Erro ao remover.", "erro");
-        }
-    } catch (error) { mostrarNotificacao("Erro de conexão.", "erro"); }
-}
-
-// --- CARREGAR DADOS NO MODAL PARA EDIÇÃO ---
-async function editarVenda(id) {
-    await carregarDadosVendaModal(); // Carrega lista de clientes/produtos
-    try {
-        const response = await fetch(`/vendas/api/venda/${id}`);
-        const venda = await response.json();
-
-        // Cria ou recupera o input hidden para o ID da venda
-        let elId = document.getElementById('vendaId');
-        if(!elId) {
-             const modalVenda = document.getElementById('modalVenda');
-             if(modalVenda) {
-                 elId = document.createElement('input');
-                 elId.type = 'hidden';
-                 elId.id = 'vendaId';
-                 modalVenda.querySelector('.modal-content').appendChild(elId);
-             }
-        }
-        if(elId) elId.value = venda.idVenda;
-
-        // Preenche o formulário
-        if(document.getElementById('vendaCliente')) document.getElementById('vendaCliente').value = venda.idCliente;
-        if(document.getElementById('vendaProduto')) document.getElementById('vendaProduto').value = venda.idProduto;
-        if(document.getElementById('vendaQuantidade')) document.getElementById('vendaQuantidade').value = venda.quantidade;
-
-        openModal('venda');
-    } catch (e) {
-        mostrarNotificacao("Erro ao carregar venda", "erro");
-    }
-}
-
-// --- DELETAR VENDA ---
-async function deletarVenda(id) {
-    if (!confirm("Deletar venda?")) return;
-    try {
-        const response = await fetch(`/vendas/api/venda/deletar/${id}`, { method: 'DELETE', headers: getAuthHeaders() });
-        if (response.ok) {
-            mostrarNotificacao("Venda removida!", "sucesso");
-            // Atualiza a tabela visualmente
-            atualizarTabelaVendas(); 
-        } else {
-            mostrarNotificacao("Erro ao remover.", "erro");
-        }
-    } catch (error) { mostrarNotificacao("Erro de conexão.", "erro"); }
-}
-
 // =================================================================================
 // 8. FUNÇÕES DE FUNCIONÁRIOS
 // =================================================================================
 
-/**
- * Atualiza a tabela de Funcionários dinamicamente
- */
 async function atualizarTabelaFuncionarios() {
     const tbody = document.getElementById('tbody-funcionarios');
     if (!tbody) return;
@@ -1231,7 +1185,6 @@ async function atualizarTabelaFuncionarios() {
             lista.forEach(func => {
                 const tr = document.createElement('tr');
                 
-                // Define a cor do badge baseado no status (Exemplo)
                 let statusClass = 'status-normal';
                 if (func.statusFuncionario === 'ATIVO' || func.statusFuncionario === 'EFETIVO') statusClass = 'status-success';
                 if (func.statusFuncionario === 'DEMITIDO' || func.statusFuncionario === 'INATIVO') statusClass = 'status-danger';
@@ -1260,9 +1213,6 @@ async function atualizarTabelaFuncionarios() {
     }
 }
 
-/**
- * Carrega dados para edição no Modal
- */
 async function editarFuncionario(id) {
     try {
         const response = await fetch(`/funcionario/api/funcionario/${id}`);
@@ -1270,7 +1220,6 @@ async function editarFuncionario(id) {
         
         const func = await response.json();
 
-        // Garante que existe um campo hidden para o ID
         let elId = document.getElementById('funcId');
         if (!elId) {
             elId = document.createElement('input');
@@ -1280,99 +1229,28 @@ async function editarFuncionario(id) {
         }
         elId.value = func.idFuncionario;
 
-        // Preenche os campos
         document.getElementById('funcNome').value = func.nomeFuncionario;
         document.getElementById('funcCpf').value = func.cpf;
         document.getElementById('funcEmail').value = func.endEmail;
         document.getElementById('funcTel').value = func.telefone;
         
-        // Endereço
         document.getElementById('funcCep').value = func.cep || '';
         document.getElementById('funcRua').value = func.rua || '';
         document.getElementById('funcBairro').value = func.bairro || '';
         document.getElementById('funcNumero').value = func.numeroCasa || '';
         document.getElementById('funcCidade').value = func.cidade || '';
-        
-        // Se houver campos de data/nível no modal, preencha aqui
-        // document.getElementById('funcAcesso').value = func.nivelAces;
 
         openModal('Funcionario');
+
+        // --- Mudar Titulo para Editar ---
+        const h2 = document.querySelector('#modalFuncionario h2');
+        if(h2) h2.textContent = 'Editar Funcionário';
+
     } catch (e) {
         mostrarNotificacao("Erro ao carregar funcionário.", "erro");
     }
 }
 
-/**
- * Salva (Cria ou Edita) Funcionário
- */
-async function salvarFuncionario() {
-    const elId = document.getElementById('funcId');
-    const id = elId ? elId.value : null;
-
-    const nome = document.getElementById('funcNome').value;
-    const cpf = document.getElementById('funcCpf').value;
-    const email = document.getElementById('funcEmail').value;
-    const telefone = document.getElementById('funcTel').value;
-    
-    // Endereço
-    const cep = document.getElementById('funcCep').value;
-    const rua = document.getElementById('funcRua').value;
-    const bairro = document.getElementById('funcBairro').value;
-    const numero = document.getElementById('funcNumero').value;
-    const cidade = document.getElementById('funcCidade').value;
-    
-    // Outros dados (Acesso, Salário)
-    const acesso = document.getElementById('funcAcesso') ? document.getElementById('funcAcesso').value : null;
-    const salario = document.getElementById('funcSalario') ? document.getElementById('funcSalario').value : 0;
-
-    if (!nome || !cpf) { 
-        mostrarNotificacao('Nome e CPF são obrigatórios!', 'erro'); 
-        return; 
-    }
-
-    const dto = {
-        idFun: id ? parseInt(id) : null, // Backend espera idFun ou idFuncionario? O controller verifica idFun
-        nomeFuncionario: nome, 
-        cpf: cpf,
-        endEmail: email,
-        telefone: telefone,
-        cep: cep,
-        rua: rua,
-        bairro: bairro,
-        numeroCasa: parseInt(numero || 0),
-        cidade: cidade,
-        nivelAces: acesso,
-        // Adicione outros campos conforme seu DTO
-    };
-
-    try {
-        const res = await fetch('/funcionario/api/funcionario/salvar', {
-            method: 'POST', 
-            headers: getAuthHeaders(), 
-            body: JSON.stringify(dto)
-        });
-
-        if (res.ok) {
-            mostrarNotificacao('Funcionário salvo com sucesso!', 'sucesso');
-            closeModal('Funcionario');
-            
-            // Limpa o ID oculto para evitar edições acidentais depois
-            if(elId) elId.value = '';
-            
-            atualizarTabelaFuncionarios(); // Atualiza a tabela sem reload
-        } else {
-            const erro = await res.text();
-            mostrarNotificacao('Erro: ' + erro, 'erro');
-        }
-    } catch (e) { 
-        console.error(e);
-        mostrarNotificacao('Erro de conexão ao salvar.', 'erro'); 
-    }
-}
-
-/**
- * Deleta Funcionário
- */
 async function deletarFuncionario(id) {
     if (!confirm("Tem certeza que deseja excluir este funcionário?")) return;
     
@@ -1386,14 +1264,10 @@ async function deletarFuncionario(id) {
             mostrarNotificacao("Funcionário excluído!", "sucesso");
             atualizarTabelaFuncionarios();
         } else {
-            const err = await response.text(); // Tenta pegar mensagem de erro do backend (vínculos)
+            const err = await response.text(); 
             mostrarNotificacao(err || "Erro ao excluir.", "erro");
         }
     } catch (error) { 
         mostrarNotificacao("Erro de conexão.", "erro"); 
     }
 }
-
-
-
-

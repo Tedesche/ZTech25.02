@@ -848,7 +848,9 @@
 
             <div class="form-group">
                 <label>Cliente:</label>
-                <input type="text" id="cliente-nome" placeholder="Nome do cliente">
+                <select id="venda2ClienteSelect" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    <option value="">Selecione um cliente...</option>
+                </select>
             </div>
 
             <hr style="margin: 20px 0; border: 1px solid #eee;">
@@ -1048,71 +1050,19 @@
 	
 
     <script> 
-        // criar uma função para zerar os modais ao fechalos
-        function openModal(type) {
-            // Ajuste para pegar o ID correto do modal
-            let idModal = 'modal' + type.charAt(0).toUpperCase() + type.slice(1);
-            if(type === 'os') idModal = 'modalOrdemServico';
-            
-            const el = document.getElementById(idModal);
-            if(el) {
-                el.style.display = 'flex';
-                // inicializa os dados da choice
-                if(typeof inicializarChoicesServicos === 'function') {
-                    inicializarChoicesServicos();
-                }
-            } else {
-                console.error("Modal não encontrado com ID: " + idModal);
-            }
-        }
-
-        function closeModal(type) {
-            let idModal = 'modal' + type.charAt(0).toUpperCase() + type.slice(1);
-            if(type === 'os') idModal = 'modalOrdemServico';
-            
-            const el = document.getElementById(idModal);
-            if(el) {
-                el.style.display = 'none';
-            }
-        }
-
         // Fechar modal ao clicar fora dele
         window.onclick = function (event) {
             if (event.target.classList.contains('modal')) {
                 event.target.style.display = 'none';
             }
         }
-        
-        // NOVA FUNÇÃO para ler o parâmetro 'tab' da URL
-        function ativarAbaPelaUrl() {
-            const params = new URLSearchParams(window.location.search);
-            const abaAtiva = params.get('tab'); // ex: 'estoque'
 
-            if (abaAtiva) {
-                // Simula um clique no botão da aba correta
-                const botaoAtivo = document.querySelector(`.nav-btn[onclick*="${abaAtiva}"]`);
-                if(botaoAtivo) {
-                    botaoAtivo.click(); // Usa sua função showSection para abrir a aba
-                }
-            } else {
-                // Comportamento padrão: mostrar dashboard
-                const dashSection = document.getElementById('dashboard-section');
-                if(dashSection) dashSection.classList.add('active');
-                
-                const btnDash = document.querySelector('.nav-btn[onclick="showSection(\'dashboard\')"]');
-                if(btnDash) btnDash.classList.add('active');
-            }
-        }
-
-        // ACHE ISSO NO SEU CÓDIGO (no final do script):
+        // Animações e Tema ao carregar
         window.addEventListener('load', function () {
             // Load theme preference
-            loadTheme();
+            if (typeof loadTheme === 'function') loadTheme();
 
-            // SUBSTITUA O CÓDIGO ANTIGO DE MOSTRAR O DASHBOARD POR ISSO:
-            ativarAbaPelaUrl(); 
-            
-            // O resto da sua função 'load' (animações, etc.)
+            // Animações dos cards
             document.querySelectorAll('.card, .quick-actions').forEach((el, index) => {
                 el.style.opacity = '0';
                 el.style.transform = 'translateY(20px)';
@@ -1124,60 +1074,11 @@
             });
         });
 
-        function GETcep() {
-            var cep = document.getElementById('cep').value;
-            
-            // Remove traços e pontos para a API
-            cep = cep.replace(/\D/g, '');
-
-            if (cep.length !== 8) {
-                alert("CEP inválido. Deve conter 8 números.");
-                return;
-            }
-
-            var url = "https://viacep.com.br/ws/" + cep + "/json/";
-
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.erro) {
-                        // Se o CEP não for encontrado, avisa o usuário
-                        alert("CEP não encontrado!");
-                        // Limpa os campos
-                        document.getElementById('rua').value = "";
-                        document.getElementById('bairro').value = "";
-                        document.getElementById('cidade').value = "";
-                    } else {
-                        // Preenche os campos do formulário com os dados
-                        document.getElementById('rua').value = data.logradouro;
-                        document.getElementById('bairro').value = data.bairro;
-                        document.getElementById('cidade').value = data.localidade; // O campo correto é 'localidade'
-                    }
-                }).catch(error => {
-                    console.error(error);
-                    alert("Houve um erro ao buscar o CEP.");
-                });
-        }
-
-        // Funcionalidade de busca simples
-        document.addEventListener('input', function (e) {
-            if (e.target.classList.contains('search-input')) {
-                const searchTerm = e.target.value.toLowerCase();
-                const table = e.target.closest('.section').querySelector('.data-table tbody');
-                const rows = table.querySelectorAll('tr');
-
-                rows.forEach(row => {
-                    const text = row.textContent.toLowerCase();
-                    row.style.display = text.includes(searchTerm) ? '' : 'none';
-                });
-            }
-        });
-
         // Update modal headers for dark theme
         function updateModalHeaders() {
             const modalHeaders = document.querySelectorAll('.modal-content h2');
             modalHeaders.forEach(header => {
-                if (isDarkTheme) {
+                if (typeof isDarkTheme !== 'undefined' && isDarkTheme) {
                     header.style.color = 'var(--text-primary-dark)';
                 } else {
                     header.style.color = 'var(--text-primary-light)';
@@ -1185,154 +1086,31 @@
             });
         }
 
-        // Listen for theme changes to update modal headers
+        // Listen for theme changes
         document.body.addEventListener('transitionend', function (e) {
             if (e.target === document.body) {
                 updateModalHeaders();
             }
         });
 
-        // funções da modal de venda
-        document.addEventListener('DOMContentLoaded', () => {
-            // Array para guardar os itens do carrinho em memória
-            let carrinho = [];
-
-            // Seleciona os elementos do DOM
-            const produtoSelect = document.getElementById('produto-select');
-            const quantidadeInput = document.getElementById('produto-quantidade');
-            const btnAdicionar = document.getElementById('btn-adicionar-produto');
-            const listaCarrinho = document.getElementById('carrinho-itens-lista');
-            const totalCarrinhoSpan = document.getElementById('valor-total-carrinho');
-            const btnFinalizar = document.getElementById('btn-finalizar-venda');
-
-            // Evento para o botão de adicionar produto
-            if(btnAdicionar){
-                btnAdicionar.addEventListener('click', () => {
-                    const produtoOption = produtoSelect.options[produtoSelect.selectedIndex];
-                    if (!produtoOption.value) {
-                        alert('Por favor, selecione um produto.');
-                        return;
-                    }
-
-                    const [nome, preco] = produtoOption.value.split('|');
-                    const quantidade = parseInt(quantidadeInput.value);
-                    const precoNumerico = parseFloat(preco);
-
-                    // Adiciona o produto ao array do carrinho
-                    carrinho.push({
-                        nome: nome,
-                        preco: precoNumerico,
-                        quantidade: quantidade,
-                        subtotal: precoNumerico * quantidade
-                    });
-
-                    // Atualiza a exibição do carrinho
-                    atualizarCarrinhoDisplay();
-
-                    // Limpa os campos para a próxima adição
-                    produtoSelect.selectedIndex = 0;
-                    quantidadeInput.value = 1;
-                });
-            }
-
-            // Função para renderizar o carrinho na tela
-            function atualizarCarrinhoDisplay() {
-                // Limpa a lista atual
-                listaCarrinho.innerHTML = '';
-
-                if (carrinho.length === 0) {
-                    listaCarrinho.innerHTML = '<p class="carrinho-vazio">Nenhum item adicionado ainda.</p>';
-                    totalCarrinhoSpan.textContent = '0,00';
-                    return;
-                }
-
-                let valorTotal = 0;
-
-                // Cria e adiciona cada item do carrinho na lista
-                carrinho.forEach((item, index) => {
-                    valorTotal += item.subtotal;
-
-                    const itemDiv = document.createElement('div');
-                    itemDiv.className = 'carrinho-item';
-                    itemDiv.innerHTML = `
-                <span>${item.quantidade}x ${item.nome}</span>
-                <span>R$ ${item.subtotal.toFixed(2).replace('.', ',')}</span>
-                <button class="btn-remover-item" data-index="${index}" style="background:none; border:none; color:red; cursor:pointer;">&times;</button>`;
-                    listaCarrinho.appendChild(itemDiv);
-                });
-
-                // Atualiza o valor total
-                totalCarrinhoSpan.textContent = valorTotal.toFixed(2).replace('.', ',');
-
-                // Adiciona eventos de clique aos botões de remover
-                document.querySelectorAll('.btn-remover-item').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        const indexParaRemover = parseInt(e.target.dataset.index);
-                        // Remove o item do array
-                        carrinho.splice(indexParaRemover, 1);
-                        // Atualiza a exibição novamente
-                        atualizarCarrinhoDisplay();
-                    });
-                });
-            }
-
-            // Lógica para finalizar a venda
-            if(btnFinalizar){
-                btnFinalizar.addEventListener('click', () => {
-                    if (carrinho.length === 0) {
-                        if(typeof mostrarNotificacao === 'function') mostrarNotificacao('O carrinho está vazio!', 'erro');
-                        else alert('O carrinho está vazio!');
-                        return;
-                    }
-
-                    const dadosVenda = {
-                        cliente: document.getElementById('cliente-nome').value,
-                        itens: carrinho,
-                        total: carrinho.reduce((acc, item) => acc + item.subtotal, 0)
-                    };
-
-                    console.log('Dados da Venda:', dadosVenda);
-                    
-                    // Sucesso!
-                    if(typeof mostrarNotificacao === 'function') mostrarNotificacao('Venda finalizada com sucesso!', 'sucesso');
-                    else alert('Venda finalizada com sucesso!');
-                    
-                    // Fecha a modal e limpa o carrinho (opcional)
-                    closeModal('venda2');
-                    carrinho = [];
-                    document.getElementById('carrinho-itens-lista').innerHTML = '<p class="carrinho-vazio">Carrinho limpo.</p>';
-                    document.getElementById('valor-total-carrinho').textContent = '0,00';
-                });
-            }
-        });
-    
-        
-            // verificar esta função para a modal de serviços e possiveisoutra modals onde possuem campos de dropslist
-        // Variável para guardar a instância do Choices, para não inicializar várias vezes
+        // Choices JS initialization (Mantido caso seja usado em outros modais)
         let choicesInstance = null;
-
         function inicializarChoicesServicos() {
-        // Encontra o elemento <input> de serviços
-        const servicosInput = document.getElementById('servicos-input');
-
-        // Se o elemento existe E AINDA NÃO FOI INICIALIZADO
-        if (servicosInput && !choicesInstance) {
-            
-            // Inicializa a biblioteca
-            choicesInstance = new Choices(servicosInput, {
-            choices: [
-                { value: 'Troca de tela | 380.00', label: 'Troca de tela | 380.00' },
-                { value: 'Troca de Bateria | 250.00', label: 'Troca de Bateria | 250.00' },
-                { value: 'Limpeza Química | 150.00', label: 'Limpeza Química | 150.00' },
-                { value: 'Reparo Placa Mãe | 550.00', label: 'Reparo Placa Mãe | 550.00' }
-            ],
-            removeItemButton: true,
-            addItemText: (value) => `Pressione Enter para adicionar <b>"${value}"</b>`,
-            noResultsText: 'Nenhum resultado encontrado',
-            });
-            
+            const servicosInput = document.getElementById('servicos-input');
+            if (servicosInput && !choicesInstance) {
+                choicesInstance = new Choices(servicosInput, {
+                    choices: [
+                        { value: 'Troca de tela | 380.00', label: 'Troca de tela | 380.00' },
+                        { value: 'Troca de Bateria | 250.00', label: 'Troca de Bateria | 250.00' },
+                        { value: 'Limpeza Química | 150.00', label: 'Limpeza Química | 150.00' },
+                        { value: 'Reparo Placa Mãe | 550.00', label: 'Reparo Placa Mãe | 550.00' }
+                    ],
+                    removeItemButton: true,
+                    addItemText: (value) => `Pressione Enter para adicionar <b>"${value}"</b>`,
+                    noResultsText: 'Nenhum resultado encontrado',
+                });
+            }
         }
-    }
     </script>   
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script th:src="@{/script/script.js}"></script>
