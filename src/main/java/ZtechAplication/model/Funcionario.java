@@ -108,5 +108,14 @@ public class Funcionario {
 	public void setTelefone(Telefone telefone) {
 		this.telefone = telefone;
 	}
+
+	public LocalDate getDataAdm() {
+		return dataAdm;
+	}
+
+	public void setDataAdm(LocalDate dataAdm) {
+		this.dataAdm = dataAdm;
+	}
+	
 	
 }

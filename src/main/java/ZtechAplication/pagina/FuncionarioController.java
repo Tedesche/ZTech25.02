@@ -1,5 +1,6 @@
 package ZtechAplication.pagina;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -50,6 +51,41 @@ public class FuncionarioController {
         }
         return listaDeDTOs;
     }
+    
+    private FuncionarioDTO converterParaDTO(Funcionario funcionario) {
+        FuncionarioDTO dto = new FuncionarioDTO();
+        dto.setIdFuncionario(funcionario.getIdFun());
+        dto.setNomeFuncionario(funcionario.getNomeFuncionario());
+        dto.setCpf(funcionario.getCpf());
+        
+        // Formatação da Data de Admissão (Adicione isso)
+        if (funcionario.getDataAdm() != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            dto.setDataAdm(funcionario.getDataAdm().format(formatter));
+        } else {
+            dto.setDataAdm("");
+        }
+
+        // Nível de Acesso e Status (Adicione isso)
+        dto.setNivelAces(funcionario.getNivelAces()); // Certifique-se que o DTO tem esse campo
+        dto.setStatus_Fun(funcionario.getStatus_Fun()); // Certifique-se que o DTO tem esse campo
+
+        if (funcionario.getEmail() != null) {
+            dto.setEndEmail(funcionario.getEmail().getEndEmail());
+        }
+        if (funcionario.getTelefone() != null) {
+            dto.setTelefone(funcionario.getTelefone().getTelefone());
+        }
+        if (funcionario.getEndereco() != null) {
+            Endereco end = funcionario.getEndereco();
+            dto.setRua(end.getRua());
+            dto.setCep(end.getCep());
+            dto.setBairro(end.getBairro());
+            dto.setCidade(end.getCidade());
+            dto.setNumeroCasa(end.getNumeroCasa());
+        }
+        return dto;
+    }
 
     // --- NOVOS MÉTODOS API (JSON) ------------------------------------------------------------
 
@@ -71,8 +107,8 @@ public class FuncionarioController {
 
             Funcionario funcionario = new Funcionario();
             // Correção aqui: getIdFun() em vez de getIdFuncionario()
-            if (funcionarioDTO.getIdFun() != null) {
-                funcionario = funcionarioRepository.findById(funcionarioDTO.getIdFun())
+            if (funcionarioDTO.getIdFuncionario() != null) {
+                funcionario = funcionarioRepository.findById(funcionarioDTO.getIdFuncionario())
                         .orElse(new Funcionario());
             } else {
                 // Validação de CPF apenas na criação (quando não tem ID)
@@ -144,31 +180,5 @@ public class FuncionarioController {
         funcionario.getEndereco().setNumeroCasa(funcionarioDTO.getNumeroCasa());
     }
 
-    private FuncionarioDTO converterParaDTO(Funcionario funcionario) {
-        FuncionarioDTO dto = new FuncionarioDTO();
-        // O setter no DTO se chama setIdFuncionario, mas o getter do model é getIdFun
-        dto.setIdFuncionario(funcionario.getIdFun());
-        dto.setNomeFuncionario(funcionario.getNomeFuncionario());
-        dto.setCpf(funcionario.getCpf());
-
-        if (funcionario.getEmail() != null) {
-            dto.setEndEmail(funcionario.getEmail().getEndEmail());
-        } else {
-            dto.setEndEmail("");
-        }
-        if (funcionario.getTelefone() != null) {
-            dto.setTelefone(funcionario.getTelefone().getTelefone());
-        } else {
-            dto.setTelefone("");
-        }
-        if (funcionario.getEndereco() != null) {
-            Endereco end = funcionario.getEndereco();
-            dto.setRua(end.getRua());
-            dto.setCep(end.getCep());
-            dto.setBairro(end.getBairro());
-            dto.setCidade(end.getCidade());
-            dto.setNumeroCasa(end.getNumeroCasa());
-        }
-        return dto;
-    }
+   
 }

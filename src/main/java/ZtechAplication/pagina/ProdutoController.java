@@ -56,15 +56,27 @@ public class ProdutoController {
         return listaDeDTOs;
     }
 
-	// --- MÉTODOS DA API (JSON para o Dashboard) ---
-	
-	@GetMapping("/api/produto/listar")
-    @ResponseBody 
-    public ResponseEntity<Page<ProdutoDTO>> apiListarProdutos(@PageableDefault(size = 10, page = 0) Pageable pageable) {
-        Page<Produto> paginaProdutos = produtoRepository.findAll(pageable);
-        Page<ProdutoDTO> paginaDTO = paginaProdutos.map(this::converterParaDTO);
-        return ResponseEntity.ok(paginaDTO);
-    }
+ // Em ZtechAplication.pagina.ProdutoController
+
+ 	@GetMapping("/api/produto/listar")
+     @ResponseBody 
+     public ResponseEntity<Page<ProdutoDTO>> apiListarProdutos(
+             @RequestParam(required = false) String termo,
+             @RequestParam(required = false) Integer idCategoria,
+             @RequestParam(required = false) Integer idMarca,
+             @PageableDefault(size = 10, page = 0) Pageable pageable) {
+         
+         // 1. Chama a specification com os 3 parâmetros
+         Specification<Produto> spec = SpecificationController.comFiltrosProduto(termo, idCategoria, idMarca);
+         
+         // 2. Passa 'spec' para o findAll
+         Page<Produto> paginaProdutos = produtoRepository.findAll(spec, pageable);
+         
+         // 3. Converte para DTO
+         Page<ProdutoDTO> paginaDTO = paginaProdutos.map(this::converterParaDTO);
+         
+         return ResponseEntity.ok(paginaDTO);
+     }
 
     @PostMapping("/api/produto/salvar")
     @ResponseBody

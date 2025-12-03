@@ -82,49 +82,7 @@ public class indexController {
             @RequestParam(value = "pageClientes", defaultValue = "0") int pageClientes
         ) {
         
-        try {
-            int pageSize = 10; 
-
-            Pageable pageableCliente = PageRequest.of(pageClientes, pageSize);
-            Pageable pageableFuncionario = PageRequest.of(pageFuncionarios, pageSize);
-            Pageable pageableProduto = PageRequest.of(pageEstoque, pageSize);
-            Pageable pageableOS = PageRequest.of(pageOS, pageSize, Sort.by("dataInicio").descending());
-            Pageable pageableVenda = PageRequest.of(pageVendas, pageSize, Sort.by("dataInicio").descending());
-
-            // 1. Buscar os dados (Entidades)
-            Page<Cliente> paginaClientes = clienteRepository.findAll(pageableCliente);
-            Page<Funcionario> paginaFuncionarios = funcionarioRepository.findAll(pageableFuncionario);
-            Page<OrdemServico> paginaOrdemServicos = ordemServicoRepository.findAll(pageableOS);
-            Page<Produto> paginaProdutos = produtoRepository.findAll(pageableProduto);
-            Page<Venda> paginaVendas = vendaRepository.findAll(pageableVenda);
-            
-            // 2. Converter para DTOs
-            // Clientes
-            List<ClienteDTO> clienteDTOs = clienteController.getClienteDTO(paginaClientes.getContent());
-            Page<ClienteDTO> paginaDTOClientes = new PageImpl<>(clienteDTOs, pageableCliente, paginaClientes.getTotalElements());
-
-            // Funcionários
-            List<FuncionarioDTO> funcionarioDTOs = funcionarioController.getFuncionarioDTO(paginaFuncionarios.getContent());
-            Page<FuncionarioDTO> paginaDTOFuncionarios = new PageImpl<>(funcionarioDTOs, pageableFuncionario, paginaFuncionarios.getTotalElements());
-
-            // Produtos
-            List<ProdutoDTO> produtoDTOs = produtoController.getProdutoDTO(paginaProdutos.getContent());
-            Page<ProdutoDTO> paginaDTOProdutos = new PageImpl<>(produtoDTOs, pageableProduto, paginaProdutos.getTotalElements());
-            
-            // --- CORREÇÃO AQUI: Conversão direta de O.S. e Vendas ---
-            
-            // Ordem de Serviço (Mapeamento direto usando método auxiliar)
-            Page<OrdemServicoDTO> paginaDTOOS = paginaOrdemServicos.map(this::converterOSParaDTO);
-
-            // Vendas (Mapeamento direto usando método auxiliar)
-            Page<VendaDTO> paginaDTOVendas = paginaVendas.map(this::converterVendaParaDTO);
-
-            // 3. Adicionar as PÁGINAS ao Model (CORRIGIDO: Descomentado)
-            model.addAttribute("paginaDeClientes", paginaDTOClientes);
-            model.addAttribute("paginaDeFuncionarios", paginaDTOFuncionarios);
-            model.addAttribute("paginaDeOrdensServico", paginaDTOOS); // Agora não é nulo
-            model.addAttribute("paginaDeProdutos", paginaDTOProdutos);
-            model.addAttribute("paginaDeVendas", paginaDTOVendas);     // Agora não é nulo
+        try {   // Agora não é nulo
             
             // Valores dos cards
             long totalProdutos = produtoRepository.count();

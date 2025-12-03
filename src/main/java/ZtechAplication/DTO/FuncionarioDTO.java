@@ -22,7 +22,7 @@ public class FuncionarioDTO {
 	private String cidade;
 	private int numeroCasa;
 	
-	public Integer getIdFun() {
+	public Integer getIdFuncionario() {
 		return idFun;
 	}
 	public void setIdFuncionario(Integer idFun) {
@@ -100,6 +100,9 @@ public class FuncionarioDTO {
 	public void setNumeroCasa(int numeroCasa) {
 		this.numeroCasa = numeroCasa;
 	}
-
+	public void setIdFun(Integer idFun) {
+		this.idFun = idFun;
+	}
+	
 	
 }
