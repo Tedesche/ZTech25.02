@@ -4098,3 +4098,15 @@ Caused by: org.h2.mvstore.MVStoreException: The file is locked: C:/Users/Marcus 
 2025-11-02 20:10:38.976225-03:00 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TB_USUARIO" not found; SQL statement:
 select u1_0.id_usuario,u1_0.fk_funcionario,u1_0.password,u1_0.username from tb_usuario u1_0 where u1_0.username=? [42102-232]
+2025-12-03 12:25:30.311868-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TB_USUARIO" not found; SQL statement:
+select u1_0.id_usuario,u1_0.fk_funcionario,u1_0.password,u1_0.username from tb_usuario u1_0 where u1_0.username=? [42102-232]
+2025-12-03 12:25:33.845849-03:00 jdbc[5]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TB_USUARIO" not found; SQL statement:
+select u1_0.id_usuario,u1_0.fk_funcionario,u1_0.password,u1_0.username from tb_usuario u1_0 where u1_0.username=? [42102-232]
+2025-12-03 12:25:53.784739-03:00 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TB_USUARIO" not found; SQL statement:
+select u1_0.id_usuario,u1_0.fk_funcionario,u1_0.password,u1_0.username from tb_usuario u1_0 where u1_0.username=? [42102-232]
+2025-12-03 12:26:00.199619-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TB_USUARIO" not found; SQL statement:
+select u1_0.id_usuario,u1_0.fk_funcionario,u1_0.password,u1_0.username from tb_usuario u1_0 where u1_0.username=? [42102-232]

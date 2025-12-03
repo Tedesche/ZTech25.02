@@ -136,67 +136,85 @@
         </div>
 
         <div id="dashboard-section" class="section active">
-            <div class="main-content">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-icon estoque">📦</div>
-                        <h3>Controle de Estoque</h3>
-                    </div>
-                    <div class="stats">
-                        <div class="stat-item">
-                            <div class="stat-text" th:text="${totalProdutos}">0</div>
-                            <div class="stat-label">Produtos Total</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-text">12</div>
-                            <div class="stat-label">Estoque Baixo</div>
-                        </div>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="action-btn btn-primary" style="width: 320px" onclick="openModal('produto')">Novo Produto</button>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-icon vendas">💰</div>
-                        <h3>Controle de Venda</h3>
-                    </div>
-                    <div class="stats">
-                        <div class="stat-item">
-                            <div class="stat-text" th:text="${lucroVendas}" >R$ 0.00</div>
-                            <div class="stat-label">Vendas do Mês</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-text" th:text="${totalVendas}">0</div>
-                            <div class="stat-label">Pedidos</div>
-                        </div>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="action-btn btn-primary" style="width: 320px" onclick="openModal('venda')">Nova Venda</button>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-icon vendas">💳</div>
-                        <h3>Controle de O.S.</h3>
-                    </div>
-                    <div class="stats">
-                        <div class="stat-item">
-                            <div class="stat-text" th:text="${lucroOSs}" >R$ 0.00</div>
-                            <div class="stat-label">Serviços do mês</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-text" th:text="${totalVendas}">0</div>
-                            <div class="stat-label">Serviços</div>
-                        </div>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="action-btn btn-primary" style="width: 320px" onclick="openModal('conta')">Nova Conta</button>
-                    </div>
-                </div>
+<div class="main-content">
+    
+    <div class="card">
+        <div class="card-header">
+            <div class="card-icon estoque">📦</div>
+            <h3>Controle de Estoque</h3>
+        </div>
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-text" id="dash-total-produtos" th:text="${totalProdutos}">0</div>
+                <div class="stat-label">Produtos Total</div>
             </div>
+            <div class="stat-item">
+                <div class="stat-text" id="dash-estoque-baixo" th:text="${estoqueBaixo}">0</div>
+                <div class="stat-label">Estoque Baixo</div>
+            </div>
+        </div>
+        <div class="action-buttons">
+            <button class="action-btn btn-primary" style="width: 320px" onclick="openModal('produto')">Novo Produto</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="card-icon vendas">💰</div>
+            <h3>Controle de Venda</h3>
+        </div>
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-text" id="dash-lucro-vendas" th:text="${lucroVendas}">R$ 0.00</div>
+                <div class="stat-label">Vendas do Mês</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-text" id="dash-total-vendas" th:text="${totalVendas}">0</div>
+                <div class="stat-label">Pedidos</div>
+            </div>
+        </div>
+        <div class="action-buttons">
+            <button class="action-btn btn-primary" style="width: 320px" onclick="openModal('venda2')">Nova Venda</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="card-icon vendas">💳</div>
+            <h3>Controle de O.S.</h3>
+        </div>
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-text" id="dash-lucro-os" th:text="${lucroOSs}">R$ 0.00</div>
+                <div class="stat-label">Lucro do mês</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-text" id="dash-total-os" th:text="${totalOSs}">0</div>
+                <div class="stat-label">Serviços</div>
+            </div>
+        </div>
+        <div class="action-buttons">
+            <button class="action-btn btn-primary" style="width: 320px" onclick="openModal('conta')">Nova Conta</button>
+        </div>
+    </div>
+</div>
+
+<div class="stats-row">
+    <div class="stat-card">
+        <div class="stat-icon">📅</div>
+        <div class="stat-content">
+            <div class="stat-text" id="dash-funcionarios-ativos" th:text="${funcionariosAtivos}">0</div>
+            <div class="stat-label">Colaborador(es) ativos</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">⚠️</div>
+        <div class="stat-content">
+            <div class="stat-text" id="dash-aniversariantes" th:text="${aniversariantes}">Verificando...</div>
+            <div class="stat-label">Aniversariante(s) do mês</div>
+        </div>
+    </div>
+</div>
 
             <div class="quick-actions">
                 <h3>Emissão de Relatórios</h3>
@@ -809,33 +827,34 @@
         </div>
     </div>
 
-    <div id="modalVenda" class="modal">
+<div id="modalVenda" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('venda')">&times;</span>
-            <h2 style="margin-bottom: 25px;">Registrar Nova Venda</h2>
+            <h2 style="margin-bottom: 25px;">Editar Venda</h2>
+            
+            <input type="hidden" id="vendaId">
+
             <div class="form-group">
                 <label>Cliente:</label>
-                <input type="text" placeholder="Nome do cliente">
-            </div>
-            <div class="form-group">
-                <label>Produto:</label>
-                <select>
-                    <option>Selecione um produto</option>
-                    <option>Smartphone Samsung - R$ 899,00</option>
-                    <option>Notebook Dell - R$ 2.499,00</option>
-                    <option>Fone de Ouvido - R$ 129,90</option>
+                <select id="vendaCliente" style="width: 100%; padding: 8px;">
+                    <option value="">Carregando clientes...</option>
                 </select>
             </div>
+            
+            <div class="form-group">
+                <label>Produto:</label>
+                <select id="vendaProduto" style="width: 100%; padding: 8px;">
+                    <option value="">Carregando produtos...</option>
+                </select>
+            </div>
+            
             <div class="form-group">
                 <label>Quantidade:</label>
-                <input type="number" placeholder="1" min="1">
+                <input type="number" id="vendaQuantidade" placeholder="1" min="1">
             </div>
-            <div class="form-group">
-                <label>Valor Total:</label>
-                <input type="number" placeholder="0,00" step="5">
-            </div>
+            
             <div style="display: flex; gap: 10px; margin-top: 25px;">
-                <button class="action-btn btn-primary" style="flex: 1;">Finalizar Venda</button>
+                <button class="action-btn btn-primary" style="flex: 1;" onclick="salvarVenda()">Salvar Alterações</button>
                 <button class="action-btn btn-secondary" onclick="closeModal('venda')">Cancelar</button>
             </div>
         </div>
