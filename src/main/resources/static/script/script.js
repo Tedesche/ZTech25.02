@@ -515,6 +515,7 @@ async function editarOS(id) {
 
 async function salvarOS() {
     let elId = document.getElementById('osId');
+    // Cria o input hidden se não existir
     if(!elId) {
          elId = document.createElement('input');
          elId.type = 'hidden';
@@ -535,6 +536,18 @@ async function salvarOS() {
         return;
     }
 
+    // --- CORREÇÃO AQUI ---
+    // Define a data/hora apenas se for uma NOVA O.S. (sem ID).
+    // Se for edição, manda null para o backend não alterar a data de início original.
+    let dataEnvio = null;
+    let horaEnvio = null;
+
+    if (!idOS) {
+        dataEnvio = new Date().toISOString().split('T')[0];
+        horaEnvio = new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+    }
+    // ---------------------
+
     const dto = {
         idOS: idOS ? parseInt(idOS) : null,
         idCliente: parseInt(idCliente),
@@ -543,8 +556,8 @@ async function salvarOS() {
         quantidade: parseInt(qtd || 1),
         statusOS: status,
         valor: valor ? parseFloat(valor) : 0.0,
-        dataInicio: new Date().toISOString().split('T')[0],
-        horaInicio: new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})
+        dataInicio: dataEnvio, // Agora envia null na edição
+        horaInicio: horaEnvio
     };
 
     try {
@@ -557,7 +570,7 @@ async function salvarOS() {
         if (res.ok) {
             mostrarNotificacao('O.S. Salva com sucesso!', 'sucesso');
             closeModal('OrdemServico');
-            atualizarTabelaOrdens(); 
+            atualizarTabelaOrdens(); // Atualiza sem reload
         } else {
             const txt = await res.text();
             mostrarNotificacao('Erro: ' + txt, 'erro');

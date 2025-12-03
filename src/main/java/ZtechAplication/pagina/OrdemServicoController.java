@@ -10,14 +10,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import ZtechAplication.DTO.OrdemServicoDTO;
 import ZtechAplication.model.Cliente;
@@ -74,19 +71,24 @@ public class OrdemServicoController {
 
             OrdemServico os;
             
-            // EDIÇÃO: Restaura estoque antigo
+            // EDIÇÃO: Restaura estoque antigo antes de aplicar a nova quantidade
             if (osDTO.getIdOS() != null) {
                 os = ordemServicoRepository.findById(osDTO.getIdOS()).orElse(new OrdemServico());
                 if (os.getProduto() != null) {
                     os.getProduto().adicionarQuantidade(os.getQuantidade());
                     produtoRepository.save(os.getProduto());
                 }
-                // Recarrega produto atualizado
+                // Recarrega produto atualizado do banco
                 produto = produtoRepository.findById(osDTO.getIdProduto()).get();
             } else {
                 // CRIAÇÃO
                 os = new OrdemServico();
-                // Status padrão se não vier preenchido
+                // Define data de início apenas na criação se não vier preenchida
+                if (osDTO.getDataInicio() == null || osDTO.getDataInicio().isEmpty()) {
+                    os.setDataInicio(LocalDate.now());
+                    os.setHoraInicio(LocalTime.now());
+                }
+                
                 if(osDTO.getStatusOS() == null || osDTO.getStatusOS().isEmpty()) {
                     os.setStatus("Registrada");
                 }
@@ -97,15 +99,26 @@ public class OrdemServicoController {
                 return ResponseEntity.badRequest().body("Estoque insuficiente. Disponível: " + produto.getQuantidade());
             }
 
-            // Atualiza dados da entidade
+            // Atualiza dados da entidade (Preço, ids, etc)
             processarOS(os, osDTO, produto, servico, cliente);
             
-            // Se veio status no DTO (edição ou criação explícita), usa ele
+            // --- CORREÇÃO DE STATUS E DATA FIM ---
             if(osDTO.getStatusOS() != null && !osDTO.getStatusOS().isEmpty()) {
                 os.setStatus(osDTO.getStatusOS());
+
+                // Se o status for CONCLUIDA, define a Data Fim
+                if ("CONCLUIDA".equals(osDTO.getStatusOS())) {
+                    // Só define se ainda não tiver data fim, ou atualiza sempre (opção atual: atualiza sempre)
+                    os.setDataFim(LocalDate.now());
+                    os.setHoraFim(LocalTime.now());
+                } else {
+                    // Se reabriu a OS (ex: mudou de Concluida para Em Andamento), limpa a data fim
+                    os.setDataFim(null);
+                    os.setHoraFim(null);
+                }
             }
 
-            // Baixa estoque
+            // Baixa estoque do produto
             produto.removerQuantidade(osDTO.getQuantidade());
             produtoRepository.save(produto);
             
@@ -125,7 +138,7 @@ public class OrdemServicoController {
             OrdemServico os = ordemServicoRepository.findById(id)
                     .orElseThrow(() -> new Exception("OS não encontrada"));
             
-            // Restaura estoque
+            // Restaura estoque ao deletar
             Produto produto = os.getProduto();
             if (produto != null) {
                 produto.adicionarQuantidade(os.getQuantidade());
@@ -138,14 +151,17 @@ public class OrdemServicoController {
         }
     }
 
-
-
     // --- MÉTODOS AUXILIARES ---
 
     private void processarOS(OrdemServico os, OrdemServicoDTO osDTO, Produto produto, Servico servico, Cliente cliente) {
-        os.setDataInicio(stringToLocalDate(osDTO.getDataInicio(), "yyyy-MM-dd"));
-        os.setHoraInicio(stringToLocalTime(osDTO.getHoraInicio(), "HH:mm"));
-        // Se desejar processar DataFim vindo do DTO, adicione aqui
+        // CORREÇÃO: Só altera a DataInicio se o DTO trouxe uma data nova explícita
+        // Se for edição e o campo vier vazio, mantém a data que já estava no banco
+        if (osDTO.getDataInicio() != null && !osDTO.getDataInicio().isEmpty()) {
+            os.setDataInicio(stringToLocalDate(osDTO.getDataInicio(), "yyyy-MM-dd"));
+        }
+        if (osDTO.getHoraInicio() != null && !osDTO.getHoraInicio().isEmpty()) {
+            os.setHoraInicio(stringToLocalTime(osDTO.getHoraInicio(), "HH:mm"));
+        }
         
         os.setQuantidade(osDTO.getQuantidade());
         os.setProduto(produto);
@@ -166,8 +182,10 @@ public class OrdemServicoController {
         dto.setIdOS(os.getIdOS());
         dto.setDataInicio(localDateToString(os.getDataInicio(), "dd/MM/yyyy"));
         dto.setHoraInicio(localTimeToString(os.getHoraInicio(), "HH:mm"));
+        // Adiciona Data Fim ao DTO para aparecer na tabela
         dto.setDataFim(localDateToString(os.getDataFim(), "dd/MM/yyyy"));
         dto.setHoraFim(localTimeToString(os.getHoraFim(), "HH:mm"));
+        
         dto.setValor(os.getValor());
         dto.setLucro(os.getLucro());
         dto.setStatusOS(os.getStatus());
@@ -188,7 +206,7 @@ public class OrdemServicoController {
         return dto; 
     }
     
-    // Utilitários de Data iguais aos da VendaController
+    // Utilitários de Data
     public static LocalDate stringToLocalDate(String dataString, String formato) {
         if (dataString == null || dataString.trim().isEmpty()) return LocalDate.now(); 
         try { return LocalDate.parse(dataString, DateTimeFormatter.ofPattern(formato)); } 
