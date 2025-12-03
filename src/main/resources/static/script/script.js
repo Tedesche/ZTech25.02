@@ -321,7 +321,7 @@ async function editarProduto(id) {
     } catch (e) { mostrarNotificacao("Erro ao carregar produto.", "erro"); }
 }
 
-async function atualizarTabelaProdutos() {
+async function atualizarTabelaProdutos(page = 0) {
     const tbody = document.getElementById('tbody-produtos');
     if (!tbody) return;
     const termo = document.getElementById('buscaProdutoInput') ? document.getElementById('buscaProdutoInput').value : '';
@@ -331,7 +331,8 @@ async function atualizarTabelaProdutos() {
     tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Carregando estoque...</td></tr>';
 
     try {
-        const params = new URLSearchParams({ size: 20, sort: 'idProduto,desc' });
+        // Correção: Adicionado 'page' aos parâmetros
+        const params = new URLSearchParams({ page: page, size: 10, sort: 'idProduto,desc' });
         if (termo) params.append('termo', termo);
         if (idCat) params.append('idCategoria', idCat);
         if (idMarca) params.append('idMarca', idMarca);
@@ -351,11 +352,11 @@ async function atualizarTabelaProdutos() {
                  tr.innerHTML = `<td>${p.idProduto}</td><td>${p.nome}</td><td>${valorFormatado}</td><td>${p.quantidade}</td><td>${p.descricao || ''}</td><td>${p.categoria || '-'}</td><td>${p.marca || '-'}</td><td style="display: flex; gap: 5px; justify-content: center;"><button class="table-btn edit" onclick="editarProduto(${p.idProduto})">Editar</button><button class="table-btn delete" onclick="deletarProduto(${p.idProduto})">Deletar</button></td>`;
                 tbody.appendChild(tr);
             });
-			gerarPaginacao(data, 'paginacao-produtos', atualizarTabelaProdutos);
+            // Callback correto: atualizarTabelaProdutos
+            gerarPaginacao(data, 'paginacao-produtos', atualizarTabelaProdutos);
         } else { tbody.innerHTML = '<tr><td colspan="8" style="color:red; text-align:center;">Erro ao carregar dados.</td></tr>'; }
     } catch (error) { tbody.innerHTML = '<tr><td colspan="8" style="color:red; text-align:center;">Erro de conexão.</td></tr>'; }
 }
-
 document.getElementById('buscaProdutoInput')?.addEventListener('keypress', function (e) { if (e.key === 'Enter') atualizarTabelaProdutos(); });
 
 // =================================================================================
@@ -469,12 +470,13 @@ async function deletarOS(id) {
     } catch (error) { mostrarNotificacao("Erro de conexão.", "erro"); }
 }
 
-async function atualizarTabelaOrdens() {
+async function atualizarTabelaOrdens(page = 0) {
     const tbody = document.getElementById('tbody-ordens'); 
     if (!tbody) return;
     tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">Carregando O.S...</td></tr>';
     try {
-        const response = await fetch('/ordens/api/ordem/listar?size=20&sort=idOS,desc');
+        // Correção: Adicionado 'page=${page}' na URL
+        const response = await fetch(`/ordens/api/ordem/listar?page=${page}&size=10&sort=idOS,desc`);
         if (response.ok) {
             const data = await response.json();
             const lista = data.content || data;
@@ -490,11 +492,11 @@ async function atualizarTabelaOrdens() {
                 tr.innerHTML = `<td>${os.idOS}</td><td>${os.nomeCliente || '-'}</td><td>${os.dataInicio || ''}</td><td>${os.dataFim || '-'}</td><td>${valorFormatado}</td><td>${os.nomeServico || '-'}</td><td>${os.nomeProduto || '-'}</td><td><span class="status-badge ${badgeClass}">${os.statusOS || 'Registrada'}</span></td><td style="display: flex; gap: 5px; justify-content: center;"><button class="table-btn edit" onclick="editarOS(${os.idOS})">Editar</button><button class="table-btn delete" onclick="deletarOS(${os.idOS})">Deletar</button></td>`;
                 tbody.appendChild(tr);
             });
-			gerarPaginacao(data, 'paginacao-ordens', atualizarTabelaProdutos);
+            // Correção: Callback mudado para atualizarTabelaOrdens
+            gerarPaginacao(data, 'paginacao-ordens', atualizarTabelaOrdens);
         } else { tbody.innerHTML = '<tr><td colspan="9" style="color:red; text-align:center;">Erro ao carregar dados.</td></tr>'; }
     } catch (error) { tbody.innerHTML = '<tr><td colspan="9" style="color:red; text-align:center;">Erro de conexão.</td></tr>'; }
 }
-
 // =================================================================================
 // 6. FUNÇÕES DE VENDA
 // =================================================================================
@@ -737,42 +739,75 @@ function atualizarCarrinhoDisplay() {
     });
 }
 
-async function atualizarTabelaVendas() {
+async function atualizarTabelaVendas(page = 0) {
     const tbody = document.getElementById('tbody-vendas');
     if (!tbody) return;
+
+    // Adicionado: Pega o termo de busca para não perder o filtro ao mudar de página
+    const termo = document.getElementById('buscaVendaInput') ? document.getElementById('buscaVendaInput').value : '';
+
     tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;">Carregando vendas...</td></tr>';
+
     try {
-        const response = await fetch('/vendas/api/venda/listar?size=20&sort=idVenda,desc');
+        // Monta os parâmetros (page, size, sort e termo)
+        const params = new URLSearchParams({ 
+            page: page, 
+            size: 10, 
+            sort: 'idVenda,desc' 
+        });
+
+        if (termo) {
+            params.append('termo', termo);
+        }
+
+        const response = await fetch(`/vendas/api/venda/listar?${params.toString()}`);
+        
         if (response.ok) {
             const data = await response.json();
             const lista = data.content || data;
+            
             tbody.innerHTML = '';
+            
             if (!lista || lista.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;">Nenhuma venda encontrada.</td></tr>';
+                // Limpa a paginação se não houver resultados
+                const divPaginacao = document.getElementById('paginacao-vendas');
+                if(divPaginacao) divPaginacao.innerHTML = '';
                 return;
             }
+
             lista.forEach(venda => {
                 const tr = document.createElement('tr');
                 const valorFormatado = venda.valor ? venda.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 'R$ 0,00';
                 const lucroFormatado = venda.lucro ? venda.lucro.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 'R$ 0,00';
+                
+                // MANTIDO EXATAMENTE COMO VOCÊ ENVIOU (10 Colunas, Botões juntos)
                 tr.innerHTML = `<td>${venda.idVenda}</td><td>${venda.dataInicio || ''}</td><td>${venda.horaInicio || ''}</td><td>${venda.nomeCliente || '-'}</td><td>${venda.nomeProduto || '-'}</td><td>${venda.quantidade}</td><td>${valorFormatado}</td><td>${lucroFormatado}</td><td><span class="status-badge status-success">Concluída</span></td><td style="display: flex; gap: 5px; justify-content: center;"><button class="table-btn edit" onclick="editarVenda(${venda.idVenda})">Editar</button><button class="table-btn delete" onclick="deletarVenda(${venda.idVenda})">Deletar</button></td>`;
                 tbody.appendChild(tr);
             });
-			gerarPaginacao(data, 'paginacao-venda', atualizarTabelaProdutos);
-        } else { tbody.innerHTML = '<tr><td colspan="10" style="color:red; text-align:center;">Erro ao carregar dados.</td></tr>'; }
-    } catch (error) { tbody.innerHTML = '<tr><td colspan="10" style="color:red; text-align:center;">Erro de conexão.</td></tr>'; }
-}
 
+            // ATENÇÃO: Certifique-se que no seu HTML a div de paginação tem id="paginacao-vendas"
+            gerarPaginacao(data, 'paginacao-vendas', atualizarTabelaVendas);
+
+        } else { 
+            tbody.innerHTML = '<tr><td colspan="10" style="color:red; text-align:center;">Erro ao carregar dados.</td></tr>'; 
+        }
+    } catch (error) { 
+        console.error(error);
+        tbody.innerHTML = '<tr><td colspan="10" style="color:red; text-align:center;">Erro de conexão.</td></tr>'; 
+    }
+}
 // =================================================================================
 // 7. FUNÇÕES DE FUNCIONÁRIOS
 // =================================================================================
 
-async function atualizarTabelaFuncionarios() {
+async function atualizarTabelaFuncionarios(page = 0) {
     const tbody = document.getElementById('tbody-funcionarios');
     if (!tbody) return;
     tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Carregando...</td></tr>';
     try {
-        const response = await fetch('/funcionario/api/funcionario/listar?size=20&sort=idFun,desc');
+        // Correção: Adicionado 'page=${page}' na URL
+        const response = await fetch(`/funcionario/api/funcionario/listar?page=${page}&size=10&sort=idFun,desc`);
         if (response.ok) {
             const data = await response.json();
             const lista = data.content || data;
@@ -787,7 +822,8 @@ async function atualizarTabelaFuncionarios() {
                 tr.innerHTML = `<td>${func.idFuncionario}</td><td>${func.nomeFuncionario}</td><td>${func.cpf}</td><td>${func.dataAdm || '-'}</td><td>${func.nivelAces || '-'}</td><td><span class="status-badge ${statusClass}">${func.statusFuncionario || 'Ativo'}</span></td><td style="display: flex; gap: 5px;"><button class="table-btn edit" onclick="editarFuncionario(${func.idFuncionario})">Editar</button><button class="table-btn delete" onclick="deletarFuncionario(${func.idFuncionario})">Deletar</button></td>`;
                 tbody.appendChild(tr);
             });
-			gerarPaginacao(data, 'paginacao-funcionarios', atualizarTabelaProdutos);
+            // Correção: Callback mudado para atualizarTabelaFuncionarios
+            gerarPaginacao(data, 'paginacao-funcionarios', atualizarTabelaFuncionarios);
         } else { tbody.innerHTML = '<tr><td colspan="7" style="color:red; text-align:center;">Erro ao carregar dados.</td></tr>'; }
     } catch (error) { tbody.innerHTML = '<tr><td colspan="7" style="color:red; text-align:center;">Erro de conexão.</td></tr>'; }
 }
