@@ -98,8 +98,17 @@
 			</plugin>
 			  <plugin>
                 <groupId>org.jacoco</groupId>
-    <artifactId>jacoco-maven-plugin</artifactId>
-    <version>0.8.12</version>
+    			<artifactId>jacoco-maven-plugin</artifactId>
+    			<version>0.8.12</version>
+    			<configuration>
+			        <excludes>
+			            <exclude>**/ZtechAplication/DataConfiguration*.class</exclude>
+			            <exclude>**/ZtechAplication/ZtechAplicationAplication*.class</exclude>
+			            
+			            <exclude>**/ZtechAplication/DTO/**</exclude>
+			            <exclude>**/ZtechAplication/config/**</exclude>
+			        </excludes>
+		  	    </configuration>		
                 <executions>
                     <!-- Inicializa o agente do JaCoCo antes dos testes rodarem -->
                     <execution>
