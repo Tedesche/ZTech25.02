@@ -102,11 +102,27 @@
     			<version>0.8.12</version>
     			<configuration>
 			        <excludes>
-			            <exclude>**/ZtechAplication/DataConfiguration*.class</exclude>
-			            <exclude>**/ZtechAplication/ZtechAplicationAplication*.class</exclude>
+			            <exclude>**/ZtechAplication/DataConfiguration.class</exclude>
+			            <exclude>**/ZtechAplication/ZtechAplicationAplication.class</exclude>
 			            
+			            <exclude>**/ZtechAplication/config/CustomAuthenticationSuccessHandler.class</exclude>
+			           
 			            <exclude>**/ZtechAplication/DTO/**</exclude>
-			            <exclude>**/ZtechAplication/config/**</exclude>
+			            
+			            <!-- classes model -->
+						<exclude>**/Categoria.class</exclude>
+						<exclude>**/Cliente.class</exclude>
+						<exclude>**/Email.class</exclude>
+						<exclude>**/Endereco.class</exclude>
+						<exclude>**/Funcionario.class</exclude>
+						<exclude>**/Marca.class</exclude>
+						<exclude>**/Produto.class</exclude>
+						<exclude>**/Servico.class</exclude>
+						<exclude>**/Telefone.class</exclude>
+						<exclude>**/Usuario.class</exclude>
+						<exclude>**/Venda.class</exclude>
+			            
+			            
 			        </excludes>
 		  	    </configuration>		
                 <executions>
