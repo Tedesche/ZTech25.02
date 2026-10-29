@@ -132,9 +132,12 @@ public class OrdemServico {
 		return status;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public void setStatus(String novoStatus) {
+        if ("Cancelada".equals(this.status)) {
+            throw new StatusInvalidException("Não é possível alterar o status de uma OS previamente cancelada.");
+        }
+        this.status = novoStatus;
+    }
 
 	public Servico getServico() {
         return servico;

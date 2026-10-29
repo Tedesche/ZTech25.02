@@ -107,6 +107,14 @@ public class Venda {
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
+    
+    //Métodos de Teste
+    public double calculaLucro(double valorVenda, double custo) {
+        if (valorVenda < custo) {
+            throw new IllegalArgumentException("Margem de lucro negativa não permitida.");
+        }
+        return valorVenda - custo;
+    }
 	
 	
 	
