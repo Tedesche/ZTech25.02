@@ -102,14 +102,17 @@
     			<version>0.8.12</version>
     			<configuration>
 			        <excludes>
+			        	<!-- Pasta classes Aplication -->
 			            <exclude>**/ZtechAplication/DataConfiguration.class</exclude>
 			            <exclude>**/ZtechAplication/ZtechAplicationAplication.class</exclude>
 			            
+			            <!-- Pasta classes config -->
 			            <exclude>**/ZtechAplication/config/CustomAuthenticationSuccessHandler.class</exclude>
 			           
+			            <!-- Pasta classes DTO -->
 			            <exclude>**/ZtechAplication/DTO/**</exclude>
 			            
-			            <!-- classes model -->
+			            <!-- Pasta classes model -->
 						<exclude>**/Categoria.class</exclude>
 						<exclude>**/Cliente.class</exclude>
 						<exclude>**/Email.class</exclude>
@@ -121,8 +124,22 @@
 						<exclude>**/Telefone.class</exclude>
 						<exclude>**/Usuario.class</exclude>
 						<exclude>**/Venda.class</exclude>
+						
+						<!-- Pasta classes pagina -->
+						<exclude>ZtechAplication/pagina/CategoriaController.class</exclude>
+					    <exclude>ZtechAplication/pagina/ClienteController.class</exclude>
+					    <exclude>ZtechAplication/pagina/FuncionarioController.class</exclude>
+					    <exclude>ZtechAplication/pagina/indexController.class</exclude>
+					    <exclude>ZtechAplication/pagina/MarcaController.class</exclude>
+					    <exclude>ZtechAplication/pagina/OrdemServicoController.class</exclude>
+					    <exclude>ZtechAplication/pagina/ProdutoController.class</exclude>
+					    <exclude>ZtechAplication/pagina/ServicoController.class</exclude>
+					    <exclude>ZtechAplication/pagina/SpecificationController.class</exclude>
+					    <exclude>ZtechAplication/pagina/StatusLibrary.class</exclude>
 			            
-			            
+			            <!-- Pasta classes service -->
+			            <exclude>ZtechAplication/service/DetalhesUsuarioServiceImpl.class</exclude>
+    					<exclude>ZtechAplication/service/EmailService.class</exclude>
 			        </excludes>
 		  	    </configuration>		
                 <executions>
