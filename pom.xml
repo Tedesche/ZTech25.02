@@ -107,7 +107,7 @@
 			            <exclude>**/ZtechAplication/ZtechAplicationAplication.class</exclude>
 			            
 			            <!-- Pasta classes config -->
-			            <exclude>**/ZtechAplication/config/CustomAuthenticationSuccessHandler.class</exclude>
+			            <exclude>**/ZtechAplication/config/**</exclude>
 			           
 			            <!-- Pasta classes DTO -->
 			            <exclude>**/ZtechAplication/DTO/**</exclude>
@@ -123,7 +123,6 @@
 						<exclude>**/Servico.class</exclude>
 						<exclude>**/Telefone.class</exclude>
 						<exclude>**/Usuario.class</exclude>
-						<exclude>**/Venda.class</exclude>
 						
 						<!-- Pasta classes pagina -->
 						<exclude>ZtechAplication/pagina/CategoriaController.class</exclude>
@@ -136,6 +135,7 @@
 					    <exclude>ZtechAplication/pagina/ServicoController.class</exclude>
 					    <exclude>ZtechAplication/pagina/SpecificationController.class</exclude>
 					    <exclude>ZtechAplication/pagina/StatusLibrary.class</exclude>
+					    <exclude>ZtechAplication/pagina/VendaController.class</exclude>
 			            
 			            <!-- Pasta classes service -->
 			            <exclude>ZtechAplication/service/DetalhesUsuarioServiceImpl.class</exclude>

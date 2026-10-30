@@ -1,10 +1,7 @@
 package ZtechAplication.model;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,8 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -34,6 +29,10 @@ public class Produto {
     
     @Column(nullable = false)
     private Integer quantidade;
+
+    // NOVO: Atributo para controlar a margem de segurança do estoque
+    @Column(nullable = false)
+    private Integer quantidadeMinima;
     
     @Column(columnDefinition = "TEXT")
     private String descricao;
@@ -49,7 +48,15 @@ public class Produto {
     @ManyToOne
     private Venda vendas;
 
- // Métodos auxiliares
+    // NOVO: Método de validação exigido pelo teste
+    public boolean verificaEstoque() {
+        if (this.quantidade == null || this.quantidadeMinima == null) {
+            return false; // Prevenção contra NullPointerException caso os valores não sejam setados
+        }
+        return this.quantidade <= this.quantidadeMinima;
+    }
+
+    // Métodos auxiliares de controle
     public void adicionarQuantidade(int quantidade) {
         this.quantidade += quantidade;
     }
@@ -94,17 +101,25 @@ public class Produto {
     public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
-    
 
     public Integer getQuantidade() {
-		return quantidade;
-	}
+        return quantidade;
+    }
 
-	public void setQuantidade(Integer quantidade) {
-		this.quantidade = quantidade;
-	}
+    public void setQuantidade(Integer quantidade) {
+        this.quantidade = quantidade;
+    }
 
-	public String getDescricao() {
+    // NOVO: Getter e Setter para a quantidade mínima
+    public Integer getQuantidadeMinima() {
+        return quantidadeMinima;
+    }
+
+    public void setQuantidadeMinima(Integer quantidadeMinima) {
+        this.quantidadeMinima = quantidadeMinima;
+    }
+
+    public String getDescricao() {
         return descricao;
     }
 
@@ -128,7 +143,6 @@ public class Produto {
         this.marca = marca;
     }
 
-
     public Venda getVendas() {
         return vendas;
     }
@@ -136,7 +150,4 @@ public class Produto {
     public void setVendas(Venda vendas) {
         this.vendas = vendas;
     }
-	
-	
-
 }
