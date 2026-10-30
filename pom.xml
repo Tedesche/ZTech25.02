@@ -119,7 +119,7 @@
 						<exclude>**/Endereco.class</exclude>
 						<exclude>**/Funcionario.class</exclude>
 						<exclude>**/Marca.class</exclude>
-						<exclude>**/Produto.class</exclude>
+						
 						<exclude>**/Servico.class</exclude>
 						<exclude>**/Telefone.class</exclude>
 						<exclude>**/Usuario.class</exclude>
