@@ -1,5 +1,6 @@
 package ZtechAplication.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -55,5 +56,23 @@ public class OtpService {
      */
     public void clearOtp(String username) {
         otpCache.invalidate(username);
+    }
+ // 1. INSERÇÃO: Injeta o serviço de e-mail dentro do serviço de OTP
+    @Autowired
+    private EmailService emailService;
+
+    // 2. INSERÇÃO: Novo método que orquestra a geração e o envio
+    public String solicitarToken2fa(String username, String emailDestino) {
+        
+        // Reaproveita o seu método que já existe para gerar e salvar no cache
+        String token = this.generateAndSaveOtp(username); 
+        
+        // Monta e dispara o e-mail
+        String assunto = "Seu Código de Acesso 2FA - ZTech";
+        String texto = "Olá, " + username + "! Seu código de verificação é: " + token;
+        
+        emailService.enviarEmailSimples(emailDestino, assunto, texto);
+        
+        return token;
     }
 }
