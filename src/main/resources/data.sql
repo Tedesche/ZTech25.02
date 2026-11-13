@@ -69,22 +69,22 @@ INSERT INTO TB_MARCA (NOME) VALUES
 ('Sony'), ('Microsoft'), ('Nintendo'), ('JBL'), ('Logitech'), ('Kingston'), ('Intel');
 
 -- INSERTS PARA TB_PRODUTO (15 produtos - mantidos da versão anterior)
-INSERT INTO TB_PRODUTO (NOME, CUSTO, VALOR, QUANTIDADE, DESCRICAO, FK_CATEGORIA, FK_MARCA) VALUES 
-('Smartphone Galaxy S23', 3500.00, 4800.00, 15, 'Smartphone avançado com câmera tripla.', 1, 1),
-('iPhone 15 Pro', 6500.00, 8500.00, 10, 'Último lançamento da Apple com chip A17.', 1, 2),
-('Notebook Dell Inspiron 15', 2800.00, 3900.00, 20, 'Notebook versátil para trabalho e estudo.', 2, 5),
-('SSD Kingston NV2 1TB', 250.00, 450.00, 50, 'SSD NVMe PCIe 4.0 de alta velocidade.', 5, 14),
-('Cabo USB-C Reforçado 2m', 30.00, 70.00, 100, 'Cabo trançado para maior durabilidade.', 4, 1),
-('Tela Display iPhone 12 Original', 450.00, 750.00, 25, 'Peça de reposição original para iPhone 12.', 5, 2),
-('Bateria Samsung Galaxy A54', 90.00, 180.00, 40, 'Bateria de reposição para Galaxy A54.', 5, 1),
-('Mouse Gamer Logitech G502', 220.00, 350.00, 30, 'Mouse com sensor HERO e pesos ajustáveis.', 6, 13),
-('Fone de Ouvido JBL Wave Buds', 180.00, 280.00, 60, 'Fone TWS com Deep Bass Sound.', 4, 12),
-('PlayStation 5 Digital Edition', 3200.00, 4000.00, 8, 'Console de última geração, versão digital.', 8, 9),
-('Teclado Mecânico HyperX Alloy Origins', 400.00, 650.00, 12, 'Teclado compacto com switches HyperX Red.', 6, 14), 
-('Carregador Rápido 45W Samsung Trio', 150.00, 250.00, 35, 'Carregador com 3 portas e Super Fast Charging.', 4, 1),
-('Tablet Xiaomi Pad 6', 1800.00, 2500.00, 18, 'Tablet com tela de 11" 144Hz.', 3, 3),
-('Smartwatch Amazfit GTS 4 Mini', 450.00, 700.00, 22, 'Smartwatch leve com GPS e longa bateria.', 7, 3), 
-('Memória RAM DDR4 8GB 3200MHz Kingston Fury', 130.00, 220.00, 45, 'Módulo de memória para upgrade de PC/Notebook.', 5, 14);
+INSERT INTO TB_PRODUTO (NOME, CUSTO, VALOR, QUANTIDADE, QUANTIDADE_MINIMA, DESCRICAO, FK_CATEGORIA, FK_MARCA) VALUES 
+('Smartphone Galaxy S23', 3500.00, 4800.00, 15, 1, 'Smartphone avançado com câmera tripla.', 1, 1),
+('iPhone 15 Pro', 6500.00, 8500.00, 10, 1, 'Último lançamento da Apple com chip A17.', 1, 2),
+('Notebook Dell Inspiron 15', 2800.00, 3900.00, 20, 1, 'Notebook versátil para trabalho e estudo.', 2, 5),
+('SSD Kingston NV2 1TB', 250.00, 450.00, 50, 1, 'SSD NVMe PCIe 4.0 de alta velocidade.', 5, 14),
+('Cabo USB-C Reforçado 2m', 30.00, 70.00, 100, 1, 'Cabo trançado para maior durabilidade.', 4, 1),
+('Tela Display iPhone 12 Original', 450.00, 750.00, 25, 1, 'Peça de reposição original para iPhone 12.', 5, 2),
+('Bateria Samsung Galaxy A54', 90.00, 180.00, 40, 1, 'Bateria de reposição para Galaxy A54.', 5, 1),
+('Mouse Gamer Logitech G502', 220.00, 350.00, 30, 1, 'Mouse com sensor HERO e pesos ajustáveis.', 6, 13),
+('Fone de Ouvido JBL Wave Buds', 180.00, 280.00, 60, 1, 'Fone TWS com Deep Bass Sound.', 4, 12),
+('PlayStation 5 Digital Edition', 3200.00, 4000.00, 8, 1, 'Console de última geração, versão digital.', 8, 9),
+('Teclado Mecânico HyperX Alloy Origins', 400.00, 650.00, 12, 1, 'Teclado compacto com switches HyperX Red.', 6, 14), 
+('Carregador Rápido 45W Samsung Trio', 150.00, 250.00, 35, 1, 'Carregador com 3 portas e Super Fast Charging.', 4, 1),
+('Tablet Xiaomi Pad 6', 1800.00, 2500.00, 18, 1, 'Tablet com tela de 11" 144Hz.', 3, 3),
+('Smartwatch Amazfit GTS 4 Mini', 450.00, 700.00, 22, 1, 'Smartwatch leve com GPS e longa bateria.', 7, 3), 
+('Memória RAM DDR4 8GB 3200MHz Kingston Fury', 130.00, 220.00, 45, 1, 'Módulo de memória para upgrade de PC/Notebook.', 5, 14);
 
 -- INSERTS PARA TB_ESTOQUE (espelhando TB_PRODUTO.QUANTIDADE - mantidos)
 INSERT INTO TB_ESTOQUE (QUANTIDADE, FK_PRODUTO) VALUES 
