@@ -87,6 +87,14 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
+		<!-- Testes JavaScript-->
+		<dependency>
+		    <groupId>com.microsoft.playwright</groupId>
+		    <artifactId>playwright</artifactId>
+		    <version>1.40.0</version>
+		    <scope>test</scope>
+		</dependency>
 	</dependencies>
 		
 
@@ -103,7 +111,6 @@
     			<configuration>
 			        <excludes>
 			        	<!-- Pasta classes Aplication -->
-			            <exclude>**/ZtechAplication/DataConfiguration.class</exclude>
 			            <exclude>**/ZtechAplication/ZtechAplicationAplication.class</exclude>
 			            
 			            <!-- Pasta classes config -->
@@ -126,20 +133,15 @@
 						
 						<!-- Pasta classes pagina -->
 						<exclude>ZtechAplication/pagina/CategoriaController.class</exclude>
-					    <exclude>ZtechAplication/pagina/ClienteController.class</exclude>
 					    <exclude>ZtechAplication/pagina/FuncionarioController.class</exclude>
-					    <exclude>ZtechAplication/pagina/indexController.class</exclude>
 					    <exclude>ZtechAplication/pagina/MarcaController.class</exclude>
 					    <exclude>ZtechAplication/pagina/OrdemServicoController.class</exclude>
-					    <exclude>ZtechAplication/pagina/ProdutoController.class</exclude>
 					    <exclude>ZtechAplication/pagina/ServicoController.class</exclude>
 					    <exclude>ZtechAplication/pagina/SpecificationController.class</exclude>
 					    <exclude>ZtechAplication/pagina/StatusLibrary.class</exclude>
-					    <exclude>ZtechAplication/pagina/VendaController.class</exclude>
 			            
 			            <!-- Pasta classes service -->
 			            <exclude>ZtechAplication/service/DetalhesUsuarioServiceImpl.class</exclude>
-    					<exclude>ZtechAplication/service/EmailService.class</exclude>
 			        </excludes>
 		  	    </configuration>		
                 <executions>

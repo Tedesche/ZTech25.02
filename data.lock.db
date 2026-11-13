@@ -1,6 +1,6 @@
 #FileLock
-#Fri Oct 23 02:03:30 GMT-03:00 2026
-hostName=192.168.15.3
-id=1a16724803ef2f12cbc61e77a79eaff5c0f5202376d
+#Fri Nov 13 18:24:15 BRT 2026
+hostName=CAS0616567W11-1.senacsp.edu.br
+id=1a1d6cbfc93e6ad55e2d02051e0af42b133145ce8b4
 method=file
-server=192.168.15.3\:54328
+server=10.135.110.100\:51070
