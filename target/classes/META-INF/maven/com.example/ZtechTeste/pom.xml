@@ -95,6 +95,11 @@
 		    <version>1.40.0</version>
 		    <scope>test</scope>
 		</dependency>
+		<dependency>
+    		<groupId>org.seleniumhq.selenium</groupId>
+    		<artifactId>selenium-java</artifactId>
+    		<scope>test</scope>
+		</dependency>
 	</dependencies>
 		
 
@@ -135,7 +140,7 @@
 						<exclude>ZtechAplication/pagina/CategoriaController.class</exclude>
 					    <exclude>ZtechAplication/pagina/FuncionarioController.class</exclude>
 					    <exclude>ZtechAplication/pagina/MarcaController.class</exclude>
-					    <exclude>ZtechAplication/pagina/OrdemServicoController.class</exclude>
+					    
 					    <exclude>ZtechAplication/pagina/ServicoController.class</exclude>
 					    <exclude>ZtechAplication/pagina/SpecificationController.class</exclude>
 					    <exclude>ZtechAplication/pagina/StatusLibrary.class</exclude>
