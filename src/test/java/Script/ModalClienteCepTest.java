@@ -141,8 +141,9 @@ public class ModalClienteCepTest {
     @BeforeAll
     static void iniciarNavegador() {
         playwright = Playwright.create();
+     // Em iniciarNavegador() (linha 144), substitua o launch atual por:
         browser = playwright.chromium().launch(
-            new BrowserType.LaunchOptions().setChannel("chrome") // ou "msedge"
+            new BrowserType.LaunchOptions().setHeadless(false)
         );
     }
 
